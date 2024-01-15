@@ -3,7 +3,9 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			prisma: import('@prisma/client').PrismaClient;
+		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
