@@ -31,7 +31,7 @@ model Event {
   organizer    Participant   @relation(fields: [organizerId], references: [id])
   organizerId  String
   participants Participant[] @relation("event_participants")
-  votes        Json
+  votes        Vote[]
 
   @@schema("public")
 }
@@ -43,6 +43,8 @@ model Vote {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   content       Json
+  Event         Event       @relation(fields: [eventId], references: [id])
+  eventId       String
 
   @@schema("public")
 }
