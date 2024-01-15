@@ -19,7 +19,6 @@ CREATE TABLE "public"."Event" (
     "time" TEXT,
     "location" TEXT,
     "organizerId" TEXT NOT NULL,
-    "votes" JSONB NOT NULL,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("id")
 );
@@ -31,6 +30,7 @@ CREATE TABLE "public"."Vote" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "content" JSONB NOT NULL,
+    "eventId" TEXT NOT NULL,
 
     CONSTRAINT "Vote_pkey" PRIMARY KEY ("id")
 );
@@ -52,6 +52,9 @@ ALTER TABLE "public"."Event" ADD CONSTRAINT "Event_organizerId_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "public"."Vote" ADD CONSTRAINT "Vote_participantId_fkey" FOREIGN KEY ("participantId") REFERENCES "public"."Participant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."Vote" ADD CONSTRAINT "Vote_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "public"."Event"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."_event_participants" ADD CONSTRAINT "_event_participants_A_fkey" FOREIGN KEY ("A") REFERENCES "public"."Event"("id") ON DELETE CASCADE ON UPDATE CASCADE;
