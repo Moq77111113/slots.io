@@ -1,11 +1,48 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("CONNECTION_POOL_URL")
+  provider  = "postgresql"
+  url       = env("CONNECTION_POOL_URL")
+  directUrl = env("DIRECT_URL")
+  schemas   = ["auth", "public"]
+}
+
+model Participant {
+  id             String  @id @default(uuid())
+  name           String
+  Vote           Vote[]
+  eventId        String?
+  Event          Event[] @relation("event_participants")
+  organizedEvent Event[]
+
+  @@schema("public")
+}
+
+model Event {
+  id           String        @id @default(uuid())
+  title        String
+  description  String?
+  date         DateTime
+  time         String?
+  location     String?
+  organizer    Participant   @relation(fields: [organizerId], references: [id])
+  organizerId  String
+  participants Participant[] @relation("event_participants")
+  votes        Json
+
+  @@schema("public")
+}
+
+model Vote {
+  id            String      @id @default(uuid())
+  participant   Participant @relation(fields: [participantId], references: [id])
+  participantId String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  content       Json
+
+  @@schema("public")
 }
