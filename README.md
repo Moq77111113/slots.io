@@ -9,7 +9,6 @@ Thank you for visiting! Our aoo is currently under construction to bring you an 
 - **SvelteKit:** A powerful framework for building web applications with Svelte.
 - **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
 - **Supabase:** The open-source alternative to Firebase. Instantly build and scale applications.
-- **Prisma:** Modern database access for Node.js, focusing on type safety.
 
 
 ## What to Expect
