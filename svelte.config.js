@@ -14,7 +14,11 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$domain: 'src/lib/server/domain',
-			'$domain/*': 'src/lib/server/domain/*'
+			$application: 'src/lib/server/application',
+			$infrastructure: 'src/lib/server/infrastructure',
+			'$domain/*': 'src/lib/server/domain/*',
+			'$application/*': 'src/lib/server/application/*',
+			'$infrastructure/*': 'src/lib/server/infrastructure/*'
 		}
 	}
 };
