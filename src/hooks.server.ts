@@ -1,4 +1,4 @@
-import { initContext } from '$application/context';
+import { initContext } from '$domain/@shared/context';
 import type { Handle } from '@sveltejs/kit';
 
 const context = initContext();

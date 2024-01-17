@@ -3,13 +3,13 @@ import type { Participant } from '$domain/participant/models';
 import type { ParticipantRepository } from '$domain/participant/spi/participant.repository';
 import { randomUUID } from 'node:crypto';
 
-const participants: Participant[] = [];
 export const InMemoryParticipantRepository = (): ParticipantRepository => {
+	const participants: Participant[] = [];
 	return {
 		findOne: (id: string) => participants.find((_) => _.id === id) || null,
-		findAll: ({ page = 1, limit }: ParticipantFilters) => {
+		findAll: ({ page = 1, limit = 10 }: ParticipantFilters) => {
 			const currentPage = Math.max(1, page);
-			const itemsPerPage = limit ? Math.max(1, limit) : participants.length;
+			const itemsPerPage = Math.max(1, limit);
 
 			const startIndex = (currentPage - 1) * itemsPerPage;
 			const endIndex = startIndex + itemsPerPage;

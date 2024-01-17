@@ -1,5 +1,5 @@
-import type { Action as ActionSchape } from '$domain/@shared';
+import type { Action as ActionShape } from '$domain/@shared';
 
-export type ActionImplementation<Action extends ActionSchape<unknown, unknown>> = (
-	...args: unknown[]
+export type ActionImplementation<Action extends ActionShape<unknown, unknown>, Args> = (
+	...args: Args[]
 ) => Action;

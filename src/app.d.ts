@@ -1,6 +1,6 @@
 // See https://kit.svelte.dev/docs/types#app
 
-import type { AppContext } from '$application/context';
+import type { AppContext } from '$domain/@shared/context';
 
 // for information about these interfaces
 declare global {

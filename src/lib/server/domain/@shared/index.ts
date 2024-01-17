@@ -5,7 +5,8 @@ import type {
 	Paginated,
 	MaybePromise,
 	ActionImplementation,
-	PaginationFilters
+	PaginationFilters,
+	ServiceContext
 } from './types';
 
 export type {
@@ -15,5 +16,6 @@ export type {
 	Paginated,
 	PaginationFilters,
 	MaybePromise,
-	ActionImplementation
+	ActionImplementation,
+	ServiceContext
 };

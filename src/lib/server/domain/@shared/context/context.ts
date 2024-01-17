@@ -1,4 +1,4 @@
-import { ParticipantService } from '$application/actions/participant';
+import { ParticipantService } from '$domain/participant/services/participant.service';
 import { InMemoryParticipantRepository } from '$infrastructure';
 
 export type SharedContext = Record<string, never>;
