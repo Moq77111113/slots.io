@@ -1,5 +1,5 @@
 import type { MaybePromise } from '$domain/@shared/types/promise';
 
-export interface Action<Input, Output> {
-	execute(input: Input): MaybePromise<Output>;
+export interface Action<Inputs extends unknown[], Output> {
+	execute(...input: Inputs): MaybePromise<Output>;
 }

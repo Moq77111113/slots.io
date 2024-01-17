@@ -7,5 +7,5 @@ export interface Repository<Entity extends BaseEntity, EntityInput, EntityFilter
 	create(entity: EntityInput): MaybePromise<Entity>;
 	update(id: string, entity: EntityInput): MaybePromise<Entity>;
 	patch(id: string, entity: Partial<EntityInput>): MaybePromise<Entity>;
-	delete(id: string): MaybePromise<Entity>;
+	remove(id: string): MaybePromise<Entity>;
 }
