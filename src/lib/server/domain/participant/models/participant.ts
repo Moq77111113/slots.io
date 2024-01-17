@@ -1,12 +1,10 @@
+import type { BaseEntity } from '$domain/@shared';
 import type { ParticipantType } from '$domain/participant/types/participant-type.type';
 
-type Participant = {
-	id: string;
+type Participant = BaseEntity & {
 	name: string;
 	type: ParticipantType;
 	scheduleId: string;
-	createdAt: Date;
-	updatedAt: Date;
 };
 
 export type { Participant };
