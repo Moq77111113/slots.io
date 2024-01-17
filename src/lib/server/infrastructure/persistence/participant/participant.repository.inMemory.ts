@@ -3,7 +3,7 @@ import type { Participant } from '$domain/participant/models';
 import type { ParticipantRepository } from '$domain/participant/spi/participant.repository';
 import { randomUUID } from 'node:crypto';
 
-export const InMemoryParticipantRepository = (): ParticipantRepository => {
+export const InMemoryParticipantRepository = () => {
 	const ERROR_OP = 'InMemoryParticipantRepository';
 	const participants: Participant[] = [];
 
@@ -72,5 +72,5 @@ export const InMemoryParticipantRepository = (): ParticipantRepository => {
 			participants.splice(participantIndex, 1);
 			return deletedParticipant;
 		}
-	};
+	} satisfies ParticipantRepository;
 };
