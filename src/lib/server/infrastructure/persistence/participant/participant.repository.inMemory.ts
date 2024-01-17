@@ -63,14 +63,14 @@ export const InMemoryParticipantRepository = () => {
 			participants[participantIndex] = updatedParticipant;
 			return updatedParticipant;
 		},
-		delete: (id: string) => {
+		remove: (id: string) => {
 			const participantIndex = participants.findIndex((_) => _.id === id);
 			if (participantIndex === -1) {
 				throw notFoundException(id);
 			}
-			const deletedParticipant = participants[participantIndex];
+			const removedParticipant = participants[participantIndex];
 			participants.splice(participantIndex, 1);
-			return deletedParticipant;
+			return removedParticipant;
 		}
 	} satisfies ParticipantRepository;
 };

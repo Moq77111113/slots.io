@@ -1,4 +1,4 @@
-import type { FindParticipantAction } from './findOne.action';
+import type { FindParticipantAction } from './crud.actions';
 
 export type { FindParticipantAction };
 export type Actions = {
