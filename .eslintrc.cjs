@@ -3,8 +3,8 @@ module.exports = {
 	root: true,
 	extends: [
 		'eslint:recommended',
-		'plugin:@typescript-eslint/recommended',
 		'plugin:svelte/recommended',
+		'plugin:@typescript-eslint/recommended',
 		'prettier'
 	],
 	parser: '@typescript-eslint/parser',
@@ -14,12 +14,22 @@ module.exports = {
 		ecmaVersion: 2020,
 		extraFileExtensions: ['.svelte']
 	},
+	ignorePatterns: ['.eslintrc.cjs', 'vite.config.ts'],
 	env: {
 		browser: true,
 		es2017: true,
 		node: true
 	},
 	overrides: [
+		{
+			files: ['*.ts'],
+
+			extends: ['plugin:@typescript-eslint/strict-type-checked'],
+
+			parserOptions: {
+				project: ['./tsconfig.json']
+			}
+		},
 		{
 			files: ['*.svelte'],
 			parser: 'svelte-eslint-parser',
