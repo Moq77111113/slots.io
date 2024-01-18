@@ -1,21 +1,21 @@
-import type { Action } from './contracts/action';
+import type { Scenario } from './contracts/scenario';
 import type { Repository } from './contracts/repository';
 import type {
 	BaseEntity,
 	Paginated,
 	MaybePromise,
-	ActionImplementation,
+	ScenarioAdapter,
 	PaginationFilters,
-	ServiceContext
+	ScenariosContext
 } from './types';
 
 export type {
-	Action,
+	Scenario,
 	Repository,
 	BaseEntity,
 	Paginated,
 	PaginationFilters,
 	MaybePromise,
-	ActionImplementation,
-	ServiceContext
+	ScenarioAdapter,
+	ScenariosContext
 };

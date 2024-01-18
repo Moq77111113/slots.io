@@ -13,7 +13,7 @@ export const makeCommonCrudService = <
 		return await repository.findOne(id);
 	};
 
-	const findAll = async (filters: Filters) => {
+	const findAll = async (filters?: Filters) => {
 		return await repository.findAll(filters);
 	};
 
