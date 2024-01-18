@@ -1,7 +1,7 @@
 import type { ParticipantFilters, ParticipantInput } from '$domain/participant/dtos';
 import type { Participant } from '$domain/participant/models';
-import type { ParticipantRepository } from '$domain/participant/spi/participant.repository';
-import { randomUUID } from 'node:crypto';
+import type { ParticipantRepository } from '$domain/participant/ports/spi/participant.repository';
+import { randomUUID } from 'node:crypto'; // TODO: May have to be generated using domain ?
 
 export const InMemoryParticipantRepository = () => {
 	const ERROR_OP = 'InMemoryParticipantRepository';
