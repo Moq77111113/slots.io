@@ -1,5 +1,5 @@
 type SharedContext = Record<string, never>;
 
-export type ScenariosContext = {
+export type ActionContext = {
 	shared: SharedContext;
 };
