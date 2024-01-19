@@ -1,6 +1,6 @@
-import type { FindParticipantScenario } from './crud.scenarios';
+import type { FindParticipantAction } from './crud.actions';
 
-export type { FindParticipantScenario };
-export type Scenarios = {
-	findOne: FindParticipantScenario;
+export type { FindParticipantAction };
+export type Actions = {
+	findOne: FindParticipantAction;
 };

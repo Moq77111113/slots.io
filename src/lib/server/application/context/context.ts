@@ -1,25 +1,25 @@
-import { ParticipantScenarios } from '$domain/participant/scenarios/participant.scenarios';
+import { ParticipantActions } from '$domain/participant/actions/participant.actions';
 import { InMemoryParticipantRepository } from '$infrastructure';
 
 export type SharedContext = Record<string, never>;
 
 /**
  * @description
- * This is the context that is available to all scenarios.
+ * This is the context that is available to all actions.
  *
  */
 export type AppContext = {
 	/**
 	 * @description
-	 * This is a shared context that is available to all scenarios.
+	 * This is a shared context that is available to all actions.
 	 */
 	shared: SharedContext;
 	/**
 	 * @description
-	 * This is a service context that is available to all scenarios.
+	 * This is a service context that is available to all actions.
 	 */
 	services: {
-		participant: ParticipantScenarios;
+		participant: ParticipantActions;
 	};
 };
 
@@ -32,7 +32,7 @@ export const initContext = () => {
 	const shared = {};
 	const participantRepository = InMemoryParticipantRepository();
 
-	const participantService = ParticipantScenarios({
+	const participantService = ParticipantActions({
 		shared,
 		repositories: {
 			participantRepository
