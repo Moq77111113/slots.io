@@ -1,13 +1,14 @@
 import type { ParticipantFilters, ParticipantInput } from '$domain/participant/dtos';
 import type { Participant } from '$domain/participant/models';
 import type { ParticipantRepository } from '$domain/participant/ports/spi/participant.repository';
-import { randomUUID } from 'node:crypto'; // TODO: May have to be generated using domain ?
+import { randomUUID } from 'node:crypto'; // TODO: Have to be generated using domain port
 
 export const InMemoryParticipantRepository = () => {
-	const ERROR_OP = 'InMemoryParticipantRepository';
+	const ERROR_OP = Symbol.for('InMemoryParticipantRepository');
 	const participants: Participant[] = [];
 
-	const notFoundException = (id: string) => Error(`${ERROR_OP}: Participant ${id} not found`);
+	const notFoundException = (id: string) =>
+		Error(`${ERROR_OP.description}: Participant ${id} not found`);
 	return {
 		findOne: (id: string) => participants.find((_) => _.id === id) || null,
 		findAll: ({ page = 1, limit = 10 }: ParticipantFilters) => {

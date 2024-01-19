@@ -1,7 +1,7 @@
 import type { Action } from './contracts/action';
 import type { Repository } from './contracts/repository';
 import type {
-	BaseEntity,
+	Entity,
 	Paginated,
 	MaybePromise,
 	ActionAdapter,
@@ -12,7 +12,7 @@ import type {
 export type {
 	Action,
 	Repository,
-	BaseEntity,
+	Entity,
 	Paginated,
 	PaginationFilters,
 	MaybePromise,
