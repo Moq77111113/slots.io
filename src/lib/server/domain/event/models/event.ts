@@ -10,6 +10,6 @@ export type Event = Entity<{
 	creator: unknown; // TODO replace by user;
 	slots: Slot[];
 	locked: boolean;
-	expiration: Date;
+	expiration?: Date;
 	participants: unknown[]; // TODO replace by user;
 }>;
