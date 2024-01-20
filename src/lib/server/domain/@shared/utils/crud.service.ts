@@ -1,9 +1,9 @@
-import type { BaseEntity } from '$domain/@shared/types';
+import type { Entity as BaseEntity } from '$domain/@shared/types';
 import type { Repository } from '$domain/@shared/contracts/repository';
 
 export const makeCommonCrudService = <
 	Repo extends Repository<Entity, Input, Filters>,
-	Entity extends BaseEntity,
+	Entity extends BaseEntity<unknown>,
 	Input,
 	Filters
 >(
