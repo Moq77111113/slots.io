@@ -10,6 +10,9 @@ function assertsPersonId(id: string): asserts id is PersonId {
 
 export const makePersonId = (id: string) => make(id, assertsPersonId);
 
+/**
+ * @description Aggregate root entity representing a person.
+ */
 export type Person = Entity<
 	PersonId,
 	{
