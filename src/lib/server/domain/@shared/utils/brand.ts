@@ -49,7 +49,8 @@ export type Branded<T, B extends string> = T & Brand<B>;
  */
 export function make<T, BrandName extends string, BrandedType extends Branded<T, BrandName>>(
 	value: T,
-	assertFn: (x: unknown) => asserts x is BrandedType
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	assertFn: (x: any) => asserts x is BrandedType
 ): BrandedType {
 	assertFn(value);
 	return value;
