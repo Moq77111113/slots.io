@@ -8,14 +8,8 @@ import type {
 	PaginationFilters,
 	ActionContext
 } from './types';
+import type { Locale, Language } from './attributes';
 
-export type {
-	Action,
-	Repository,
-	Entity,
-	Paginated,
-	PaginationFilters,
-	MaybePromise,
-	ActionAdapter,
-	ActionContext
-};
+export type { Action, Repository };
+export type { Entity, Paginated, PaginationFilters, MaybePromise, ActionAdapter, ActionContext };
+export type { Locale, Language };
