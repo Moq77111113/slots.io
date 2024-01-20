@@ -4,9 +4,9 @@ import type { UserId } from '$domain/user/models';
 
 export type PersonId = Branded<string, 'ParticipantId'>;
 
-function assertsPersonId(id: string): asserts id is PersonId {
+const assertsPersonId = (id: string): asserts id is PersonId => {
 	if (typeof id !== 'string') throw new Error('Invalid person id');
-}
+};
 
 export const makePersonId = (id: string) => make(id, assertsPersonId);
 

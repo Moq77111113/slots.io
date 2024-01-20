@@ -47,11 +47,10 @@ export type Branded<T, B extends string> = T & Brand<B>;
  * const myEmail = make('test@example.com', assertIsEmail); // This will pass
  * const notEmail = make('not an email', assertIsEmail); // This will throw an error
  */
-export function make<T, BrandName extends string, BrandedType extends Branded<T, BrandName>>(
+export const make = <T, BrandName extends string, BrandedType extends Branded<T, BrandName>>(
 	value: T,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	assertFn: (x: any) => asserts x is BrandedType
-): BrandedType {
+	assertFn: (x: T) => asserts x is BrandedType
+): BrandedType => {
 	assertFn(value);
 	return value;
-}
+};

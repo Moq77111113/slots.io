@@ -5,7 +5,7 @@ import type { NotificationChannel } from '../attributes/notification-channel';
 
 export type UserId = Branded<string, 'UserId'>;
 
-function assertsUserId(id: string): asserts id is UserId {
+const assertsUserId = (id: string): asserts id is UserId => {
 	if (typeof id !== 'string') throw new Error('Invalid person id');
 }
 
