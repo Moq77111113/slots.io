@@ -1,6 +1,4 @@
-type ThirdPartyProvider = 'google';
-
 export type ThirdPartyAccount = {
-	provider: ThirdPartyProvider;
+	provider: string;
 	accountId: string;
 };
