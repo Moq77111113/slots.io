@@ -17,7 +17,6 @@ export const makeUserId = (id: string) => make(id, assertsUserId);
 export type User = Entity<
 	UserId,
 	{
-		username: string;
 		email: string;
 		notificationsChannel: NotificationChannel[];
 		thirdPartyAccounts: ThirdPartyAccount[];
