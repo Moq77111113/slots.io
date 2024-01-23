@@ -1,5 +1,5 @@
 import type { Entity } from '$domain/@shared';
-import { make, type Branded } from '$domain/@shared/utils/brand';
+import { type Branded, make } from '$domain/@shared/utils/brand';
 import type { UserId } from '$domain/user/models';
 
 export type PersonId = Branded<string, 'ParticipantId'>;

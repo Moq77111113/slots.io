@@ -45,6 +45,14 @@ module.exports = {
 			'warn',
 			{ vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
 		],
+		'@typescript-eslint/no-unused-vars': [
+			'warn', // or "error"
+			{
+				argsIgnorePattern: '^_',
+				varsIgnorePattern: '^_',
+				caughtErrorsIgnorePattern: '^_'
+			}
+		],
 		'simple-import-sort/imports': [
 			'error',
 			{
