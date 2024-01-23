@@ -8,7 +8,7 @@ module.exports = {
 		'prettier'
 	],
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint', 'unused-imports', 'simple-import-sort'],
+	plugins: ['@typescript-eslint', 'unused-imports', 'simple-import-sort', 'regex'],
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
@@ -35,6 +35,12 @@ module.exports = {
 			parser: 'svelte-eslint-parser',
 			parserOptions: {
 				parser: '@typescript-eslint/parser'
+			}
+		},
+		{
+			files: ['**/domain/**/*.ts'],
+			rules: {
+				'@typescript-eslint/no-throw-literal': 'off'
 			}
 		}
 	],
@@ -67,6 +73,18 @@ module.exports = {
 				]
 			}
 		],
-		'sort-imports': 0
+		'sort-imports': 0,
+		'regex/invalid': [
+			'warn',
+			[
+				{
+					regex: 'throw\\s+(new\\s+)?Error',
+					message: 'Use errorHandler.throw() to throw Error in the domain.',
+					files: {
+						inspect: '.*domain.*\\.ts'
+					}
+				}
+			]
+		]
 	}
 };
