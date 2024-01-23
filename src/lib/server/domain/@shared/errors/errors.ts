@@ -38,3 +38,8 @@ export const DomainError = <T, Key extends string>(
 export type DomainError<T = unknown, Key extends string = string> = ReturnType<
 	typeof DomainError<T, Key>
 >;
+
+export type ErrorCollection<Keys extends string> = Record<
+	string,
+	((...args: never[]) => DomainError<unknown, Keys>) | DomainError<unknown, Keys>
+>;

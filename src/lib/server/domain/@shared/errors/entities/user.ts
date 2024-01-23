@@ -1,5 +1,6 @@
-import { DomainError } from '../errors';
+import { DomainError, type ErrorCollection } from '../errors';
 
+type Keys = 'user:duplicated' | 'user:not-found';
 export const UserErrors = {
 	already_exists: (email: string) =>
 		DomainError(
@@ -15,6 +16,7 @@ export const UserErrors = {
 		message: 'User not found',
 		statusCode: 'not_found'
 	})
-} as const;
+} as const satisfies ErrorCollection<Keys>;
 
+export type UserErrorKeys = Keys;
 export type UserErrors = keyof typeof UserErrors;
