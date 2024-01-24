@@ -44,7 +44,7 @@ export const MockedUserRepository = (): UserRepository => {
 	};
 	const create = (data: CreateUserDto) => {
 		const newUser: User = {
-			id: makeUserId(''),
+			id: makeUserId(`userId-${Math.random() * 1000 * (Math.random() * 10)}`),
 			...data,
 			createdAt: new Date(),
 			updatedAt: new Date()

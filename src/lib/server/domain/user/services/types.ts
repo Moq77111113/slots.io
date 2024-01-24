@@ -17,4 +17,9 @@ export type RegisterUserArgs = {
 	password: NonNullable<CreateUserDto['password']>;
 };
 
+export type AuthenticateUserArgs = {
+	email: CreateUserDto['email'];
+	password: NonNullable<CreateUserDto['password']>;
+};
+
 export type PublicUser = Omit<User, 'password' | 'salt'>;

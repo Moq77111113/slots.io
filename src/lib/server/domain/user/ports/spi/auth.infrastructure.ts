@@ -12,6 +12,7 @@ export type AuthCommand = {
 	hash: {
 		generateSalt: () => MaybePromise<string>;
 		hashPassword: (args: HashPasswordDto) => MaybePromise<string>;
+		comparePassword: (password: string, hashedPassword: string) => MaybePromise<boolean>;
 	};
 };
 

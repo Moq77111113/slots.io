@@ -21,6 +21,9 @@ export const MockedAuthInfrastructure = (): AuthInfrastructure => {
 		},
 		hashPassword: ({ password, salt }: HashPasswordDto) => {
 			return Promise.resolve(`hashed_${password}_${salt}`);
+		},
+		comparePassword: (password: string, hashedPassword: string) => {
+			return Promise.resolve(new RegExp(`hashed_${password}_.+`).test(hashedPassword));
 		}
 	};
 

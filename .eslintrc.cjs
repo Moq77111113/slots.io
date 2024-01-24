@@ -82,7 +82,7 @@ module.exports = {
 					message: 'Use errorHandler.throw() to throw Error in the domain services.',
 					files: {
 						inspect: '.*domain.*\\/service.*\\.ts',
-						ignore: '.*tests.*\\.ts'
+						ignore: '.*(tests|mocks).*\\.ts'
 					}
 				},
 				{
