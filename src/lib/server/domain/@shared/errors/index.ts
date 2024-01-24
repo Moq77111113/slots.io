@@ -1,12 +1,18 @@
-import { type UserErrorKeys, UserErrors } from './entities';
-import type { DomainError, ErrorCollection } from './errors';
-import type { ErrorHandler } from './ports/spi/error.handler';
+import type { DomainError, ErrorCollection } from '$domain/@shared/errors/errors';
+import type { ErrorHandler } from '$domain/@shared/errors/ports/spi/error.handler';
+import { type UserErrorKeys, UserErrors } from '$domain/@shared/errors/user.errors';
 
-type ErrorKeys = UserErrorKeys;
+/**
+ * @description List of keys available for domain errors
+ */
+type DomainErrorKeys = UserErrorKeys;
 
-const Errors = {
+/**
+ * @description Collection of domain errors
+ */
+const DomainErrors = {
 	User: UserErrors
-} as const satisfies Record<string, ErrorCollection<ErrorKeys>>;
+} as const satisfies Record<string, ErrorCollection<DomainErrorKeys>>;
 
-export { Errors };
-export type { DomainError, ErrorHandler, ErrorKeys };
+export { DomainErrors };
+export type { DomainError, ErrorHandler, DomainErrorKeys };

@@ -1,20 +1,23 @@
-import type { DomainError } from '$domain/@shared/errors';
+import type { DomainError, DomainErrorKeys } from '$domain/@shared/errors';
 
 /**
  * @description SPI ports for error handling
  * @example
  * ```ts
- * const MyErrorHandler = () => {
- *	const handle = (error: DomainError) => {
+ * const MyErrorHandler = (): ErrorHandler => {
+ *	const throws = (error: DomainError) => {
  *		// do something with the error
  *		throw new Error(error.message);
  *	};
  *
- *	return { handle } satisfies ErrorHandler;
+ *	return { throws };
  * };
  * ```
  */
 export interface ErrorHandler {
-	handle<T, K extends string>(error: DomainError<T, K>): never;
+	/**
+	 *
+	 * @description Grab a domain error and throw it
+	 */
+	throws<T, K extends DomainErrorKeys>(error: DomainError<T, K>): never;
 }
-

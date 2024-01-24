@@ -1,4 +1,4 @@
-import { DomainError, type ErrorCollection } from '../errors';
+import { DomainError, type ErrorCollection } from '$domain/@shared/errors/errors';
 
 type Keys = 'user:duplicated' | 'user:not-found';
 export const UserErrors = {
@@ -19,4 +19,3 @@ export const UserErrors = {
 } as const satisfies ErrorCollection<Keys>;
 
 export type UserErrorKeys = Keys;
-export type UserErrors = keyof typeof UserErrors;

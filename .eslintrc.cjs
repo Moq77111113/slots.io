@@ -79,9 +79,16 @@ module.exports = {
 			[
 				{
 					regex: 'throw\\s+(new\\s+)?Error',
-					message: 'Use errorHandler.throw() to throw Error in the domain.',
+					message: 'Use errorHandler.throw() to throw Error in the domain services.',
 					files: {
-						inspect: '.*domain.*\\.ts'
+						inspect: '.*domain.*/service.*\\.ts'
+					}
+				},
+				{
+					regex: "import.*from\\s+\\'(?!\\$domain|{\\.}{1,2}/|).*",
+					message: 'Import from the domain only.',
+					files: {
+						inspect: '.*domain.*/.*\\.ts'
 					}
 				}
 			]

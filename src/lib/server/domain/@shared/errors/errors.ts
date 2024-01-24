@@ -1,3 +1,5 @@
+import type { DomainErrorKeys } from '$domain/@shared/errors';
+
 type ErrorCode =
 	| 'bad_data'
 	| 'bad_request'
@@ -22,7 +24,7 @@ const statusToCode = {
  * @description Creates a domain error
  * The message param should be a system error (eg for logging into external services)
  */
-export const DomainError = <T, Key extends string>(
+export const DomainError = <T, Key extends DomainErrorKeys>(
 	args: { message: string; key: Key; statusCode: ErrorCode },
 	data?: T
 ) => {
@@ -35,11 +37,17 @@ export const DomainError = <T, Key extends string>(
 	};
 };
 
-export type DomainError<T = unknown, Key extends string = string> = ReturnType<
+/**
+ * @description Body of a domain error
+ */
+export type DomainError<T = unknown, Key extends DomainErrorKeys = DomainErrorKeys> = ReturnType<
 	typeof DomainError<T, Key>
 >;
 
-export type ErrorCollection<Keys extends string> = Record<
+/**
+ * @description Collection of domain errors
+ */
+export type ErrorCollection<Keys extends DomainErrorKeys> = Record<
 	string,
 	((...args: never[]) => DomainError<unknown, Keys>) | DomainError<unknown, Keys>
 >;
