@@ -81,7 +81,8 @@ module.exports = {
 					regex: 'throw\\s+(new\\s+)?Error',
 					message: 'Use errorHandler.throw() to throw Error in the domain services.',
 					files: {
-						inspect: '.*domain.*/service.*\\.ts'
+						inspect: '.*domain.*\\/service.*\\.ts',
+						ignore: '.*tests.*\\.ts'
 					}
 				},
 				{

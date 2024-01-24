@@ -5,7 +5,7 @@ import type { PublicUser, RegisterUserArgs, UserServiceContext } from '../types'
 export const UserRegisterSubService = (context: UserServiceContext) => {
 	const {
 		repositories: { userRepository },
-		handlers: { authHandler },
+		infrastructure: { authInfrastructure },
 		shared: { errorHandler }
 	} = context;
 
@@ -17,8 +17,8 @@ export const UserRegisterSubService = (context: UserServiceContext) => {
 			throw errorHandler.throws(DomainErrors.User.already_exists(email));
 		}
 
-		const salt = await authHandler.hash.generateSalt();
-		const hashedPassword = await authHandler.hash.hashPassword({ password, salt });
+		const salt = await authInfrastructure.hash.generateSalt();
+		const hashedPassword = await authInfrastructure.hash.hashPassword({ password, salt });
 
 		const createdUser = await userRepository.create({
 			email,
