@@ -1,1 +1,1 @@
-export type NotificationChannel = 'email';
+export type NotificationChannel = string;

@@ -1,7 +1,8 @@
-import type { Entity } from '$domain/@shared';
 import type { Branded } from '$brand';
-import type { Slot } from './slot';
+import type { Entity } from '$domain/@shared';
 import type { UserId } from '$domain/user/models';
+
+import type { Slot } from './slot';
 
 export type EventId = Branded<string, 'EventId'>;
 

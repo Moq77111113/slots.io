@@ -1,13 +1,13 @@
-import { make, type Branded } from '$brand';
-import type { Entity, Locale, Language } from '$domain/@shared';
+import { type Branded, make } from '$brand';
+import type { Entity, Language, Locale } from '$domain/@shared';
 import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import type { NotificationChannel } from '../attributes/notification-channel';
+import type { NotificationChannel, UserStatus } from '$domain/user/attributes';
 
 export type UserId = Branded<string, 'UserId'>;
 
 const assertsUserId = (id: string): asserts id is UserId => {
 	if (typeof id !== 'string') throw new Error('Invalid person id');
-}
+};
 
 export const makeUserId = (id: string) => make(id, assertsUserId);
 
@@ -17,7 +17,6 @@ export const makeUserId = (id: string) => make(id, assertsUserId);
 export type User = Entity<
 	UserId,
 	{
-		username: string;
 		email: string;
 		notificationsChannel: NotificationChannel[];
 		thirdPartyAccounts: ThirdPartyAccount[];
@@ -25,6 +24,8 @@ export type User = Entity<
 		language: Language;
 		locale: Locale;
 		password?: string;
+		salt?: string;
 		accessToken?: string;
+		status: UserStatus;
 	}
 >;
