@@ -39,4 +39,18 @@ describe('UserRegisterSubService', () => {
 
 		expect(error).toEqual(new Error('An user with email test@example.com already exists'));
 	});
+
+	it('should found duplicate case insensitive emails', async () => {
+		const user = {
+			email: 'TeSt@EXAMPLE.com',
+			password: 'password123'
+		};
+
+		const error = await service
+			.register(user)
+			.then(() => null)
+			.catch((e) => e instanceof Error && e);
+
+		expect(error).toEqual(new Error('An user with email test@example.com already exists'));
+	});
 });
