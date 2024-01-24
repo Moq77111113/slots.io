@@ -11,17 +11,19 @@ export const UserRegisterSubService = (context: UserServiceContext) => {
 
 	const register = async (args: RegisterUserArgs): Promise<PublicUser> => {
 		const { email, password } = args;
-		const exists = await userRepository.findBy.email(args.email);
+
+		const sanitizedEmail = email.toLowerCase();
+		const exists = await userRepository.findBy.email(sanitizedEmail);
 
 		if (exists) {
-			throw errorHandler.throws(DomainErrors.User.already_exists(email));
+			throw errorHandler.throws(DomainErrors.User.already_exists(sanitizedEmail));
 		}
 
 		const salt = await authInfrastructure.hash.generateSalt();
 		const hashedPassword = await authInfrastructure.hash.hashPassword({ password, salt });
 
 		const createdUser = await userRepository.create({
-			email,
+			email: sanitizedEmail,
 			password: hashedPassword,
 			salt,
 			status: 'active',
