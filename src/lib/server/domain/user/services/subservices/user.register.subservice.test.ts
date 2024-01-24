@@ -22,6 +22,8 @@ describe('UserRegisterSubService', () => {
 		const registeredUser = await service.register(user);
 
 		expect(registeredUser.email).toBe(user.email);
+		expect(registeredUser.id).toBeDefined();
+		expect('password' in registeredUser).toBe(false);
 	});
 
 	it('should throw an error if the user already exists', async () => {

@@ -9,7 +9,7 @@ import { MockedUserRepository } from './user.repository.mock';
 export const MockedUserServiceContext = (): UserServiceContext => {
 	const errorHandler = {
 		throws: (e) => {
-			throw new Error(e.message);
+			throw Error(e.message);
 		}
 	} satisfies ErrorHandler;
 
