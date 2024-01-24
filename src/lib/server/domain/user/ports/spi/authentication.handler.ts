@@ -15,4 +15,4 @@ export type AuthCommand = {
 	};
 };
 
-export type AuthService = AuthCommand;
+export type AuthHandler = AuthCommand;

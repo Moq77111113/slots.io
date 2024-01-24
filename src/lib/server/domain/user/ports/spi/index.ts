@@ -1,2 +1,2 @@
-export * from './authentication.service';
+export * from './authentication.handler';
 export * from './user.repository';
