@@ -1,5 +1,4 @@
-import { ParticipantActions } from '$domain/participant/actions/participant.actions';
-import { InMemoryParticipantRepository } from '$infrastructure';
+import type { UserService } from '$domain/user/services/user.service';
 
 export type SharedContext = Record<string, never>;
 
@@ -19,7 +18,7 @@ export type AppContext = {
 	 * This is a service context that is available to all actions.
 	 */
 	services: {
-		participant: ParticipantActions;
+		user: UserService;
 	};
 };
 
@@ -30,19 +29,6 @@ export type AppContext = {
 // TODO : Use an IoC container to create the context with correct bindings.
 export const initContext = () => {
 	const shared = {};
-	const participantRepository = InMemoryParticipantRepository();
 
-	const participantService = ParticipantActions({
-		shared,
-		repositories: {
-			participantRepository
-		}
-	});
-
-	return {
-		shared: {},
-		services: {
-			participant: participantService
-		}
-	} satisfies AppContext;
+	throw new Error('Not implemented');
 };

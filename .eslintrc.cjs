@@ -8,7 +8,7 @@ module.exports = {
 		'prettier'
 	],
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint', 'unused-imports', 'simple-import-sort'],
+	plugins: ['@typescript-eslint', 'unused-imports', 'simple-import-sort', 'regex'],
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
@@ -36,6 +36,12 @@ module.exports = {
 			parserOptions: {
 				parser: '@typescript-eslint/parser'
 			}
+		},
+		{
+			files: ['**/domain/**/*.ts'],
+			rules: {
+				'@typescript-eslint/no-throw-literal': 'off'
+			}
 		}
 	],
 	rules: {
@@ -44,6 +50,14 @@ module.exports = {
 		'unused-imports/no-unused-vars': [
 			'warn',
 			{ vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
+		],
+		'@typescript-eslint/no-unused-vars': [
+			'warn', // or "error"
+			{
+				argsIgnorePattern: '^_',
+				varsIgnorePattern: '^_',
+				caughtErrorsIgnorePattern: '^_'
+			}
 		],
 		'simple-import-sort/imports': [
 			'error',
@@ -59,6 +73,26 @@ module.exports = {
 				]
 			}
 		],
-		'sort-imports': 0
+		'sort-imports': 0,
+		'regex/invalid': [
+			'warn',
+			[
+				{
+					regex: 'throw\\s+(new\\s+)?Error',
+					message: 'Use errorHandler.throw() to throw Error in the domain services.',
+					files: {
+						inspect: '.*domain.*\\/service.*\\.ts',
+						ignore: '.*tests.*\\.ts'
+					}
+				},
+				{
+					regex: "import.*from\\s+\\'(?!\\$domain|{\\.}{1,2}/|).*",
+					message: 'Import from the domain only.',
+					files: {
+						inspect: '.*domain.*/.*\\.ts'
+					}
+				}
+			]
+		]
 	}
 };
