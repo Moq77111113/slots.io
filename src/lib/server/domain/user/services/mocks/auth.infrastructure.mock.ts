@@ -18,7 +18,7 @@ export const MockedAuthInfrastructure = (): AuthInfrastructure => {
 		getProviders: (): Promise<ThirdPartyAccount['provider'][]> => {
 			return Promise.resolve(['mock-provider']);
 		},
-		generateAuthRequest: (provider: ThirdPartyAccount['provider']): Promise<AuthRequest> => {
+		generateThirdPartyRequest: (provider: ThirdPartyAccount['provider']): Promise<AuthRequest> => {
 			return Promise.resolve({
 				provider,
 				request: 'mock-request',
@@ -27,7 +27,7 @@ export const MockedAuthInfrastructure = (): AuthInfrastructure => {
 				authUrl: 'mock-auth-url'
 			});
 		},
-		authenticateWithOAuth2: (_request: OAuthAuthenticationArgs): Promise<UserId> => {
+		authOrRegisterWithThirdParty: (_request: OAuthAuthenticationArgs): Promise<UserId> => {
 			return Promise.resolve(makeUserId('mock-user-id'));
 		}
 	};

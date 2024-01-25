@@ -1,9 +1,7 @@
-import type { ThirdPartyAccount } from '$domain/@shared/attributes';
 import { DomainErrors } from '$domain/@shared/errors';
-import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
-import type { UserId } from '$domain/user/models';
 
 import type { AuthenticateUserArgs, PublicUser, UserServiceContext } from '../types';
+import { toPublic } from '../user.service';
 
 export const UserAuthenticateSubService = (context: UserServiceContext) => {
 	const {
@@ -12,8 +10,10 @@ export const UserAuthenticateSubService = (context: UserServiceContext) => {
 		shared: { errorHandler }
 	} = context;
 
-	const authenticateOnPort = async (args: AuthenticateUserArgs): Promise<UserId> =>
-		await authInfrastructure.authenticateWithCredentials(args);
+	const wrapPort = {
+		authenticateWithCredentials: async (args: AuthenticateUserArgs) =>
+			await authInfrastructure.authenticateWithCredentials(args)
+	};
 
 	const authenticateWithCredentials = async (args: AuthenticateUserArgs): Promise<PublicUser> => {
 		const { email, password } = args;
@@ -28,35 +28,21 @@ export const UserAuthenticateSubService = (context: UserServiceContext) => {
 			throw errorHandler.throws(DomainErrors.User.password_not_set);
 		}
 
-		const id = await authenticateOnPort({ email: sanitizedEmail, password }).catch(() => {
-			throw errorHandler.throws(DomainErrors.User.invalid_credentials);
-		});
+		const id = await wrapPort
+			.authenticateWithCredentials({ email: sanitizedEmail, password })
+			.catch(() => {
+				throw errorHandler.throws(DomainErrors.User.invalid_credentials);
+			});
 
-		const {
-			password: _password,
-			salt: _salt,
-			...publicUser
-		} = await userRepository.patch({
-			id,
-			lastLogin: new Date()
-		});
-
-		return publicUser;
+		return toPublic(
+			await userRepository.patch({
+				id,
+				lastLogin: new Date()
+			})
+		);
 	};
 
-	const isProviderEnabled = async (provider: ThirdPartyAccount['provider']) => {
-		const providers = await authInfrastructure.getProviders();
-		return providers.includes(provider);
+	return {
+		authenticateWithCredentials
 	};
-	const generateAuthRequest = async (
-		provider: ThirdPartyAccount['provider']
-	): Promise<AuthRequest> => {
-		if (!(await isProviderEnabled(provider))) {
-			throw errorHandler.throws(DomainErrors.User.provider_not_enabled(provider));
-		}
-
-		return authInfrastructure.generateAuthRequest(provider);
-	};
-
-	return { authenticateWithCredentials, generateAuthRequest };
 };

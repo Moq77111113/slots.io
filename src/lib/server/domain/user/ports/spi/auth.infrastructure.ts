@@ -12,8 +12,8 @@ export type AuthCommand = {
 
 export type ThirdPartyCommand = {
 	getProviders: () => MaybePromise<ThirdPartyAccount['provider'][]>;
-	generateAuthRequest: (provider: ThirdPartyAccount['provider']) => MaybePromise<AuthRequest>;
-	authenticateWithOAuth2: (request: OAuthAuthenticationArgs) => MaybePromise<UserId>;
+	generateThirdPartyRequest: (provider: ThirdPartyAccount['provider']) => MaybePromise<AuthRequest>;
+	authOrRegisterWithThirdParty: (request: OAuthAuthenticationArgs) => MaybePromise<UserId>;
 };
 
 export type AuthInfrastructure = AuthCommand & ThirdPartyCommand;
