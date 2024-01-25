@@ -1,31 +1,34 @@
-import type { HashPasswordDto } from '$domain/user/dtos/authentication.input';
-import type { User } from '$domain/user/models';
-import type { AuthInfrastructure } from '$domain/user/ports/spi';
+import type { ThirdPartyAccount } from '$domain/@shared/attributes';
+import type {
+	AuthenticateUserArgs,
+	OAuthAuthenticationArgs
+} from '$domain/user/dtos/in/authentication.input';
+import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
+import { makeUserId, type UserId } from '$domain/user/models';
+import type { AuthInfrastructure } from '$domain/user/ports/spi/auth.infrastructure';
 
 export const MockedAuthInfrastructure = (): AuthInfrastructure => {
-	const authenticate = {
-		byCredentials: (_email: User['email'], _password: User['password']) => {
-			return Promise.resolve(null);
-		},
-		byThirdPartyAccount: (_thirdPartyAccount: User['thirdPartyAccounts'][number]) => {
-			return Promise.resolve(null);
-		}
-	};
-
-	const hash = {
-		generateSalt: () => {
-			const salt = Array.from({ length: 16 }, () =>
-				Math.floor(Math.random() * 36).toString(36)
-			).join('');
-			return Promise.resolve(salt);
-		},
-		hashPassword: ({ password, salt }: HashPasswordDto) => {
-			return Promise.resolve(`hashed_${password}_${salt}`);
-		}
-	};
-
 	return {
-		authenticate,
-		hash
+		registerWithCredentials: (_args: AuthenticateUserArgs): Promise<UserId> => {
+			return Promise.resolve(makeUserId('mock-user-id'));
+		},
+		authenticateWithCredentials: (_args: AuthenticateUserArgs): Promise<UserId> => {
+			return Promise.resolve(makeUserId('mock-user-id'));
+		},
+		getProviders: (): Promise<ThirdPartyAccount['provider'][]> => {
+			return Promise.resolve(['mock-provider']);
+		},
+		generateThirdPartyRequest: (provider: ThirdPartyAccount['provider']): Promise<AuthRequest> => {
+			return Promise.resolve({
+				provider,
+				request: 'mock-request',
+				state: 'mock-state',
+				codeVerifier: 'mock-code-verifier',
+				authUrl: 'mock-auth-url'
+			});
+		},
+		authOrRegisterWithThirdParty: (_request: OAuthAuthenticationArgs): Promise<UserId> => {
+			return Promise.resolve(makeUserId('mock-user-id'));
+		}
 	};
 };
