@@ -4,7 +4,8 @@ type Keys =
 	| 'user:duplicated'
 	| 'user:not-found'
 	| 'user:password-not-set'
-	| 'user:invalid-credentials';
+	| 'user:invalid-credentials'
+	| 'user:provider-not-enabled';
 export const UserErrors = {
 	already_exists: (email: string) =>
 		DomainError(
@@ -30,7 +31,13 @@ export const UserErrors = {
 		key: 'user:invalid-credentials',
 		message: 'Invalid credentials',
 		statusCode: 'unauthorized'
-	})
+	}),
+	provider_not_enabled: (provider: string) =>
+		DomainError({
+			key: 'user:provider-not-enabled',
+			message: `The provider ${provider} is not enabled`,
+			statusCode: 'bad_request'
+		})
 } as const satisfies ErrorCollection<Keys>;
 
 export type UserErrorKeys = Keys;

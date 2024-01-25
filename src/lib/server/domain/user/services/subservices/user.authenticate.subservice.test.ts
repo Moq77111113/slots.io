@@ -34,20 +34,16 @@ describe('UserRegisterSubService', () => {
 			expect('password' in loggedIn).toBe(false);
 		});
 
-		it('should throw an user_not_found domain Error if the user does not exist', async () => {
+		it('should throw an user_not_found domain Error if the user does not exist', () => {
 			const input = {
 				email: 'foo@bar.com',
 				password: 'password123'
 			};
-			const error = await service
-				.authenticateWithCredentials(input)
-				.then(() => null)
-				.catch((e) => e instanceof Error && e);
+			const fn = () => service.authenticateWithCredentials(input);
 
-			expect(error).toEqual(Error('User not found'));
+			expect(fn).toThrow(Error('User not found'));
 		});
-
-		it('should throw a password_not_set domain Error if the user does not have a password ', async () => {
+		it('should throw a password_not_set domain Error if the user does not have a password ', () => {
 			const input = {
 				email: 'foo@bar.com',
 				password: 'password123'
@@ -60,16 +56,13 @@ describe('UserRegisterSubService', () => {
 					} as User)
 			);
 
-			const error = await service
-				.authenticateWithCredentials(input)
-				.then(() => null)
-				.catch((e) => e instanceof Error && e);
+			const fn = () => service.authenticateWithCredentials(input);
 
-			expect(error).toEqual(Error('User password is not set'));
+			expect(fn).toThrow(Error('User password is not set'));
 			spy.mockRestore();
 		});
 
-		it('should throw an invalid_credentials domain Error if port invalidate credentials', async () => {
+		it('should throw an invalid_credentials domain Error if port invalidate credentials', () => {
 			const input = {
 				email: 'uSer@example.com',
 				password: 'password321'
@@ -80,14 +73,39 @@ describe('UserRegisterSubService', () => {
 			).mockImplementation(() => {
 				throw new Error('Bad guy, the password does not match 👿');
 			});
-			const error = await service
-				.authenticateWithCredentials(input)
-				.then(() => null)
-				.catch((e) => e instanceof Error && e);
+			const fn = () => service.authenticateWithCredentials(input);
 
-			expect(spy).toHaveBeenCalled();
-			expect(error).toEqual(Error('Invalid credentials'));
+			expect(fn).toThrow(Error('Invalid credentials'));
 			spy.mockRestore();
+		});
+	});
+
+	describe('oauth', () => {
+		describe('generateAuthRequest', () => {
+			it('should throw an error if the provider is not enabled', () => {
+				const fn = () => service.generateAuthRequest('this-one-does-not-exist');
+				expect(fn).toThrow(Error('The provider this-one-does-not-exist is not enabled'));
+			});
+
+			it('should return an auth request for a valid provider', async () => {
+				const expected = {
+					authUrl: 'https://example.com/auth',
+					codeVerifier: 'code-verifier',
+					provider: 'mock-provider',
+					request: 'request',
+					state: 'state'
+				};
+				const spy = spyOn(
+					context.infrastructure.authInfrastructure,
+					'generateAuthRequest'
+				).mockImplementation(() => {
+					return Promise.resolve(expected);
+				});
+
+				const request = await service.generateAuthRequest('mock-provider');
+				expect(request).toEqual(expected);
+				spy.mockRestore();
+			});
 		});
 	});
 });

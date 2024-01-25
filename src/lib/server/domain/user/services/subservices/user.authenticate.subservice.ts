@@ -1,4 +1,6 @@
+import type { ThirdPartyAccount } from '$domain/@shared/attributes';
 import { DomainErrors } from '$domain/@shared/errors';
+import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
 import type { UserId } from '$domain/user/models';
 
 import type { AuthenticateUserArgs, PublicUser, UserServiceContext } from '../types';
@@ -42,5 +44,19 @@ export const UserAuthenticateSubService = (context: UserServiceContext) => {
 		return publicUser;
 	};
 
-	return { authenticateWithCredentials };
+	const isProviderEnabled = async (provider: ThirdPartyAccount['provider']) => {
+		const providers = await authInfrastructure.getProviders();
+		return providers.includes(provider);
+	};
+	const generateAuthRequest = async (
+		provider: ThirdPartyAccount['provider']
+	): Promise<AuthRequest> => {
+		if (!(await isProviderEnabled(provider))) {
+			throw errorHandler.throws(DomainErrors.User.provider_not_enabled(provider));
+		}
+
+		return authInfrastructure.generateAuthRequest(provider);
+	};
+
+	return { authenticateWithCredentials, generateAuthRequest };
 };
