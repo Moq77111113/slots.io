@@ -11,9 +11,11 @@ export type Identity<T> = {
 export type CreateEntityInput<T> = Identity<Omit<T, 'id' | 'createdAt' | 'updatedAt'>>;
 
 export type UpdateEntityInput<T extends Entity<Branded<unknown, string>, unknown>> = Identity<
-	CreateEntityInput<T>
+	Omit<T, 'createdAt' | 'updatedAt'>
 >;
-
 export type PatchEntityInput<T extends Entity<Branded<unknown, string>, unknown>> = Identity<
-	Partial<CreateEntityInput<T>>
+	Omit<Partial<UpdateEntityInput<T>>, 'id'> & { id: T['id'] }
+>;
+export type UpsertEntityInput<T extends Entity<Branded<unknown, string>, unknown>> = Identity<
+	Omit<UpdateEntityInput<T>, 'id'> & { id?: T['id'] }
 >;

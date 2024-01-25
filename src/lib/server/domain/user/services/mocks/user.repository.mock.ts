@@ -1,6 +1,11 @@
 import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import type { UserFilters } from '$domain/user/dtos/user-filters';
-import type { CreateUserDto, PatchUserDto, UpdateUserDto } from '$domain/user/dtos/user-input';
+import type { UserFilters } from '$domain/user/dtos/in/user-filters';
+import type {
+	CreateUserDto,
+	PatchUserDto,
+	UpdateUserDto,
+	UpsertUserDto
+} from '$domain/user/dtos/in/user-input';
 import { makeUserId, type User, type UserId } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
 
@@ -44,7 +49,7 @@ export const MockedUserRepository = (): UserRepository => {
 	};
 	const create = (data: CreateUserDto) => {
 		const newUser: User = {
-			id: makeUserId(''),
+			id: makeUserId(`userId-${Math.random() * 1000 * (Math.random() * 10)}`),
 			...data,
 			createdAt: new Date(),
 			updatedAt: new Date()
@@ -53,7 +58,8 @@ export const MockedUserRepository = (): UserRepository => {
 		return Promise.resolve(newUser);
 	};
 
-	const update = (id: UserId, data: UpdateUserDto) => {
+	const update = (data: UpdateUserDto) => {
+		const { id } = data;
 		const index = users.findIndex((user) => user.id === id);
 		if (index === -1) {
 			throw new Error(`User ${id} not found`);
@@ -62,7 +68,8 @@ export const MockedUserRepository = (): UserRepository => {
 		return Promise.resolve(users[index]);
 	};
 
-	const patch = (id: UserId, data: PatchUserDto) => {
+	const patch = (data: PatchUserDto) => {
+		const { id } = data;
 		const index = users.findIndex((user) => user.id === id);
 		if (index === -1) {
 			throw new Error(`User ${id} not found`);
@@ -72,6 +79,13 @@ export const MockedUserRepository = (): UserRepository => {
 		return Promise.resolve(users[index]);
 	};
 
+	const upsert = (data: UpsertUserDto) => {
+		const { id } = data;
+		if (id && users.find((_) => _.id === id)) {
+			return update({ id, ...data });
+		}
+		return create(data);
+	};
 	const remove = (id: UserId) => {
 		const index = users.findIndex((user) => user.id === id);
 		if (index === -1) {
@@ -88,6 +102,7 @@ export const MockedUserRepository = (): UserRepository => {
 		create,
 		update,
 		patch,
+		upsert,
 		delete: remove
 	};
 };

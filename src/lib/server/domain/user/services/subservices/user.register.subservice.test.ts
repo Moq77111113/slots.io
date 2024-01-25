@@ -37,7 +37,7 @@ describe('UserRegisterSubService', () => {
 			.then(() => null)
 			.catch((e) => e instanceof Error && e);
 
-		expect(error).toEqual(new Error('An user with email test@example.com already exists'));
+		expect(error).toEqual(new Error('user:password-not-set'));
 	});
 
 	it('should found duplicate case insensitive emails', async () => {
@@ -51,6 +51,6 @@ describe('UserRegisterSubService', () => {
 			.then(() => null)
 			.catch((e) => e instanceof Error && e);
 
-		expect(error).toEqual(new Error('An user with email test@example.com already exists'));
+		expect(error).toEqual(new Error('user:already-exists'));
 	});
 });

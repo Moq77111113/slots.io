@@ -38,7 +38,7 @@ module.exports = {
 			}
 		},
 		{
-			files: ['**/domain/**/*.ts'],
+			files: ['**/domain/**/*.ts', '**/+page.server.ts', '**/+server.ts'],
 			rules: {
 				'@typescript-eslint/no-throw-literal': 'off'
 			}
@@ -51,8 +51,9 @@ module.exports = {
 			'warn',
 			{ vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
 		],
+
 		'@typescript-eslint/no-unused-vars': [
-			'warn', // or "error"
+			'warn',
 			{
 				argsIgnorePattern: '^_',
 				varsIgnorePattern: '^_',
@@ -82,7 +83,7 @@ module.exports = {
 					message: 'Use errorHandler.throw() to throw Error in the domain services.',
 					files: {
 						inspect: '.*domain.*\\/service.*\\.ts',
-						ignore: '.*tests.*\\.ts'
+						ignore: '.*(tests|mocks).*\\.ts'
 					}
 				},
 				{
