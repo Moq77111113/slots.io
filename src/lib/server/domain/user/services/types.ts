@@ -24,4 +24,8 @@ export type AuthenticateUserArgs = {
 	password: NonNullable<CreateUserDto['password']>;
 };
 
+export type LogoutUserArgs = {
+	userId: User['id'];
+};
+
 export type PublicUser = Omit<User, 'password' | 'salt'>;
