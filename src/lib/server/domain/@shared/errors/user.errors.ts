@@ -6,7 +6,8 @@ type Keys =
 	| 'user:password-not-set'
 	| 'user:invalid-credentials'
 	| 'user:provider-not-enabled'
-	| 'user:oauth-failed';
+	| 'user:oauth-failed'
+	| 'user:logout-failed';
 export const UserErrors = {
 	already_exists: (email: string) =>
 		DomainError(
@@ -42,6 +43,11 @@ export const UserErrors = {
 	oauth_failed: DomainError({
 		key: 'user:oauth-failed',
 		message: 'OAuth authentication failed',
+		statusCode: 'internal'
+	}),
+	logout_failed: DomainError({
+		key: 'user:logout-failed',
+		message: 'Logout failed',
 		statusCode: 'internal'
 	})
 } as const satisfies ErrorCollection<Keys>;

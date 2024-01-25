@@ -7,6 +7,8 @@ import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
 import { makeUserId, type UserId } from '$domain/user/models';
 import type { AuthInfrastructure } from '$domain/user/ports/spi/auth.infrastructure';
 
+import type { LogoutUserArgs } from '../types';
+
 export const MockedAuthInfrastructure = (): AuthInfrastructure => {
 	return {
 		registerWithCredentials: (_args: AuthenticateUserArgs): Promise<UserId> => {
@@ -29,6 +31,9 @@ export const MockedAuthInfrastructure = (): AuthInfrastructure => {
 		},
 		authOrRegisterWithThirdParty: (_request: OAuthAuthenticationArgs): Promise<UserId> => {
 			return Promise.resolve(makeUserId('mock-user-id'));
+		},
+		logout: (_args: LogoutUserArgs): Promise<void> => {
+			return Promise.resolve();
 		}
 	};
 };
