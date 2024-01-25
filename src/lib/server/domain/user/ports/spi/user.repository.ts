@@ -1,7 +1,12 @@
 import type { MaybePromise, Paginated } from '$domain/@shared';
 import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import type { UserFilters } from '$domain/user/dtos/user-filters';
-import type { CreateUserDto, PatchUserDto, UpdateUserDto } from '$domain/user/dtos/user-input';
+import type { UserFilters } from '$domain/user/dtos/in/user-filters';
+import type {
+	CreateUserDto,
+	PatchUserDto,
+	UpdateUserDto,
+	UpsertUserDto
+} from '$domain/user/dtos/in/user-input';
 import type { User, UserId } from '$domain/user/models';
 
 export type UserQuery = {
@@ -15,9 +20,10 @@ export type UserQuery = {
 
 export type UserCommand = {
 	create(data: CreateUserDto): MaybePromise<User>;
-	update(id: UserId, data: UpdateUserDto): MaybePromise<User>;
-	patch(id: UserId, data: PatchUserDto): MaybePromise<User>;
+	update(data: UpdateUserDto): MaybePromise<User>;
+	patch(data: PatchUserDto): MaybePromise<User>;
 	delete(id: UserId): MaybePromise<User>;
+	upsert(data: UpsertUserDto): MaybePromise<User>;
 };
 
 export type UserRepository = UserQuery & UserCommand;

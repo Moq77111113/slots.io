@@ -19,13 +19,15 @@ export const UserRegisterSubService = (context: UserServiceContext) => {
 			throw errorHandler.throws(DomainErrors.User.already_exists(sanitizedEmail));
 		}
 
-		const salt = await authInfrastructure.hash.generateSalt();
-		const hashedPassword = await authInfrastructure.hash.hashPassword({ password, salt });
-
-		const createdUser = await userRepository.create({
+		const userId = await authInfrastructure.registerWithCredentials({
 			email: sanitizedEmail,
-			password: hashedPassword,
-			salt,
+			password
+		});
+
+		const createdUser = await userRepository.upsert({
+			id: userId,
+			email: sanitizedEmail,
+			password,
 			status: 'active',
 			language: { code: 'fr' },
 			notificationsChannel: [],

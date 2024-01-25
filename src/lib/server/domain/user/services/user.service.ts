@@ -1,4 +1,4 @@
-import { UserAuthenticateSubService } from './subservices/user.authenticate';
+import { UserAuthenticateSubService } from './subservices/user.authenticate.subservice';
 import { UserRegisterSubService } from './subservices/user.register.subservice';
 import type { UserServiceContext } from './types';
 

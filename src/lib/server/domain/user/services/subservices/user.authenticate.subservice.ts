@@ -1,86 +1,46 @@
-import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
+import { DomainErrors } from '$domain/@shared/errors';
+import type { UserId } from '$domain/user/models';
 
-import type { User } from '$domain/user/models';
+import type { AuthenticateUserArgs, PublicUser, UserServiceContext } from '../types';
 
-import { MockedUserServiceContext } from '../mocks/context.mock';
-import type { UserServiceContext } from '../types';
-import { UserAuthenticateSubService } from './user.authenticate';
-import { UserRegisterSubService } from './user.register.subservice';
+export const UserAuthenticateSubService = (context: UserServiceContext) => {
+	const {
+		repositories: { userRepository },
+		infrastructure: { authInfrastructure },
+		shared: { errorHandler }
+	} = context;
 
-describe('UserRegisterSubService', () => {
-	let service: ReturnType<typeof UserAuthenticateSubService>;
-	let context: UserServiceContext;
+	const authenticateOnPort = async (args: AuthenticateUserArgs): Promise<UserId> =>
+		await authInfrastructure.authenticateWithCredentials(args);
 
-	beforeAll(async () => {
-		context = MockedUserServiceContext();
-		await UserRegisterSubService(context).register({
-			email: 'uSer@example.com',
-			password: 'password123'
-		});
-		service = UserAuthenticateSubService(context);
-	});
+	const authenticateWithCredentials = async (args: AuthenticateUserArgs): Promise<PublicUser> => {
+		const { email, password } = args;
+		const sanitizedEmail = email.trim().toLowerCase();
+		const existingUser = await userRepository.findBy.email(sanitizedEmail);
 
-	describe('with credentials', () => {
-		it('should return the user if the credentials are correct', async () => {
-			const input = {
-				email: 'uSer@example.com',
-				password: 'password123'
-			};
+		if (!existingUser) {
+			throw errorHandler.throws(DomainErrors.User.not_found);
+		}
 
-			const loggedIn = await service.authenticateWithCredentials(input);
+		if (!existingUser.password) {
+			throw errorHandler.throws(DomainErrors.User.password_not_set);
+		}
 
-			expect(loggedIn.email).toBe('user@example.com');
-			expect(loggedIn.id).toBeDefined();
-			expect('password' in loggedIn).toBe(false);
+		const id = await authenticateOnPort({ email: sanitizedEmail, password }).catch(() => {
+			throw errorHandler.throws(DomainErrors.User.invalid_credentials);
 		});
 
-		it('should throw an user_not_found domain Error if the user does not exist', async () => {
-			const input = {
-				email: 'foo@bar.com',
-				password: 'password123'
-			};
-			const error = await service
-				.authenticateWithCredentials(input)
-				.then(() => null)
-				.catch((e) => e instanceof Error && e);
-
-			expect(error).toEqual(Error('User not found'));
+		const {
+			password: _password,
+			salt: _salt,
+			...publicUser
+		} = await userRepository.patch({
+			id,
+			lastLogin: new Date()
 		});
 
-		it('should throw a password_not_set domain Error if the user does not have a password ', async () => {
-			const input = {
-				email: 'foo@bar.com',
-				password: 'password123'
-			};
-			const spy = spyOn(context.repositories.userRepository.findBy, 'email').mockImplementation(
-				() =>
-					Promise.resolve({
-						id: 'foo',
-						email: 'foo@bar.com'
-					} as User)
-			);
+		return publicUser;
+	};
 
-			const error = await service
-				.authenticateWithCredentials(input)
-				.then(() => null)
-				.catch((e) => e instanceof Error && e);
-
-			expect(error).toEqual(Error('User password is not set'));
-			spy.mockRestore();
-		});
-
-		it('should throw an invalid_credentials domain Error if the credentials are not the same', async () => {
-			const input = {
-				email: 'uSer@example.com',
-				password: 'password321'
-			};
-
-			const error = await service
-				.authenticateWithCredentials(input)
-				.then(() => null)
-				.catch((e) => e instanceof Error && e);
-
-			expect(error).toEqual(Error('Invalid credentials'));
-		});
-	});
-});
+	return { authenticateWithCredentials };
+};
