@@ -30,7 +30,7 @@ export const MockedUserRepository = (): UserRepository => {
 	};
 
 	const findMany = (filters: UserFilters) => {
-		const { language, status, limit = 10, page = 0 } = filters;
+		const { language, status, itemsPerPage = 10, page = 1 } = filters;
 
 		const filtered = users.filter((user) => {
 			if (language && user.language.code !== language) return false;
@@ -38,13 +38,13 @@ export const MockedUserRepository = (): UserRepository => {
 			return true;
 		});
 
-		const paginated = filtered.slice(page * limit, page * limit + limit);
+		const paginated = filtered.slice((page - 1) * itemsPerPage, page * itemsPerPage + itemsPerPage);
 
 		return Promise.resolve({
 			data: paginated,
 			total: filtered.length,
 			page,
-			limit
+			itemsPerPage
 		});
 	};
 	const create = (data: CreateUserDto) => {
