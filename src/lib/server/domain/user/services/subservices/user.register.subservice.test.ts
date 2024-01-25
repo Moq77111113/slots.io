@@ -26,31 +26,25 @@ describe('UserRegisterSubService', () => {
 		expect('password' in registeredUser).toBe(false);
 	});
 
-	it('should throw an error if the user already exists', async () => {
+	it('should throw an error if the user already exists', () => {
 		const user = {
 			email: 'test@example.com',
 			password: 'password123'
 		};
 
-		const error = await service
-			.register(user)
-			.then(() => null)
-			.catch((e) => e instanceof Error && e);
+		const fn = () => service.register(user);
 
-		expect(error).toEqual(new Error('user:password-not-set'));
+		expect(fn).toThrow(new Error('user:duplicated'));
 	});
 
-	it('should found duplicate case insensitive emails', async () => {
+	it('should found duplicate case insensitive emails', () => {
 		const user = {
 			email: 'TeSt@EXAMPLE.com',
 			password: 'password123'
 		};
 
-		const error = await service
-			.register(user)
-			.then(() => null)
-			.catch((e) => e instanceof Error && e);
+		const fn = () => service.register(user);
 
-		expect(error).toEqual(new Error('user:already-exists'));
+		expect(fn).toThrow(new Error('user:duplicated'));
 	});
 });
