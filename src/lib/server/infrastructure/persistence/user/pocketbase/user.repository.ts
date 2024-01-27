@@ -1,19 +1,15 @@
+import type { RecordOptions } from 'pocketbase';
 import { z } from 'zod';
 
 import type { Language, ThirdPartyAccount } from '$domain/@shared/attributes';
 import type { UserFilters } from '$domain/user/dtos/in/user-filters';
-import type {
-	CreateUserDto,
-	PatchUserDto,
-	UpdateUserDto,
-	UpsertUserDto
-} from '$domain/user/dtos/in/user-input';
+import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '$domain/user/dtos/in/user-input';
 import { makeUserId, type User } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
-import { Collections, type UsersResponse } from '$infrastructure/generated/pb-types';
-import { makePocketBaseRepository } from '$infrastructure/helpers/repository.helper';
 import { validateData } from '$infrastructure/helpers/schema';
-import type { PocketbaseInfrastructure } from '$infrastructure/persistence/pocketbase';
+import { Collections, type UsersResponse } from '$infrastructure/pocketbase/pb-types';
+import type { PocketBaseInfrastructure } from '$infrastructure/pocketbase/pocketbase';
+import { makePocketBaseRepository } from '$infrastructure/pocketbase/repository.helper';
 
 const schema = z.object({
 	id: z.string(),
@@ -39,10 +35,11 @@ type Relations = {
 	thirdPartyAccounts: ThirdPartyAccount[];
 };
 type PocketBaseUser = UsersResponse<Language, string[], Relations>;
+
 export const PocketBaseUserRepository = ({
 	pocketbase
 }: {
-	pocketbase: PocketbaseInfrastructure;
+	pocketbase: PocketBaseInfrastructure;
 }): UserRepository => {
 	const toBusiness = (data: PocketBaseUser): User => {
 		const {
@@ -81,30 +78,32 @@ export const PocketBaseUserRepository = ({
 		console.error(error);
 		throw new Error('Failed');
 	};
-
 	const toBusinessList = (data: PocketBaseUser[]): User[] => data.map(toBusiness);
+
+	const options = { expand: 'thirdPartyAccounts' } as const satisfies RecordOptions;
+
 	const { repository: users } = makePocketBaseRepository<PocketBaseUser>(
-		{ pocketbase },
+		{ pocketbase: pocketbase },
 		{ collection: Collections.Users }
 	);
 
 	const findById = async (id: string) => {
 		return users
-			.getOne(id, { expand: 'thirdPartyAccounts' })
+			.getOne(id, options)
 			.then(toBusiness)
 			.catch(() => null);
 	};
 
 	const findByEmail = async (email: string) => {
 		return users
-			.getFirstListItem(`email = "${email}"`, { expand: 'thirdPartyAccounts' })
+			.getFirstListItem(`email = "${email}"`, options)
 			.then(toBusiness)
 			.catch(() => null);
 	};
 
 	const findByThirdPartyAccount = async (thirdPartyAccount: ThirdPartyAccount) => {
 		return users
-			.getFirstListItem(`thirdPartyAccount = "${thirdPartyAccount.accountId}"`)
+			.getFirstListItem(`thirdPartyAccount = "${thirdPartyAccount.accountId}"`, options)
 			.then(toBusiness)
 			.catch(() => null);
 	};
@@ -118,8 +117,8 @@ export const PocketBaseUserRepository = ({
 		].filter(Boolean);
 
 		const result = await users.getList((page - 1) * itemsPerPage, itemsPerPage, {
-			filter: filter.length ? filter.join(' && ') : '',
-			expand: 'thirdPartyAccounts'
+			...options,
+			filter: filter.length ? filter.join(' && ') : ''
 		});
 		return {
 			data: toBusinessList(result.items),
@@ -129,30 +128,18 @@ export const PocketBaseUserRepository = ({
 		};
 	};
 
-	const create = async (data: CreateUserDto): Promise<User> => {
-		return await users
-			.create({
-				...data,
-				passwordConfirm: data.password,
-				status: data.status === 'active',
-				emailVisibility: true
-			})
-			.then(toBusiness)
-			.catch((e) => {
-				console.error('QMO');
-				console.error(e instanceof Error ? e.message : e);
-				throw e;
-			});
-	};
-
 	const update = async (data: UpdateUserDto): Promise<User> => {
 		const { id, ...rest } = data;
-		return await users.update(id, { ...rest, status: rest.status === 'active' }).then(toBusiness);
+		return await users
+			.update(id, { ...rest, status: rest.status === 'active' }, options)
+			.then(toBusiness);
 	};
 
 	const patch = async (data: PatchUserDto): Promise<User> => {
 		const { id, ...rest } = data;
-		return await users.update(id, { ...rest, status: rest.status === 'active' }).then(toBusiness);
+		return await users
+			.update(id, { ...rest, status: rest.status ? rest.status === 'active' : undefined }, options)
+			.then(toBusiness);
 	};
 
 	const remove = async (id: string): Promise<User> => {
@@ -162,12 +149,12 @@ export const PocketBaseUserRepository = ({
 		return user;
 	};
 
-	const upsert = (data: UpsertUserDto): Promise<User> => {
+	const upsert = async (data: UpsertUserDto): Promise<User> => {
 		const { id, ...rest } = data;
 		if (id) {
 			return update({ id, ...rest });
 		}
-		return create(rest);
+		return await users.create({ ...rest, status: rest.status === 'active' }).then(toBusiness);
 	};
 	return {
 		findById,
@@ -176,7 +163,6 @@ export const PocketBaseUserRepository = ({
 			thirdPartyAccount: findByThirdPartyAccount
 		},
 		findMany,
-		create,
 		update,
 		patch,
 		delete: remove,

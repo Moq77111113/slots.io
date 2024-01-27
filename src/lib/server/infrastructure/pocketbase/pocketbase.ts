@@ -1,9 +1,9 @@
 import PocketBase, { type RecordModel } from 'pocketbase';
 
-type PocketbaseInfrastructureContext = {
+type PocketBaseInfrastructureContext = {
 	uri: string;
 };
-export const PocketbaseInfrastructure = async (context: PocketbaseInfrastructureContext) => {
+export const PocketBaseInfrastructure = async (context: PocketBaseInfrastructureContext) => {
 	const { uri } = context;
 	const pocketbase = new PocketBase(uri);
 
@@ -30,4 +30,4 @@ export const PocketbaseInfrastructure = async (context: PocketbaseInfrastructure
 	};
 };
 
-export type PocketbaseInfrastructure = Awaited<ReturnType<typeof PocketbaseInfrastructure>>;
+export type PocketBaseInfrastructure = Awaited<ReturnType<typeof PocketBaseInfrastructure>>;

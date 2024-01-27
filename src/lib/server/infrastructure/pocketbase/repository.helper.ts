@@ -1,8 +1,9 @@
-import type { BaseSystemFields, Collections } from '$infrastructure/generated/pb-types';
-import type { PocketbaseInfrastructure } from '$infrastructure/persistence/pocketbase';
+import type { BaseSystemFields, Collections } from '$infrastructure/pocketbase/pb-types';
+
+import type { PocketBaseInfrastructure } from './pocketbase';
 
 export const makePocketBaseRepository = <Shape extends BaseSystemFields<unknown>>(
-	{ pocketbase }: { pocketbase: PocketbaseInfrastructure },
+	{ pocketbase }: { pocketbase: PocketBaseInfrastructure },
 
 	{ collection }: { collection: Collections }
 ) => {
