@@ -3,7 +3,7 @@
 import type { ErrorHandler } from '$domain/@shared/errors';
 
 import type { UserServiceContext } from '../types';
-import { MockedAuthInfrastructure } from './auth.infrastructure.mock';
+import { MockedAuthProvider } from './auth.provider.mock';
 import { MockedUserRepository } from './user.repository.mock';
 
 export const MockedUserServiceContext = (): UserServiceContext => {
@@ -20,8 +20,8 @@ export const MockedUserServiceContext = (): UserServiceContext => {
 		repositories: {
 			userRepository: MockedUserRepository()
 		},
-		infrastructure: {
-			authInfrastructure: MockedAuthInfrastructure()
+		providers: {
+			authProvider: MockedAuthProvider()
 		}
 	};
 };

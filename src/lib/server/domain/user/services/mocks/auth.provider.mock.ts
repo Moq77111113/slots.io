@@ -9,7 +9,7 @@ import type { AuthProvider } from '$domain/user/ports/spi/auth.provider';
 
 import type { LogoutUserArgs } from '../types';
 
-export const MockedAuthInfrastructure = (): AuthProvider => {
+export const MockedAuthProvider = (): AuthProvider => {
 	return {
 		registerWithCredentials: (_args: AuthenticateUserArgs): Promise<UserId> => {
 			return Promise.resolve(makeUserId('mock-user-id'));
@@ -26,7 +26,7 @@ export const MockedAuthInfrastructure = (): AuthProvider => {
 				request: 'mock-request',
 				state: 'mock-state',
 				codeVerifier: 'mock-code-verifier',
-				authUrl: 'mock-auth-url'
+				authUrlWithoutRedirect: 'mock-auth-url'
 			});
 		},
 		authOrRegisterWithThirdParty: (_request: OAuthAuthenticationArgs): Promise<UserId> => {

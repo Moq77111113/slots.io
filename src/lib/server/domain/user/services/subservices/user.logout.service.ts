@@ -5,13 +5,13 @@ import type { UserServiceContext } from '../types';
 
 export const UserLogoutSubService = (context: UserServiceContext) => {
 	const {
-		infrastructure: { authInfrastructure },
+		providers: { authProvider },
 		shared: { errorHandler }
 	} = context;
 
 	const wrapPort = {
 		logout: async (userId: UserId) => {
-			await authInfrastructure.logout({ userId });
+			await authProvider.logout({ userId });
 		}
 	};
 

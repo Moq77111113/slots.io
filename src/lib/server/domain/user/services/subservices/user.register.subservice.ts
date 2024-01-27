@@ -5,7 +5,7 @@ import type { PublicUser, RegisterUserArgs, UserServiceContext } from '../types'
 export const UserRegisterSubService = (context: UserServiceContext) => {
 	const {
 		repositories: { userRepository },
-		infrastructure: { authInfrastructure },
+		providers: { authProvider },
 		shared: { errorHandler }
 	} = context;
 
@@ -19,7 +19,7 @@ export const UserRegisterSubService = (context: UserServiceContext) => {
 			throw errorHandler.throws(DomainErrors.User.already_exists(sanitizedEmail));
 		}
 
-		const userId = await authInfrastructure.registerWithCredentials({
+		const userId = await authProvider.registerWithCredentials({
 			email: sanitizedEmail,
 			password
 		});

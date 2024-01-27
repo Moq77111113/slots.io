@@ -1,6 +1,10 @@
 import type { RecordOptions } from 'pocketbase';
 
+import type { ThirdPartyAccount } from '$domain/@shared/attributes';
+import type { OAuthAuthenticationArgs } from '$domain/user/dtos/in/authentication.input';
+import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
 import { makeUserId, type User } from '$domain/user/models';
+import type { AuthProvider } from '$domain/user/ports/spi';
 import type { AuthenticateUserArgs } from '$domain/user/services/types';
 import { DomainSchemas, validateData } from '$infrastructure';
 import { PocketBaseInfrastructure } from '$infrastructure/pocketbase';
@@ -12,7 +16,7 @@ export const PocketBaseAuthProvider = ({
 	pocketbase
 }: {
 	pocketbase: PocketBaseInfrastructure;
-}) => {
+}): AuthProvider => {
 	const {
 		collections: { users }
 	} = pocketbase;
@@ -21,8 +25,8 @@ export const PocketBaseAuthProvider = ({
 		const {
 			id,
 			email,
-			language,
-			locale,
+			language = { code: 'fr' },
+			locale = 'fr_FR',
 			status,
 			created,
 			updated,
@@ -34,7 +38,7 @@ export const PocketBaseAuthProvider = ({
 			{
 				id,
 				email,
-				language: language || { code: 'fr' },
+				language,
 				locale,
 				status: status ? ('active' as const) : ('inactive' as const),
 				createdAt: new Date(created),
@@ -61,7 +65,7 @@ export const PocketBaseAuthProvider = ({
 
 	const registerWithCredentials = async ({ email, password }: AuthenticateUserArgs) => {
 		//TODO: add password validation to args ?
-		return await users
+		const user = await users
 			.create(
 				{
 					email,
@@ -77,10 +81,58 @@ export const PocketBaseAuthProvider = ({
 				options
 			)
 			.then(toBusiness);
+		return user.id;
 	};
 
+	const authenticateWithCredentials = async ({ email, password }: AuthenticateUserArgs) => {
+		const res = await users.authWithPassword(email, password, { ...options });
+
+		const user = toBusiness(res.record);
+		return user.id;
+	};
+	const listProviders = async () => {
+		return await users.listAuthMethods({ fields: 'authProviders' });
+	};
+	const getProviders = async () => {
+		return listProviders().then((res) => res.authProviders.map((_) => _.name));
+	};
+
+	const generateThirdPartyRequest = async (
+		provider: ThirdPartyAccount['provider']
+	): Promise<AuthRequest> => {
+		const thirdParty = await listProviders().then((_) =>
+			_.authProviders.find((_) => _.name === provider)
+		);
+		if (!thirdParty) throw new Error(`Provider ${provider} not found`);
+		return {
+			provider: thirdParty.name,
+			state: thirdParty.state,
+			authUrlWithoutRedirect: thirdParty.authUrl,
+			codeVerifier: thirdParty.codeVerifier
+		};
+	};
+
+	const authOrRegisterWithThirdParty = async (request: OAuthAuthenticationArgs) => {
+		const { code, codeVerifier, provider, sourceUrl } = request;
+		const { record: user } = await users.authWithOAuth2Code(
+			provider,
+			code,
+			codeVerifier,
+			sourceUrl,
+			{},
+			{ ...options }
+		);
+		return toBusiness(user).id;
+	};
+
+	const logout = async () => {};
 	return {
-		registerWithCredentials
+		registerWithCredentials,
+		authenticateWithCredentials,
+		getProviders,
+		generateThirdPartyRequest,
+		authOrRegisterWithThirdParty,
+		logout
 	};
 };
 

@@ -9,8 +9,8 @@ export type UserServiceContext = ActionContext & {
 	repositories: {
 		userRepository: UserRepository;
 	};
-	infrastructure: {
-		authInfrastructure: AuthProvider;
+	providers: {
+		authProvider: AuthProvider;
 	};
 };
 
