@@ -99,7 +99,6 @@ export const MockedUserRepository = (): UserRepository => {
 		findById,
 		findBy,
 		findMany,
-		create,
 		update,
 		patch,
 		upsert,

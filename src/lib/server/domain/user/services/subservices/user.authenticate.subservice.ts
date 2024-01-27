@@ -6,13 +6,13 @@ import { toPublic } from '../user.service';
 export const UserAuthenticateSubService = (context: UserServiceContext) => {
 	const {
 		repositories: { userRepository },
-		infrastructure: { authInfrastructure },
+		providers: { authProvider },
 		shared: { errorHandler }
 	} = context;
 
 	const wrapPort = {
 		authenticateWithCredentials: async (args: AuthenticateUserArgs) =>
-			await authInfrastructure.authenticateWithCredentials(args)
+			await authProvider.authenticateWithCredentials(args)
 	};
 
 	const authenticateWithCredentials = async (args: AuthenticateUserArgs): Promise<PublicUser> => {

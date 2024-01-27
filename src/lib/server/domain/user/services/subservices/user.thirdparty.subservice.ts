@@ -9,12 +9,12 @@ import { toPublic } from '../user.service';
 export const UserThirdPartyService = (context: UserServiceContext) => {
 	const {
 		repositories: { userRepository },
-		infrastructure: { authInfrastructure },
+		providers: { authProvider },
 		shared: { errorHandler }
 	} = context;
 
 	const isProviderEnabled = async (provider: ThirdPartyAccount['provider']) => {
-		const providers = await authInfrastructure.getProviders();
+		const providers = await authProvider.getProviders();
 		return providers.includes(provider);
 	};
 
@@ -26,7 +26,7 @@ export const UserThirdPartyService = (context: UserServiceContext) => {
 
 	const wrapPort = {
 		authenticateWithThirdParty: async (args: OAuthAuthenticationArgs) =>
-			await authInfrastructure.authOrRegisterWithThirdParty(args)
+			await authProvider.authOrRegisterWithThirdParty(args)
 	};
 
 	const generateThirdPartyRequest = async (
@@ -34,7 +34,7 @@ export const UserThirdPartyService = (context: UserServiceContext) => {
 	): Promise<AuthRequest> => {
 		await checkProvider(provider);
 
-		return authInfrastructure.generateThirdPartyRequest(provider);
+		return authProvider.generateThirdPartyRequest(provider);
 	};
 
 	const authOrRegisterWithThirdParty = async (

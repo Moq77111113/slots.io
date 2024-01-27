@@ -1,2 +1,2 @@
 export * from './user.repository';
-export * from './auth.infrastructure'
+export * from './auth.provider'

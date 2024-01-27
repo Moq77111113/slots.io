@@ -1,6 +1,6 @@
 export type AuthRequest = {
 	provider: string;
 	state: string;
-	authUrl: string;
+	authUrlWithoutRedirect: string;
 	codeVerifier: string;
 };

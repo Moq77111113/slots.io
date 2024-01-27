@@ -66,7 +66,7 @@ describe('Register user with credentials', () => {
 			password: 'password321'
 		};
 		const spy = spyOn(
-			context.infrastructure.authInfrastructure,
+			context.providers.authProvider,
 			'authenticateWithCredentials'
 		).mockImplementation(() => {
 			throw Error('Bad guy, the password does not match 👿');
