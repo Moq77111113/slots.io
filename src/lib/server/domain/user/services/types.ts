@@ -3,7 +3,7 @@ import type { CreateUserDto } from '$domain/user/dtos/in/user-input';
 import type { User } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
 
-import type { AuthProvider } from '../ports/spi/auth.infrastructure';
+import type { AuthProvider } from '../ports/spi/auth.provider';
 
 export type UserServiceContext = ActionContext & {
 	repositories: {

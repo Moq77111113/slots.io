@@ -1,4 +1,7 @@
-import PocketBase, { type RecordModel } from 'pocketbase';
+import PocketBase from 'pocketbase';
+
+import { Collections } from '.';
+import type { PocketBaseEntities } from './types';
 
 type PocketBaseInfrastructureContext = {
 	uri: string;
@@ -22,11 +25,13 @@ export const PocketBaseInfrastructure = async (context: PocketBaseInfrastructure
 		process.exit(1);
 	}
 
+	const userCollection = pocketbase.collection<PocketBaseEntities['User']>(Collections.Users);
 	return {
 		healthCheck,
 		auth: pocketbase.authStore,
-		getCollection: <T, Name extends string = string>(name: Name) =>
-			pocketbase.collection<T & RecordModel>(name)
+		collections: {
+			users: userCollection
+		}
 	};
 };
 

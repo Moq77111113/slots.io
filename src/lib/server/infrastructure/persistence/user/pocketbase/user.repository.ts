@@ -1,41 +1,16 @@
 import type { RecordOptions } from 'pocketbase';
-import { z } from 'zod';
 
-import type { Language, ThirdPartyAccount } from '$domain/@shared/attributes';
+import type { ThirdPartyAccount } from '$domain/@shared/attributes';
 import type { UserFilters } from '$domain/user/dtos/in/user-filters';
 import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '$domain/user/dtos/in/user-input';
 import { makeUserId, type User } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
-import { validateData } from '$infrastructure/helpers/schema';
-import { Collections, type UsersResponse } from '$infrastructure/pocketbase/pb-types';
+import { DomainSchemas, validateData } from '$infrastructure/helpers/schema';
 import type { PocketBaseInfrastructure } from '$infrastructure/pocketbase/pocketbase';
-import { makePocketBaseRepository } from '$infrastructure/pocketbase/repository.helper';
+import type { PocketBaseEntities } from '$infrastructure/pocketbase/types';
+import { entries } from '$lib/server/common/helpers/types';
 
-const schema = z.object({
-	id: z.string(),
-	email: z.string().email(),
-	notificationsChannel: z.array(z.string()).default([]),
-	lastLogin: z.date().nullable(),
-	thirdPartyAccounts: z
-		.array(z.object({ accountId: z.string(), provider: z.string() }))
-		.default([]),
-	language: z.object({
-		code: z.union([z.literal('fr'), z.literal('en')]).default('fr')
-	}),
-	locale: z.union([z.literal('fr_FR'), z.literal('en_GB')]).default('fr_FR'),
-	password: z.string().default(''),
-	salt: z.string().default(''),
-	accessToken: z.string().optional(),
-	status: z.enum(['active', 'inactive']),
-	createdAt: z.date(),
-	updatedAt: z.date()
-});
-
-type Relations = {
-	thirdPartyAccounts: ThirdPartyAccount[];
-};
-type PocketBaseUser = UsersResponse<Language, string[], Relations>;
-
+type PocketBaseUser = PocketBaseEntities['User'];
 export const PocketBaseUserRepository = ({
 	pocketbase
 }: {
@@ -67,7 +42,7 @@ export const PocketBaseUserRepository = ({
 				notificationsChannel: notificationsChannel || [],
 				thirdPartyAccounts: expand?.thirdPartyAccounts || []
 			},
-			schema
+			DomainSchemas.User
 		);
 		if (result) {
 			return {
@@ -75,17 +50,17 @@ export const PocketBaseUserRepository = ({
 				id: makeUserId(result.id)
 			};
 		}
-		console.error(error);
-		throw new Error('Failed');
+
+		const { fieldErrors, formErrors } = error;
+		const fieldError = entries(fieldErrors).find(Boolean);
+		throw new Error(fieldError ? fieldError.reverse().join(' :') : formErrors[0]);
 	};
 	const toBusinessList = (data: PocketBaseUser[]): User[] => data.map(toBusiness);
 
 	const options = { expand: 'thirdPartyAccounts' } as const satisfies RecordOptions;
-
-	const { repository: users } = makePocketBaseRepository<PocketBaseUser>(
-		{ pocketbase: pocketbase },
-		{ collection: Collections.Users }
-	);
+	const {
+		collections: { users }
+	} = pocketbase;
 
 	const findById = async (id: string) => {
 		return users
