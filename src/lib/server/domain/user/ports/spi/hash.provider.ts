@@ -10,4 +10,4 @@ export type HashCommand = {
 /**
  * Currently is is not used
  */
-export type HashInfrastructure = HashCommand;
+export type HashProvider = HashCommand;

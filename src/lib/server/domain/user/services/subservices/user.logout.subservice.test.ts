@@ -22,7 +22,7 @@ describe('Logout', () => {
 
 	it('should call the port with the same userId', async () => {
 		const userId = makeUserId('Bernardo');
-		const spy = spyOn(context.infrastructure.authInfrastructure, 'logout');
+		const spy = spyOn(context.providers.authProvider, 'logout');
 
 		await service.logout(userId);
 		expect(spy).toHaveBeenCalledWith({ userId });
@@ -30,11 +30,9 @@ describe('Logout', () => {
 	});
 	it('should throw a logout_failed domain Error if the port throws', () => {
 		const userId = makeUserId('Bernardo');
-		const spy = spyOn(context.infrastructure.authInfrastructure, 'logout').mockImplementation(
-			() => {
-				throw Error(`Something went wrong during logout, you're still logged in :/`);
-			}
-		);
+		const spy = spyOn(context.providers.authProvider, 'logout').mockImplementation(() => {
+			throw Error(`Something went wrong during logout, you're still logged in :/`);
+		});
 
 		const fn = () => service.logout(userId);
 		expect(fn).toThrow(Error('user:logout-failed'));

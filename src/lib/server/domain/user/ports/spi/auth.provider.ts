@@ -17,4 +17,4 @@ export type ThirdPartyCommand = {
 	authOrRegisterWithThirdParty: (request: OAuthAuthenticationArgs) => MaybePromise<UserId>;
 };
 
-export type AuthInfrastructure = AuthCommand & ThirdPartyCommand;
+export type AuthProvider = AuthCommand & ThirdPartyCommand;
