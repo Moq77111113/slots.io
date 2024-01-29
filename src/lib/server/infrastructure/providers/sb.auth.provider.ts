@@ -31,8 +31,14 @@ export const SupabaseAuthProvider = ({
 		}
 		return makeUserId(data.user.id);
 	};
+
+	const logout = async () => {
+		await auth.signOut();
+	};
+
 	return {
 		registerWithCredentials,
-		authenticateWithCredentials
+		authenticateWithCredentials,
+		logout
 	};
 };
