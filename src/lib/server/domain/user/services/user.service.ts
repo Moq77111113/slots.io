@@ -1,9 +1,8 @@
-import type { User } from '../models';
 import { UserAuthenticateSubService } from './subservices/user.authenticate.subservice';
 import { UserLogoutSubService } from './subservices/user.logout.service';
 import { UserRegisterSubService } from './subservices/user.register.subservice';
 import { UserThirdPartyService } from './subservices/user.thirdparty.subservice';
-import type { PublicUser, UserServiceContext } from './types';
+import type { UserServiceContext } from './types';
 
 export const UserService = (context: UserServiceContext) => {
 	return {
@@ -14,8 +13,4 @@ export const UserService = (context: UserServiceContext) => {
 	};
 };
 
-export const toPublic = (user: User): PublicUser => {
-	const { password: _, salt: __, ...publicUser } = user;
-	return publicUser;
-};
 export type UserService = ReturnType<typeof UserService>;

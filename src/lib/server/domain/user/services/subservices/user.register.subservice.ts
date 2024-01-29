@@ -24,10 +24,9 @@ export const UserRegisterSubService = (context: UserServiceContext) => {
 			password
 		});
 
-		const createdUser = await userRepository.upsert({
+		return await userRepository.upsert({
 			id: userId,
 			email: sanitizedEmail,
-			password,
 			status: 'active',
 			language: { code: 'fr' },
 			notificationsChannel: [],
@@ -35,8 +34,6 @@ export const UserRegisterSubService = (context: UserServiceContext) => {
 			lastLogin: null,
 			locale: 'fr_FR'
 		});
-		const { password: _, salt: __, ...publicUser } = createdUser;
-		return publicUser;
 	};
 
 	return { register };

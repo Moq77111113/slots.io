@@ -45,7 +45,6 @@ export const SupabaseAuthProvider = ({
 
 	const generateThirdPartyRequest = async (provider: ThirdPartyAccount['provider']) => {
 		const keys: Provider[] = ['google', 'github', 'facebook']; // May have to use a db to checkout wich one is enabled
-		console.log('provider', provider, (keys as string[]).includes(provider));
 
 		if (!(keys as string[]).includes(provider)) {
 			throw new Error('Provider not supported');

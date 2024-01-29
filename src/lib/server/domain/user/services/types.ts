@@ -16,12 +16,12 @@ export type UserServiceContext = ActionContext & {
 
 export type RegisterUserArgs = {
 	email: CreateUserDto['email'];
-	password: NonNullable<CreateUserDto['password']>;
+	password: string;
 };
 
 export type AuthenticateUserArgs = {
 	email: CreateUserDto['email'];
-	password: NonNullable<CreateUserDto['password']>;
+	password: string;
 };
 
 export type LogoutUserArgs = {

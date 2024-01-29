@@ -1,5 +1,4 @@
 import type { MaybePromise, Paginated } from '$domain/@shared';
-import type { ThirdPartyAccount } from '$domain/@shared/attributes';
 import type { UserFilters } from '$domain/user/dtos/in/user-filters';
 import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '$domain/user/dtos/in/user-input';
 import type { User, UserId } from '$domain/user/models';
@@ -8,7 +7,6 @@ export type UserQuery = {
 	findById: (id: UserId) => MaybePromise<User | null>;
 	findBy: {
 		email: (email: User['email']) => MaybePromise<User | null>;
-		thirdPartyAccount: (thirdPartyAccount: ThirdPartyAccount) => MaybePromise<User | null>;
 	};
 	findMany: (filters: UserFilters) => MaybePromise<Paginated<User>>;
 };

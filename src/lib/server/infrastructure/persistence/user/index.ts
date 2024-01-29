@@ -1,1 +1,1 @@
-export * from './pocketbase/user.repository';
+export * from './sb.user.repository';

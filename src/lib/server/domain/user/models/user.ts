@@ -23,9 +23,6 @@ export type User = Entity<
 		lastLogin: Date | null;
 		language: Language;
 		locale: Locale;
-		password?: string;
-		salt?: string;
-		accessToken?: string;
 		status: UserStatus;
 	}
 >;
