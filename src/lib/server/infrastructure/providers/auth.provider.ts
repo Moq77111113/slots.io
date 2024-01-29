@@ -9,19 +9,30 @@ export const SupabaseAuthProvider = ({
 	auth: SupabaseInfrastructure['auth'];
 }): AuthProvider => {
 	const registerWithCredentials = async ({ email, password }: AuthenticateUserArgs) => {
-		const result = await auth.signUp({ email, password });
+		const { error, data } = await auth.signUp({ email, password });
 
-		if (result.error) {
-			throw new Error(result.error.message);
+		if (error) {
+			throw new Error(error.message);
 		}
 
-		if (!result.data.user?.id) {
+		if (!data.user?.id) {
 			throw new Error('An error occured while registering the user');
 		}
-		return makeUserId(result.data.user.id);
+		return makeUserId(data.user.id);
 	};
 
+	const authenticateWithCredentials = async ({ email, password }: AuthenticateUserArgs) => {
+		const { error, data } = await auth.signInWithPassword({ email, password });
+		if (error) {
+			throw new Error(error.message);
+		}
+		if (!data.user.id) {
+			throw new Error('An error occured while authenticating the user');
+		}
+		return makeUserId(data.user.id);
+	};
 	return {
-		registerWithCredentials
+		registerWithCredentials,
+		authenticateWithCredentials
 	};
 };
