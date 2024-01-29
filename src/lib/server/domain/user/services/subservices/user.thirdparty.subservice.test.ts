@@ -98,7 +98,6 @@ describe('Register user with third party', () => {
 					password: 'password123'
 				});
 
-				console.log('generated', usr);
 				return usr;
 			});
 

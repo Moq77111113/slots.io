@@ -1,7 +1,6 @@
 import { DomainErrors } from '$domain/@shared/errors';
 
 import type { AuthenticateUserArgs, PublicUser, UserServiceContext } from '../types';
-import { toPublic } from '../user.service';
 
 export const UserAuthenticateSubService = (context: UserServiceContext) => {
 	const {
@@ -24,22 +23,16 @@ export const UserAuthenticateSubService = (context: UserServiceContext) => {
 			throw errorHandler.throws(DomainErrors.User.not_found);
 		}
 
-		if (!existingUser.password) {
-			throw errorHandler.throws(DomainErrors.User.password_not_set);
-		}
-
 		const id = await wrapPort
 			.authenticateWithCredentials({ email: sanitizedEmail, password })
 			.catch(() => {
 				throw errorHandler.throws(DomainErrors.User.invalid_credentials);
 			});
 
-		return toPublic(
-			await userRepository.patch({
-				id,
-				lastLogin: new Date()
-			})
-		);
+		return await userRepository.patch({
+			id,
+			lastLogin: new Date()
+		});
 	};
 
 	return {
