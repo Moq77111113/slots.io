@@ -23,12 +23,6 @@ export const UserErrors = {
 		message: 'User not found',
 		statusCode: 'not_found'
 	}),
-
-	password_not_set: DomainError({
-		key: 'user:password-not-set',
-		message: 'User password is not set',
-		statusCode: 'bad_request'
-	}),
 	invalid_credentials: DomainError({
 		key: 'user:invalid-credentials',
 		message: 'Invalid credentials',
