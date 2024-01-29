@@ -1,7 +1,8 @@
-import { initContext } from '$application/context';
 import type { Handle } from '@sveltejs/kit';
 
-const context = initContext();
+import { initContext } from '$application/context';
+
+const context = await initContext();
 
 export const handle = (async ({ event, resolve }) => {
 	event.locals.context = context;
