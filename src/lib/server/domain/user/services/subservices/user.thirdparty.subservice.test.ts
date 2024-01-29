@@ -51,9 +51,7 @@ describe('Register user with third party', () => {
 		it('should throw if the provider is not registered', () => {
 			const fn = () =>
 				service.authOrRegisterWithThirdParty('google', {
-					code: 'invalid-code',
-					codeVerifier: 'code-verifier',
-					sourceUrl: 'https://example.com/auth'
+					code: 'invalid-code'
 				});
 			expect(fn).toThrow(Error('user:provider-not-enabled'));
 		});
@@ -70,9 +68,7 @@ describe('Register user with third party', () => {
 			});
 			const fn = () =>
 				service.authOrRegisterWithThirdParty('nasa', {
-					code: 'foo',
-					codeVerifier: 'bar',
-					sourceUrl: 'https://example.com/auth'
+					code: 'foo'
 				});
 
 			expect(fn).toThrow(Error('user:oauth-failed'));
@@ -107,9 +103,7 @@ describe('Register user with third party', () => {
 			});
 
 			const user = await service.authOrRegisterWithThirdParty('google', {
-				code: 'aSuperSecureCode',
-				codeVerifier: 'code-verifier',
-				sourceUrl: 'https://example.com/auth'
+				code: 'aSuperSecureCode'
 			});
 			expect(user.email).toBe('from-oauth@example.com');
 			expect(user.lastLogin).not.toBeNull();
