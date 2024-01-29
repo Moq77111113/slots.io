@@ -13,6 +13,4 @@ export type AuthenticateUserArgs = RegisterUserDto;
 export type OAuthAuthenticationArgs = {
 	provider: string;
 	code: string;
-	codeVerifier: string;
-	sourceUrl: string;
 };
