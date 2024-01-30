@@ -24,7 +24,7 @@ describe('Logout', () => {
 		const userId = makeUserId('Bernardo');
 		const spy = spyOn(context.providers.authProvider, 'logout');
 
-		await service.logout(userId);
+		await service.logout({ userId });
 		expect(spy).toHaveBeenCalledWith({ userId });
 		spy.mockRestore();
 	});
@@ -34,7 +34,7 @@ describe('Logout', () => {
 			throw Error(`Something went wrong during logout, you're still logged in :/`);
 		});
 
-		const fn = () => service.logout(userId);
+		const fn = () => service.logout({ userId });
 		expect(fn).toThrow(Error('user:logout-failed'));
 		spy.mockRestore();
 	});

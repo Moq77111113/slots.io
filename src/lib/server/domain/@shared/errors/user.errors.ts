@@ -3,7 +3,6 @@ import { DomainError, type ErrorCollection } from '$domain/@shared/errors/errors
 type Keys =
 	| 'user:duplicated'
 	| 'user:not-found'
-	| 'user:password-not-set'
 	| 'user:invalid-credentials'
 	| 'user:provider-not-enabled'
 	| 'user:oauth-failed'

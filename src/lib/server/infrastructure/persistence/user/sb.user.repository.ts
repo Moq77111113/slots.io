@@ -18,7 +18,7 @@ const toUser = (profile: Profile): User => {
 		thirdPartyAccounts: [],
 		notificationsChannel: [],
 		email,
-		lastLogin: last_login && new Date(last_login)
+		lastLogin: last_login ? new Date(last_login) : null
 	};
 };
 export const SupabaseUserRepository = ({

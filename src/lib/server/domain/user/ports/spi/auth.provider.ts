@@ -1,12 +1,15 @@
 import type { MaybePromise } from '$domain/@shared';
 import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import type { OAuthAuthenticationArgs } from '$domain/user/dtos/in/authentication.input';
+import type {
+	AuthenticateUserArgs,
+	LogoutUserArgs,
+	OAuthAuthenticationArgs,
+	RegisterUserArgs
+} from '$domain/user/dtos/in/authentication.input';
 import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
 import type { UserId } from '$domain/user/models';
-import type { AuthenticateUserArgs, LogoutUserArgs } from '$domain/user/services/types';
-
 export type AuthCommand = {
-	registerWithCredentials: (args: AuthenticateUserArgs) => MaybePromise<UserId>;
+	registerWithCredentials: (args: RegisterUserArgs) => MaybePromise<UserId>;
 	authenticateWithCredentials: (args: AuthenticateUserArgs) => MaybePromise<UserId>;
 	logout: (args: LogoutUserArgs) => MaybePromise<void>;
 };
