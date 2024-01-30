@@ -8,7 +8,7 @@ type LogoutUserActionContext = {
 
 export const GenerateOAuthRequest = (context: LogoutUserActionContext) => {
 	const { services } = context;
-	const _name = 'user.logout' as const;
+	const _name = 'user.genTpRequest' as const;
 
 	const execute = async (provider: string) => {
 		return await services.user.generateThirdPartyRequest(provider);
