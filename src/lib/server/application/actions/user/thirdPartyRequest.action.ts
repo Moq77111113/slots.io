@@ -1,20 +1,17 @@
-import type { ThirdPartyApi } from '$domain/user/ports/api/user.api';
+import type { AppContext } from '$application/context';
+import type { Action, ActionAdapter } from '$domain/@shared';
+import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
 
-type LogoutUserActionContext = {
-	services: {
-		user: ThirdPartyApi;
-	};
-};
-
-export const GenerateOAuthRequest = (context: LogoutUserActionContext) => {
-	const { services } = context;
+type GenerateOAuthRequestAction = Action<[string], Promise<AuthRequest>>;
+export const GenerateOAuthRequest = ((context: AppContext) => {
+	const { userApi } = context.apis;
 	const _name = 'user.genTpRequest' as const;
 
 	const execute = async (provider: string) => {
-		return await services.user.generateThirdPartyRequest(provider);
+		return await userApi.generateThirdPartyRequest(provider);
 	};
 
 	return {
 		execute
 	};
-};
+}) satisfies ActionAdapter<GenerateOAuthRequestAction, AppContext>;

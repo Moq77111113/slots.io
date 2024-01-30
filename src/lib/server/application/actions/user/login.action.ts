@@ -1,23 +1,20 @@
+import type { AppContext } from '$application/context';
+import type { Action, ActionAdapter } from '$domain/@shared';
 import type { AuthenticateUserArgs } from '$domain/user/dtos/in/authentication.input';
-import type { AuthenticateApi } from '$domain/user/ports/api/user.api';
+import type { User } from '$domain/user/models';
 
-type LoginActionContext = {
-	services: {
-		user: AuthenticateApi;
-	};
-};
-
-export const LoginUserAction = (context: LoginActionContext) => {
-	const { services } = context;
+type LoginAction = Action<[AuthenticateUserArgs], Promise<User>>;
+export const LoginUserAction = ((context) => {
+	const { userApi } = context.apis;
 	const _name = 'user.login' as const;
 
-	const handler = async (args: AuthenticateUserArgs) => {
+	const execute = async (args: AuthenticateUserArgs) => {
 		const { email, password } = args;
-		const user = await services.user.authenticate({ email, password });
+		const user = await userApi.authenticate({ email, password });
 		return user;
 	};
 
 	return {
-		handler
+		execute
 	};
-};
+}) satisfies ActionAdapter<LoginAction, AppContext>;
