@@ -26,7 +26,7 @@ describe('Register user with credentials', () => {
 			password: 'password123'
 		};
 
-		const loggedIn = await service.authenticateWithCredentials(input);
+		const loggedIn = await service.authenticate(input);
 
 		expect(loggedIn.email).toBe('user@example.com');
 		expect(loggedIn.id).toBeDefined();
@@ -38,7 +38,7 @@ describe('Register user with credentials', () => {
 			email: 'foo@bar.com',
 			password: 'password123'
 		};
-		const fn = () => service.authenticateWithCredentials(input);
+		const fn = () => service.authenticate(input);
 
 		expect(fn).toThrow(Error('user:not-found'));
 	});
@@ -54,7 +54,7 @@ describe('Register user with credentials', () => {
 			} as User)
 		);
 
-		const fn = () => service.authenticateWithCredentials(input);
+		const fn = () => service.authenticate(input);
 
 		expect(fn).toThrow(Error('user:password-not-set'));
 		spy.mockRestore();
@@ -71,7 +71,7 @@ describe('Register user with credentials', () => {
 		).mockImplementation(() => {
 			throw Error('Bad guy, the password does not match 👿');
 		});
-		const fn = () => service.authenticateWithCredentials(input);
+		const fn = () => service.authenticate(input);
 
 		expect(fn).toThrow(Error('user:invalid-credentials'));
 		spy.mockRestore();

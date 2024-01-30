@@ -1,15 +1,18 @@
 import { DomainErrors } from '$domain/@shared/errors';
+import type { RegisterUserArgs } from '$domain/user/dtos/in/authentication.input';
+import type { User } from '$domain/user/models';
+import type { RegisterApi } from '$domain/user/ports/api/user.api';
 
-import type { PublicUser, RegisterUserArgs, UserServiceContext } from '../types';
+import type { UserServiceContext } from '../types';
 
-export const UserRegisterSubService = (context: UserServiceContext) => {
+export const UserRegisterSubService = (context: UserServiceContext): RegisterApi => {
 	const {
 		repositories: { userRepository },
 		providers: { authProvider },
 		shared: { errorHandler }
 	} = context;
 
-	const register = async (args: RegisterUserArgs): Promise<PublicUser> => {
+	const register = async (args: RegisterUserArgs): Promise<User> => {
 		const { email, password } = args;
 
 		const sanitizedEmail = email.toLowerCase();
