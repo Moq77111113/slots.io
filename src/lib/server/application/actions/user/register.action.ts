@@ -9,7 +9,7 @@ type RegisterUserActionContext = {
 
 export const RegisterUserAction = (context: RegisterUserActionContext) => {
 	const { services } = context;
-	const _name = 'user.register';
+	const _name = 'user.register' as const;
 
 	const handler = async (args: RegisterUserArgs) => {
 		const { email, password } = args;
