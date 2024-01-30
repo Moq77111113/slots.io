@@ -2,11 +2,12 @@ import type { ThirdPartyAccount } from '$domain/@shared/attributes';
 import { DomainErrors } from '$domain/@shared/errors';
 import type { OAuthAuthenticationArgs } from '$domain/user/dtos/in/authentication.input';
 import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
+import type { User } from '$domain/user/models/user';
+import type { ThirdPartyApi } from '$domain/user/ports/api/user.api';
 
-import type { PublicUser, UserServiceContext } from '../types';
-import { toPublic } from '../user.service';
+import type { UserServiceContext } from '../types';
 
-export const UserThirdPartyService = (context: UserServiceContext) => {
+export const UserThirdPartyService = (context: UserServiceContext): ThirdPartyApi => {
 	const {
 		repositories: { userRepository },
 		providers: { authProvider },
@@ -40,19 +41,17 @@ export const UserThirdPartyService = (context: UserServiceContext) => {
 	const authOrRegisterWithThirdParty = async (
 		provider: ThirdPartyAccount['provider'],
 		request: Omit<OAuthAuthenticationArgs, 'provider'>
-	): Promise<PublicUser> => {
+	): Promise<User> => {
 		await checkProvider(provider);
 
 		const userId = await wrapPort.authenticateWithThirdParty({ provider, ...request }).catch(() => {
 			throw errorHandler.throws(DomainErrors.User.oauth_failed);
 		});
 
-		return toPublic(
-			await userRepository.patch({
-				id: userId,
-				lastLogin: new Date()
-			})
-		);
+		return await userRepository.patch({
+			id: userId,
+			lastLogin: new Date()
+		});
 	};
 
 	return {

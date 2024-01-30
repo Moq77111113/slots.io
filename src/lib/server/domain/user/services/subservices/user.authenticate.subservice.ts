@@ -1,8 +1,11 @@
 import { DomainErrors } from '$domain/@shared/errors';
+import type { AuthenticateUserArgs } from '$domain/user/dtos/in/authentication.input';
+import type { User } from '$domain/user/models';
+import type { AuthenticateApi } from '$domain/user/ports/api/user.api';
 
-import type { AuthenticateUserArgs, PublicUser, UserServiceContext } from '../types';
+import type { UserServiceContext } from '../types';
 
-export const UserAuthenticateSubService = (context: UserServiceContext) => {
+export const UserAuthenticateSubService = (context: UserServiceContext): AuthenticateApi => {
 	const {
 		repositories: { userRepository },
 		providers: { authProvider },
@@ -14,7 +17,7 @@ export const UserAuthenticateSubService = (context: UserServiceContext) => {
 			await authProvider.authenticateWithCredentials(args)
 	};
 
-	const authenticateWithCredentials = async (args: AuthenticateUserArgs): Promise<PublicUser> => {
+	const authenticate = async (args: AuthenticateUserArgs): Promise<User> => {
 		const { email, password } = args;
 		const sanitizedEmail = email.trim().toLowerCase();
 		const existingUser = await userRepository.findBy.email(sanitizedEmail);
@@ -36,6 +39,6 @@ export const UserAuthenticateSubService = (context: UserServiceContext) => {
 	};
 
 	return {
-		authenticateWithCredentials
+		authenticate
 	};
 };
