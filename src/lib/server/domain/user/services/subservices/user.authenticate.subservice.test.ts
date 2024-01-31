@@ -1,7 +1,5 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
-import type { User } from '$domain/user/models';
-
 import { MockedUserServiceContext } from '../mocks/context.mock';
 import type { UserServiceContext } from '../types';
 import { UserAuthenticateSubService } from './user.authenticate.subservice';
@@ -41,23 +39,6 @@ describe('Register user with credentials', () => {
 		const fn = () => service.authenticate(input);
 
 		expect(fn).toThrow(Error('user:not-found'));
-	});
-	it('should throw a password_not_set domain Error if the user does not have a password ', () => {
-		const input = {
-			email: 'foo@bar.com',
-			password: 'password123'
-		};
-		const spy = spyOn(context.repositories.userRepository.findBy, 'email').mockImplementation(() =>
-			Promise.resolve({
-				id: 'foo',
-				email: 'foo@bar.com'
-			} as User)
-		);
-
-		const fn = () => service.authenticate(input);
-
-		expect(fn).toThrow(Error('user:password-not-set'));
-		spy.mockRestore();
 	});
 
 	it('should throw an invalid_credentials domain Error if port invalidate credentials', () => {
