@@ -2,23 +2,35 @@ import type { UserFilters } from '$domain/user/dtos/in/user-filters';
 import type { UpdateUserDto } from '$domain/user/dtos/in/user-input';
 import { makeUserId, type User, type UserId } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
-import type { Profile, SupabaseInfrastructure } from '$infrastructure';
+import {
+	DomainSchemas,
+	type Profile,
+	type SupabaseInfrastructure,
+	validateData
+} from '$infrastructure';
 
 const toUser = (profile: Profile): User => {
-	const { id, language, locale, created_at, status, updated_at, email, last_login } = profile;
-	return {
-		id: makeUserId(id),
-		language: {
-			code: language
+	const [user, error] = validateData<(typeof DomainSchemas)['User']>(
+		{
+			...profile,
+			language: {
+				code: profile.language
+			},
+			status: profile.status ? 'active' : 'inactive',
+			createdAt: new Date(profile.created_at),
+			updatedAt: new Date(profile.updated_at || profile.created_at),
+			notificationsChannel: [],
+			thirdPartyAccounts: [],
+			lastLogin: profile.last_login ? new Date(profile.last_login) : null
 		},
-		locale,
-		createdAt: new Date(created_at),
-		status: status ? 'active' : 'inactive',
-		updatedAt: updated_at ? new Date(updated_at) : new Date(created_at),
-		thirdPartyAccounts: [],
-		notificationsChannel: [],
-		email,
-		lastLogin: last_login ? new Date(last_login) : null
+		DomainSchemas.User
+	);
+	if (error) {
+		throw Error(error.formErrors[0] || 'Invalid user data');
+	}
+	return {
+		...user,
+		id: makeUserId(user.id)
 	};
 };
 export const SupabaseUserRepository = ({
@@ -36,11 +48,24 @@ export const SupabaseUserRepository = ({
 		return data ? toUser(data) : null;
 	};
 
-	const findMany = async ({ page = 1, itemsPerPage = 10 }: UserFilters) => {
-		const { data } = await users.select('*').range(page, page * itemsPerPage);
+	const findMany = async ({ page = 1, itemsPerPage = 10, status, language }: UserFilters) => {
+		let query = users.select('*');
+
+		if (status) {
+			query = query.eq('status', status === 'active');
+		}
+
+		if (language) {
+			query = query.eq('language', language);
+		}
+		const from = (page - 1) * itemsPerPage;
+		const to = page * itemsPerPage - 1;
+
+		const { data, count } = await query.range(from, to);
+
 		return {
 			data: data?.map(toUser) || [],
-			total: data?.length || 0,
+			total: count || 0,
 			page: page,
 			itemsPerPage: itemsPerPage
 		};

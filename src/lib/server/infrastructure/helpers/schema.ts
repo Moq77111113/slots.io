@@ -1,5 +1,24 @@
 import { z } from 'zod';
 
+const FrenchLocales = z.union([
+	z.literal('fr_FR'),
+	z.literal('fr_BE'),
+	z.literal('fr_CH'),
+	z.literal('fr_CA')
+]);
+
+const EnglishLocales = z.union([
+	z.literal('en_US'),
+	z.literal('en_GB'),
+	z.literal('en_CA'),
+	z.literal('en_AU'),
+	z.literal('en_NZ'),
+	z.literal('en_IN')
+]);
+
+const ISOLanguage = z.union([z.literal('fr'), z.literal('en')]);
+export const Locale = z.union([FrenchLocales, EnglishLocales]);
+
 const userSchema = z.object({
 	id: z.string(),
 	email: z.string().email(),
@@ -9,12 +28,9 @@ const userSchema = z.object({
 		.array(z.object({ accountId: z.string(), provider: z.string() }))
 		.default([]),
 	language: z.object({
-		code: z.union([z.literal('fr'), z.literal('en')]).default('fr')
+		code: ISOLanguage.default('fr')
 	}),
-	locale: z.union([z.literal('fr_FR'), z.literal('en_GB')]).default('fr_FR'),
-	password: z.string().default(''),
-	salt: z.string().default(''),
-	accessToken: z.string().optional(),
+	locale: Locale.default('fr_FR'),
 	status: z.enum(['active', 'inactive']),
 	createdAt: z.date(),
 	updatedAt: z.date()
