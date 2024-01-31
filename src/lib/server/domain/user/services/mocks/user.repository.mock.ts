@@ -81,7 +81,7 @@ export const MockedUserRepository = (): UserRepository => {
 	const upsert = (data: UpsertUserDto) => {
 		const { id } = data;
 		if (id && users.find((_) => _.id === id)) {
-			return update({ id, ...data });
+			return update({ ...data });
 		}
 		return create(data);
 	};

@@ -50,7 +50,8 @@ export const UserThirdPartyService = (context: UserServiceContext): ThirdPartyAp
 
 		return await userRepository.patch({
 			id: userId,
-			lastLogin: new Date()
+			lastLogin: new Date(),
+			status: 'active'
 		});
 	};
 

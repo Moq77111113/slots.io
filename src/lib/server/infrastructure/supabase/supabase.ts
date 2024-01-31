@@ -20,7 +20,6 @@ export const SupabaseInfrastructure = (context: SupabaseContext) => {
 	const profiles = from('profiles');
 	return {
 		auth,
-
 		users: profiles
 	};
 };

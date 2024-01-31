@@ -38,7 +38,7 @@ export type PatchEntityInput<T extends Entity<Branded<unknown, string>, unknown>
  * @description Allow to get base dto to upsert an entity.
  */
 export type UpsertEntityInput<T extends Entity<Branded<unknown, string>, unknown>> = Identity<
-	Omit<UpdateEntityInput<T>, 'id'> & { id?: T['id'] }
+	CreateEntityInput<T> & { id: T['id'] }
 >;
 
 /**
