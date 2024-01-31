@@ -1,3 +1,4 @@
+import type { UserResponse } from '@supabase/supabase-js';
 import type { RequestEvent } from '@sveltejs/kit';
 
 import { DefaultErrorHandler } from '$application/errors/error.handler';
@@ -32,6 +33,7 @@ export type AppContext = {
 	apis: {
 		userApi: UserApi;
 	};
+	t: () => Promise<UserResponse>;
 };
 
 /**
@@ -39,7 +41,7 @@ export type AppContext = {
  * @returns AppContext
  */
 // TODO : Use an IoC container to create the context with correct bindings.
-export const initContext = (event: RequestEvent): AppContext => {
+export const initContext = async (event: RequestEvent): Promise<AppContext> => {
 	if (!process.env.PUBLIC_SUPABASE_URL || !process.env.PUBLIC_SUPABASE_ANON_KEY) {
 		throw new Error('Missing environment variables');
 	}
@@ -79,10 +81,11 @@ export const initContext = (event: RequestEvent): AppContext => {
 		shared
 	});
 
-	return {
+	return Promise.resolve({
 		shared,
 		apis: {
 			userApi
-		}
-	};
+		},
+		t: async () => await auth.getUser()
+	});
 };

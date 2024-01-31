@@ -1,10 +1,12 @@
 import type { Provider } from '@supabase/supabase-js';
 
 import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import type { OAuthAuthenticationArgs } from '$domain/user/dtos/in/authentication.input';
+import type {
+	AuthenticateUserArgs,
+	OAuthAuthenticationArgs
+} from '$domain/user/dtos/in/authentication.input';
 import { makeUserId } from '$domain/user/models';
 import type { AuthProvider } from '$domain/user/ports/spi';
-import type { AuthenticateUserArgs } from '$domain/user/services/types';
 import type { SupabaseInfrastructure } from '$infrastructure';
 export const SupabaseAuthProvider = ({
 	auth
@@ -40,7 +42,7 @@ export const SupabaseAuthProvider = ({
 	};
 
 	const getProviders = () => {
-		return [];
+		return ['github'];
 	};
 
 	const generateThirdPartyRequest = async (provider: ThirdPartyAccount['provider']) => {
