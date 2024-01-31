@@ -1,5 +1,5 @@
 import type { UserFilters } from '$domain/user/dtos/in/user-filters';
-import type { UpdateUserDto } from '$domain/user/dtos/in/user-input';
+import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '$domain/user/dtos/in/user-input';
 import { makeUserId, type User, type UserId } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
 import {
@@ -89,14 +89,15 @@ export const SupabaseUserRepository = ({
 		return toUser(user);
 	};
 
-	const patch = async (data: UpdateUserDto) => {
+	const patch = async (data: PatchUserDto) => {
 		const { data: user, error } = await users
 			.update({
 				email: data.email,
-				language: data.language.code,
+				language: data.language?.code,
 				locale: data.locale,
 				status: data.status === 'active',
-				updated_at: new Date().toISOString()
+				updated_at: new Date().toISOString(),
+				last_login: data.lastLogin?.toISOString()
 			})
 			.eq('id', data.id)
 			.select()
@@ -118,7 +119,7 @@ export const SupabaseUserRepository = ({
 		return toUser(data);
 	};
 
-	const upsert = async (data: UpdateUserDto) => {
+	const upsert = async (data: UpsertUserDto) => {
 		const { data: user, error } = await users
 			.upsert({
 				id: data.id,

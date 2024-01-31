@@ -9,12 +9,8 @@ type DefaultErrorHandlerContext = {};
 export const DefaultErrorHandler = (context: DefaultErrorHandlerContext): ErrorHandler => {
 	const {} = context;
 	const throws = (error: DomainError) => {
-		console.error(
-			`Received error: ${error.key} with following body: ${JSON.stringify(error.data, null, 2)}`
-		);
+		console.error(`Received error: ${error.key} with following message: ${error.message}`);
 		throw new Error(error.message);
 	};
 	return { throws };
 };
-
-
