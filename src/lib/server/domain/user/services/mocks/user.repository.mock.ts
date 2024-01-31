@@ -9,9 +9,8 @@ import type {
 import { makeUserId, type User, type UserId } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
 
-const users: User[] = [];
-
 export const MockedUserRepository = (): UserRepository => {
+	const users: User[] = [];
 	const findById = (id: UserId) => {
 		return Promise.resolve(users.find((user) => user.id === id) || null);
 	};
