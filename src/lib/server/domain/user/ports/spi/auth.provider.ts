@@ -20,4 +20,13 @@ export type ThirdPartyCommand = {
 	authOrRegisterWithThirdParty: (request: OAuthAuthenticationArgs) => MaybePromise<UserId>;
 };
 
+/**
+ * `AuthProvider` is the secondary port for authentication-related operations in our hexagonal architecture.
+ * It provides an interface for registering, authenticating, and logging out users, as well as
+ * generating third-party authentication requests and authenticating or registering users with a third-party provider.
+ *
+ * Each method returns a `MaybePromise`, allowing for both synchronous and asynchronous implementations.
+ * This makes `AuthProvider` adaptable to various infrastructures and technologies.
+ *
+ */
 export type AuthProvider = AuthCommand & ThirdPartyCommand;

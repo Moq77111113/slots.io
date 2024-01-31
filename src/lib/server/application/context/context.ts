@@ -8,13 +8,15 @@ import { SupabaseInfrastructure } from '$infrastructure';
 import { SupabaseUserRepository } from '$infrastructure/persistence';
 import { SupabaseAuthProvider } from '$infrastructure/providers/sb.auth.provider';
 
+/**
+ * `SharedContext` is a type that represents shared resources available to all actions in the application.
+ */
 export type SharedContext = {
 	errorHandler: ErrorHandler;
 };
 
 /**
- * @description
- * This is the context that is available to all actions.
+ * `AppContext` is a type that represents the context available to all actions in the application.
  *
  */
 export type AppContext = {
