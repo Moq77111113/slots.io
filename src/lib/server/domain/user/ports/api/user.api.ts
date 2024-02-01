@@ -29,6 +29,10 @@ export type ThirdPartyApi = {
 	) => MaybePromise<User>;
 };
 
+export type MeApi = {
+	getMe: () => MaybePromise<User>;
+};
+
 /**
  * `UserApi` is the primary port for user-related operations in our hexagonal architecture.
  * It provides an interface for registering, authenticating, and logging out users, as well as
@@ -38,4 +42,4 @@ export type ThirdPartyApi = {
  * This makes `UserApi` adaptable to various infrastructures and technologies.
  *
  */
-export type UserApi = RegisterApi & AuthenticateApi & LogoutApi & ThirdPartyApi;
+export type UserApi = RegisterApi & AuthenticateApi & LogoutApi & ThirdPartyApi & MeApi;

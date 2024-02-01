@@ -1,3 +1,4 @@
+import { MeSubService } from './subservices/me.subservice';
 import { UserAuthenticateSubService } from './subservices/user.authenticate.subservice';
 import { UserLogoutSubService } from './subservices/user.logout.service';
 import { UserRegisterSubService } from './subservices/user.register.subservice';
@@ -17,6 +18,7 @@ export const UserService = (context: UserServiceContext) => {
 		...UserRegisterSubService(context),
 		...UserAuthenticateSubService(context),
 		...UserThirdPartyService(context),
-		...UserLogoutSubService(context)
+		...UserLogoutSubService(context),
+		...MeSubService(context)
 	};
 };

@@ -79,12 +79,21 @@ export const SupabaseAuthProvider = ({
 
 		return makeUserId(data.user.id);
 	};
+
+	const getMe = async () => {
+		const { data, error } = await auth.getUser();
+		if (error || !data.user.id) {
+			throw new Error(error?.message || 'Unable to retrieve user from subabase');
+		}
+		return makeUserId(data.user.id);
+	};
 	return {
 		registerWithCredentials,
 		authenticateWithCredentials,
 		logout,
 		getProviders,
 		generateThirdPartyRequest,
-		authOrRegisterWithThirdParty
+		authOrRegisterWithThirdParty,
+		getMe
 	};
 };
