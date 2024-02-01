@@ -1,10 +1,13 @@
 import type { MaybePromise } from '@sveltejs/kit';
 
-import type { CreateEntityInput } from '$domain/@shared/types';
-import type { Poll } from '$domain/poll/models';
+import type { CreateEntityInput, Prettify } from '$domain/@shared/types';
+import type { Poll, Slot } from '$domain/poll/models';
 
+export type PollCreateCommand = Prettify<
+	Omit<CreateEntityInput<Poll>, 'slots'> & { slots: Prettify<CreateEntityInput<Slot>>[] }
+>;
 export type PollCommand = {
-	create: (args: CreateEntityInput<Poll>) => MaybePromise<Poll>;
+	create: (args: PollCreateCommand) => MaybePromise<Poll>;
 };
 
 export type PollRepository = PollCommand;
