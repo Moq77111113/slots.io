@@ -24,7 +24,7 @@ const statusToCode = {
  * @description Creates a domain error
  * The message param should be a system error (eg for logging into external services)
  */
-export const DomainError = <T, Key extends DomainErrorKeys>(
+export const DomainError = <Key extends DomainErrorKeys, T>(
 	args: { message: string; key: Key; statusCode: ErrorCode },
 	data?: T
 ) => {
@@ -40,8 +40,8 @@ export const DomainError = <T, Key extends DomainErrorKeys>(
 /**
  * @description Body of a domain error
  */
-export type DomainError<T = unknown, Key extends DomainErrorKeys = DomainErrorKeys> = ReturnType<
-	typeof DomainError<T, Key>
+export type DomainError<Key extends DomainErrorKeys = DomainErrorKeys, T = unknown> = ReturnType<
+	typeof DomainError<Key, T>
 >;
 
 /**
@@ -49,5 +49,5 @@ export type DomainError<T = unknown, Key extends DomainErrorKeys = DomainErrorKe
  */
 export type ErrorCollection<Keys extends DomainErrorKeys> = Record<
 	string,
-	((...args: never[]) => DomainError<unknown, Keys>) | DomainError<unknown, Keys>
+	((...args: never[]) => DomainError<Keys>) | DomainError<Keys>
 >;

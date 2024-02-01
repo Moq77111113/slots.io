@@ -19,5 +19,5 @@ export interface ErrorHandler {
 	 *
 	 * @description Grab a domain error and throw it
 	 */
-	throws<T, K extends DomainErrorKeys>(error: DomainError<T, K>): never;
+	throws<K extends DomainErrorKeys, T>(error: DomainError<K, T>): never;
 }

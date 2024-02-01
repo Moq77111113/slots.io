@@ -44,13 +44,13 @@ describe('Retrieve current logged id user with credentials', () => {
 		spy.mockRestore();
 	});
 
-	it('should throw an error when the auth provider throws', () => {
+	it('should throw an unauthorized error when the auth provider throws', () => {
 		const spy = spyOn(context.providers.authProvider, 'getMe').mockImplementation(() => {
 			throw Error('You got banned 😱');
 		});
 
 		const fn = () => service.getMe();
-		expect(fn).toThrow(Error('user:not-found'));
+		expect(fn).toThrow(Error('user:unauthorized'));
 		spy.mockRestore();
 	});
 	it('should throw an error when the user repository throws', () => {

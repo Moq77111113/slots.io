@@ -18,7 +18,7 @@ export const MeSubService = (context: UserServiceContext): MeApi => {
 	const getMe = async () => {
 		const id = await wrapPort.getMe().catch(() => null);
 		if (!id) {
-			throw errorHandler.throws(DomainErrors.User.not_found);
+			throw errorHandler.throws(DomainErrors.User.unauthorized);
 		}
 
 		const user = await wrapPort.findById(id).catch(() => null);
