@@ -30,7 +30,7 @@ describe('Retrieve current logged id user with credentials', () => {
 		});
 
 		const fn = () => service.getMe();
-		expect(fn).toThrow(Error('user:not-found'));
+		expect(fn).toThrow(Error('user:unauthorized'));
 		spy.mockRestore();
 	});
 
