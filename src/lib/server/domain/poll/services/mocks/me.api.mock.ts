@@ -4,7 +4,7 @@ import type { MeApi } from '$domain/user/ports/api/user.api';
 export const MockedMeApi = (): MeApi => {
 	const getMe = (): User => {
 		return {
-			id: makeUserId('1'),
+			id: makeUserId('me'),
 			email: 'me@myapp.com',
 			notificationsChannel: [],
 			thirdPartyAccounts: [],
