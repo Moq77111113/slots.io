@@ -6,7 +6,8 @@ type Keys =
 	| 'user:invalid-credentials'
 	| 'user:provider-not-enabled'
 	| 'user:oauth-failed'
-	| 'user:logout-failed';
+	| 'user:logout-failed'
+	| 'user:unauthorized';
 export const UserErrors = {
 	already_exists: (email: string) =>
 		DomainError(
@@ -42,6 +43,11 @@ export const UserErrors = {
 		key: 'user:logout-failed',
 		message: 'Logout failed',
 		statusCode: 'internal'
+	}),
+	unauthorized: DomainError({
+		key: 'user:unauthorized',
+		message: 'Unauthorized',
+		statusCode: 'unauthorized'
 	})
 } as const satisfies ErrorCollection<Keys>;
 
