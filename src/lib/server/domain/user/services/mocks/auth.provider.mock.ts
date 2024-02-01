@@ -33,6 +33,9 @@ export const MockedAuthProvider = (): AuthProvider => {
 		},
 		logout: (_args: LogoutUserArgs): Promise<void> => {
 			return Promise.resolve();
+		},
+		getMe: (): Promise<UserId | null> => {
+			return Promise.resolve(makeUserId('mock-user-id'));
 		}
 	};
 };
