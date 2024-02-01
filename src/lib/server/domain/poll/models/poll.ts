@@ -4,13 +4,13 @@ import type { UserId } from '$domain/user/models';
 
 import type { Slot } from './slot';
 
-export type EventId = Branded<string, 'EventId'>;
+export type PollId = Branded<string, 'PollId'>;
 
 /**
  * @description Aggregate root entity representing an event with associated slots.
  */
-export type Event = Entity<
-	EventId,
+export type Poll = Entity<
+	PollId,
 	{
 		title: string;
 		description?: string;
