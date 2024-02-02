@@ -2,8 +2,8 @@ import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
 import type { CreatePollDto } from '$domain/poll/dto/in/poll-input';
 
-import { MockedPollContext } from './mocks/context.mock';
 import type { PollServiceContext } from '../types';
+import { MockedPollContext } from './mocks/context.mock';
 import { PollCreateSubService } from './poll.create.subservice';
 
 describe('Creating poll', () => {
