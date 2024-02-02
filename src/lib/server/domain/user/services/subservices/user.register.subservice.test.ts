@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'bun:test';
 
-import { MockedUserServiceContext } from '../mocks/context.mock';
+import { MockedUserServiceContext } from './mocks/context.mock';
 import type { UserServiceContext } from '../types';
 import { UserRegisterSubService } from './user.register.subservice';
 

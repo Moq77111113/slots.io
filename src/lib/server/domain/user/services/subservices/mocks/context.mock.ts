@@ -2,7 +2,7 @@
 
 import type { ErrorHandler } from '$domain/@shared/errors';
 
-import type { UserServiceContext } from '../types';
+import type { UserServiceContext } from '../../types';
 import { MockedAuthProvider } from './auth.provider.mock';
 import { MockedUserRepository } from './user.repository.mock';
 

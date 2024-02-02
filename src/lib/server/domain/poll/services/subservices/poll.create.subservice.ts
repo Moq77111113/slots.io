@@ -1,6 +1,7 @@
 import { DomainErrors } from '$domain/@shared/errors';
 import type { CreatePollDto } from '$domain/poll/dto/in/poll-input';
 import type { CreateSlotDto } from '$domain/poll/dto/in/slot-input';
+import type { Slot } from '$domain/poll/models';
 import type { CreatePollApi } from '$domain/poll/ports/api/poll.create';
 
 import type { PollServiceContext } from '../types';
@@ -8,7 +9,7 @@ import type { PollServiceContext } from '../types';
 export const PollCreateSubService = (context: PollServiceContext): CreatePollApi => {
 	const { errorHandler } = context.shared;
 	const { meApi } = context.apis;
-	const { poll } = context.repositories;
+	const { poll, slot } = context.repositories;
 
 	/**
 	 *
@@ -48,15 +49,23 @@ export const PollCreateSubService = (context: PollServiceContext): CreatePollApi
 			end,
 			availabilities: availability ? [{ ...availability, userId: me.id }] : []
 		}));
-		return poll.create({
+
+		const createdPoll = await poll.create({
 			title: title.trim(),
 			description: description?.trim(),
 			expiration,
 			creatorId: me.id,
 			participantIds: [],
-			locked: false,
-			slots: formattedSlots
+			locked: false
 		});
+		const createdSlots = await Promise.all<Slot>(
+			formattedSlots.map((_) => slot.create({ ..._, pollId: createdPoll.id }))
+		);
+
+		return {
+			...createdPoll,
+			slots: createdSlots
+		};
 	};
 
 	return {
