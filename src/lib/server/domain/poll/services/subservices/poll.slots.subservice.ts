@@ -54,6 +54,7 @@ export const PollAddSlotSubService = (context: PollServiceContext): PollSlotsApi
 			throw errorHandler.throws(DomainErrors.Poll.slots_overlapping([newSlot, ...slots]));
 		}
 	};
+
 	const add = async (pollId: PollId, args: CreateSlotDto) => {
 		const me = await meApi.getMe();
 
@@ -88,7 +89,32 @@ export const PollAddSlotSubService = (context: PollServiceContext): PollSlotsApi
 	};
 
 	const remove = async (pollId: PollId, slotId: SlotId) => {
-		throw Error();
+		const me = await meApi.getMe();
+
+		const poll = await pollRepo.findById(pollId);
+
+		if (!poll) {
+			throw errorHandler.throws(DomainErrors.Poll.not_found);
+		}
+		if (poll.creatorId !== me.id) {
+			throw errorHandler.throws(DomainErrors.Poll.authorization_required);
+		}
+
+		const { slots } = poll;
+
+		const slot = slots.find((s) => s.id === slotId);
+
+		if (!slot) {
+			throw errorHandler.throws(DomainErrors.Poll.slot_not_found);
+		}
+
+		await slotRepo.remove(slotId);
+		const slotIndex = slots.findIndex((s) => s.id === slotId);
+		const newSlots = slots.filter((_, i) => i !== slotIndex);
+		return {
+			...poll,
+			slots: newSlots
+		};
 	};
 
 	return {

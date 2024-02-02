@@ -1,4 +1,4 @@
-import { makeSlotId, type Slot } from '$domain/poll/models';
+import { makeSlotId, type Slot, type SlotId } from '$domain/poll/models';
 import type { SlotCreateArgs, SlotRepository } from '$domain/poll/ports/spi';
 
 export const MockedSlotRepository = (): SlotRepository => {
@@ -17,7 +17,19 @@ export const MockedSlotRepository = (): SlotRepository => {
 		return slot;
 	};
 
+	const remove = (slotId: SlotId) => {
+		const index = slots.findIndex((_) => _.id === slotId);
+		if (index === -1) {
+			throw new Error('Slot not found');
+		}
+		const slot = slots[index];
+
+		slots.splice(index, 1);
+		return slot;
+	};
+
 	return {
-		create
+		create,
+		remove
 	};
 };
