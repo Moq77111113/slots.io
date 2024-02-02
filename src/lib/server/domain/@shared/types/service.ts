@@ -4,6 +4,6 @@ type SharedContext = {
 	errorHandler: ErrorHandler;
 };
 
-export type ActionContext = {
+export type ServiceContext = {
 	shared: SharedContext;
 };

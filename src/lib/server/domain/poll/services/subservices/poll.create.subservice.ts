@@ -14,13 +14,15 @@ export const PollCreateSubService = (context: PollServiceContext): CreatePollApi
 	 *
 	 * @description Asserts that the slots does not overlaps
 	 */
-	const assertSlotsDoesNotOverlaps = (slots: CreateSlotDto[], allowAdjacent = false) => {
+	const assertSlotsDoesNotOverlaps = (slots: CreateSlotDto[], allowAdjacent = true) => {
 		const sorted = slots.sort((a, b) => a.start.getTime() - b.start.getTime());
 
 		for (let i = 0; i < sorted.length - 1; i++) {
-			const overlapping = allowAdjacent
-				? sorted[i].end.getTime() >= sorted[i + 1].start.getTime()
-				: sorted[i].end.getTime() > sorted[i + 1].start.getTime();
+			const currentEnd = sorted[i].end.getTime();
+			const nextStart = sorted[i + 1].start.getTime();
+
+			const overlapping = allowAdjacent ? currentEnd > nextStart : currentEnd >= nextStart;
+
 			if (overlapping)
 				throw errorHandler.throws(DomainErrors.Poll.slots_overlapping([sorted[i], sorted[i + 1]]));
 		}
