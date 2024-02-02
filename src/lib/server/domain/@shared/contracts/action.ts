@@ -7,8 +7,4 @@ export interface Action<Inputs extends unknown[], Output> {
 	execute(...input: Inputs): MaybePromise<Output>;
 }
 
-type ActionShape<Inputs extends unknown[], Output> = Action<Inputs, Output>;
-
-export type ActionAdapter<Action extends ActionShape<unknown[], unknown>, Args> = (
-	...args: Args[]
-) => Action;
+export type ActionAdapter<Shape extends Action<unknown[], unknown>, Args> = (...args: Args[]) => Shape;
