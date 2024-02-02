@@ -1,11 +1,11 @@
 import { DomainErrors } from '$domain/@shared/errors';
 import type { CreateSlotDto } from '$domain/poll/dto/in/slot-input';
 import type { PollId, SlotId } from '$domain/poll/models';
-import type { PollSlotsApi } from '$domain/poll/ports/api/poll.slots';
+import type { SlotApi } from '$domain/poll/ports/api/poll.slots';
 
 import type { PollServiceContext } from '../types';
 
-export const PollAddSlotSubService = (context: PollServiceContext): PollSlotsApi => {
+export const SlotSubService = (context: PollServiceContext): SlotApi => {
 	const { errorHandler } = context.shared;
 	const { meApi } = context.apis;
 	const { slot: slotRepo, poll: pollRepo } = context.repositories;
@@ -118,7 +118,7 @@ export const PollAddSlotSubService = (context: PollServiceContext): PollSlotsApi
 	};
 
 	return {
-		add,
-		remove
+		addSlot: add,
+		removeSlot: remove
 	};
 };
