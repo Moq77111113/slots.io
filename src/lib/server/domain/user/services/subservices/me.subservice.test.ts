@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
-import { MockedUserServiceContext } from '../mocks/context.mock';
+import { MockedUserServiceContext } from './mocks/context.mock';
 import type { UserServiceContext } from '../types';
 import { MeSubService } from './me.subservice';
 import { UserRegisterSubService } from './user.register.subservice';

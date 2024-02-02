@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
 import type { User } from '$domain/user/models';
 
-import { MockedUserServiceContext } from '../mocks/context.mock';
+import { MockedUserServiceContext } from './mocks/context.mock';
 import type { UserServiceContext } from '../types';
 import { UserRegisterSubService } from './user.register.subservice';
 import { UserThirdPartyService } from './user.thirdparty.subservice';

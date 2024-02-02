@@ -1,6 +1,6 @@
 import type { ErrorHandler } from '$domain/@shared/errors';
 
-import type { PollServiceContext } from '../types';
+import type { PollServiceContext } from '../../types';
 import { MockedMeApi } from './me.api.mock';
 import { MockedPollRepository } from './poll.repository.mock';
 
