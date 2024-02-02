@@ -1,4 +1,5 @@
 import { PollCreateSubService } from './subservices/poll.create.subservice';
+import { SlotSubService } from './subservices/slot.subservice';
 import type { PollServiceContext } from './types';
 
 /**
@@ -11,5 +12,6 @@ import type { PollServiceContext } from './types';
  *
  */
 export const PollService = (context: PollServiceContext) => ({
-	...PollCreateSubService(context)
+	...PollCreateSubService(context),
+	...SlotSubService(context)
 });
