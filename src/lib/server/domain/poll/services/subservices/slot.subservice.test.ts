@@ -6,15 +6,15 @@ import type { User, UserId } from '$domain/user/models';
 import type { PollServiceContext } from '../types';
 import { MockedPollContext } from './mocks/context.mock';
 import { PollCreateSubService } from './poll.create.subservice';
-import { PollAddSlotSubService } from './poll.slots.subservice';
+import { SlotSubService } from './slot.subservice';
 
 describe('Poll Slots', () => {
-	let service: ReturnType<typeof PollAddSlotSubService>;
+	let service: ReturnType<typeof SlotSubService>;
 	let context: PollServiceContext;
 	let createdPoll: Poll;
 	beforeAll(async () => {
 		context = MockedPollContext();
-		service = PollAddSlotSubService(context);
+		service = SlotSubService(context);
 
 		createdPoll = await PollCreateSubService(context).create({
 			title: 'Sidney birthday party',
@@ -26,7 +26,7 @@ describe('Poll Slots', () => {
 		describe('Check Presence', () => {
 			it('should throw a poll not found exception if the poll does not exists', () => {
 				const fn = () =>
-					service.add(makePollId('2'), {
+					service.addSlot(makePollId('2'), {
 						start: new Date('2024-01-01T00:00:00Z'),
 						end: new Date('2024-01-01T23:59:00Z')
 					});
@@ -45,7 +45,7 @@ describe('Poll Slots', () => {
 				);
 
 				const fn = () =>
-					service.add(createdPoll.id, {
+					service.addSlot(createdPoll.id, {
 						start: new Date('2024-01-01T00:00:00Z'),
 						end: new Date('2024-01-01T23:59:00Z')
 					});
@@ -58,7 +58,7 @@ describe('Poll Slots', () => {
 		describe('Data validation', () => {
 			it('should throw a bad-time-range exception if the start date is greater than the end date', () => {
 				const fn = () =>
-					service.add(createdPoll.id, {
+					service.addSlot(createdPoll.id, {
 						start: new Date('2024-01-01T23:59:00Z'),
 						end: new Date('2024-01-01T00:00:00Z')
 					});
@@ -68,7 +68,7 @@ describe('Poll Slots', () => {
 
 			it('should throw a bad-time-range exception if the slot duration is less than 1 hour', () => {
 				const fn = () =>
-					service.add(createdPoll.id, {
+					service.addSlot(createdPoll.id, {
 						start: new Date('2024-01-01T23:00:00Z'),
 						end: new Date('2024-01-01T23:30:00Z')
 					});
@@ -92,7 +92,7 @@ describe('Poll Slots', () => {
 				);
 
 				const fn = () =>
-					service.add(createdPoll.id, {
+					service.addSlot(createdPoll.id, {
 						start: new Date('2024-01-01T10:00:00Z'),
 						end: new Date('2024-01-01T13:00:00Z')
 					});
@@ -126,7 +126,7 @@ describe('Poll Slots', () => {
 					}
 				} as const;
 
-				const poll = await service.add(createdPoll.id, slot);
+				const poll = await service.addSlot(createdPoll.id, slot);
 
 				expect(poll.creatorId).toEqual('me' as UserId);
 				expect(
@@ -144,7 +144,7 @@ describe('Poll Slots', () => {
 	describe('Removing Slots', () => {
 		describe('Check Presence', () => {
 			it('should throw a poll not found exception if the poll does not exists', () => {
-				const fn = () => service.remove(makePollId('2'), '1' as SlotId);
+				const fn = () => service.removeSlot(makePollId('2'), '1' as SlotId);
 
 				expect(fn).toThrow(Error('poll:not-found'));
 			});
@@ -165,7 +165,7 @@ describe('Poll Slots', () => {
 						}) as Poll
 				);
 
-				const fn = () => service.remove(createdPoll.id, '2' as SlotId);
+				const fn = () => service.removeSlot(createdPoll.id, '2' as SlotId);
 
 				expect(fn).toThrow(Error('poll:slot_not_found'));
 				spy.mockRestore();
@@ -181,7 +181,7 @@ describe('Poll Slots', () => {
 						}) as User
 				);
 
-				const fn = () => service.remove(createdPoll.id, '2' as SlotId);
+				const fn = () => service.removeSlot(createdPoll.id, '2' as SlotId);
 
 				expect(fn).toThrow(Error('poll:authorization-required'));
 				spy.mockRestore();
@@ -210,7 +210,7 @@ describe('Poll Slots', () => {
 						}) as Poll
 				);
 
-				const poll = await service.remove(createdPoll.id, '1' as SlotId);
+				const poll = await service.removeSlot(createdPoll.id, '1' as SlotId);
 
 				expect(poll.creatorId).toEqual('me' as UserId);
 				expect(poll.slots.find((_) => _.id === '1')).toBeUndefined();
