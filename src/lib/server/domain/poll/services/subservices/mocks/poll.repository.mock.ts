@@ -9,6 +9,7 @@ import type {
 
 export const MockedPollRepository = (): PollRepository => {
 	const polls: Poll[] = [];
+
 	const create = (_poll: PollCreateArgs) => {
 		const pollId = makePollId((polls.length + 1).toString());
 
@@ -41,7 +42,7 @@ export const MockedPollRepository = (): PollRepository => {
 		}
 		const newSlot = {
 			...slot,
-			id: makeSlotId((poll.slots.length + 1).toString()),
+			id: makeSlotId(`${poll.id}-${(poll.slots.length + 1).toString()}`),
 			createdAt: new Date(),
 			updatedAt: new Date()
 		};

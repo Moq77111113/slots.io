@@ -12,12 +12,16 @@ import { AvailabilitySubService } from './poll.availabilities.subservice';
 
 describe('Slots availabilities ', () => {
 	const userId = 'me' as UserId;
-	const seed = async (repo: PollRepository) => {
+	const seed = async (
+		repo: PollRepository,
+		create?: Partial<Parameters<typeof repo.create>[0]>
+	) => {
 		let poll = await repo.create({
 			title: 'test',
 			description: 'test',
 			creatorId: userId,
-			locked: false
+			locked: false,
+			...create
 		});
 		poll = await repo.addSlot(poll.id, {
 			start: new Date('2024-01-01T00:00:00Z'),
@@ -42,6 +46,7 @@ describe('Slots availabilities ', () => {
 			service = AvailabilitySubService(context);
 			seededPoll = await seed(context.repositories.poll);
 		});
+
 		describe('Assert presence & authorization', () => {
 			it('should throw a slot not found exception if the slot does not exists', () => {
 				const fn = () => service[serviceFunction]('AnIdThatDoesNotExist' as SlotId);
@@ -75,7 +80,7 @@ describe('Slots availabilities ', () => {
 
 			it('should override the availability for the user', async () => {
 				const anotherServiceFn = keys(service).filter((_) => _ !== serviceFunction)[0];
-				console.log('calling', anotherServiceFn, 'then', serviceFunction);
+
 				await service[anotherServiceFn](seededPoll.slots[0].id);
 				await service[serviceFunction](seededPoll.slots[0].id);
 
@@ -87,6 +92,38 @@ describe('Slots availabilities ', () => {
 					expect.arrayContaining([{ userId, status }]) as Availability[]
 				);
 				expect(availabilitiesForSlot.filter((_) => _.userId === userId).length).toBe(1);
+			});
+
+			it('should set the availability for many users', async () => {
+				const pollSpy = spyOn(context.repositories.poll, 'findBySlotId').mockImplementation(() => ({
+					...seededPoll,
+					participantIds: ['Mazikeen', 'Amenadiel', 'Lucifer'] as UserId[]
+				}));
+				const spy = spyOn(context.apis.meApi, 'getMe')
+					.mockImplementationOnce(() => ({ id: 'Lucifer' }) as User)
+					.mockImplementationOnce(() => ({ id: 'Mazikeen' }) as User)
+					.mockImplementationOnce(() => ({ id: 'Amenadiel' }) as User);
+
+				const seedOne = await seed(context.repositories.poll, {
+					title: `Hell`
+				});
+
+				await service[serviceFunction](seedOne.slots[0].id);
+				await service[serviceFunction](seedOne.slots[0].id);
+				const {
+					slots: [slot]
+				} = await service[serviceFunction](seedOne.slots[0].id);
+
+				expect(slot.availabilities).toHaveLength(3);
+				expect(slot.availabilities).toEqual(
+					expect.arrayContaining([
+						{ userId: 'Lucifer', status },
+						{ userId: 'Mazikeen', status },
+						{ userId: 'Amenadiel', status }
+					]) as Availability[]
+				);
+				spy.mockRestore();
+				pollSpy.mockRestore();
 			});
 		});
 	});

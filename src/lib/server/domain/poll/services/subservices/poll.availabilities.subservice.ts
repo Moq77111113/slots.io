@@ -23,6 +23,7 @@ export const AvailabilitySubService = (context: PollServiceContext): Availabilit
 		if (![poll.creatorId, ...poll.participantIds].includes(me.id)) {
 			throw errorHandler.throws(DomainErrors.Poll.not_member);
 		}
+
 		return me;
 	};
 
