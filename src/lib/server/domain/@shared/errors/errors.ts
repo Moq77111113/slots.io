@@ -17,7 +17,28 @@ const statusToCode = {
 	duplicate: 409,
 	bad_data: 422,
 	internal: 500
-} as const satisfies Record<ErrorCode, number>;
+} as const;
+
+type StatusCode = (typeof statusToCode)[ErrorCode];
+/**
+ * @description Internal Error entity
+ * It should not be used directly, use DomainError instead
+ */
+class _DomainError<Key extends DomainErrorKeys, T> extends Error {
+	key: Key;
+	statusCode: StatusCode;
+	message: string;
+	data?: T;
+	constructor(args: { message: string; key: Key; statusCode: ErrorCode }, data?: T) {
+		super(args.message);
+		this.key = args.key;
+		this.statusCode = statusToCode[args.statusCode];
+		this.message = args.message;
+		this.data = data;
+		this.name = args.key;
+		this.stack = new Error().stack?.split('\n').slice(3).join('\n');
+	}
+}
 
 /**
  *
@@ -29,12 +50,14 @@ export const DomainError = <Key extends DomainErrorKeys, T>(
 	data?: T
 ) => {
 	const { message, key, statusCode } = args;
-	return {
-		message,
-		key,
-		statusCode: statusToCode[statusCode],
+	return new _DomainError(
+		{
+			message,
+			key,
+			statusCode
+		},
 		data
-	};
+	);
 };
 
 /**
