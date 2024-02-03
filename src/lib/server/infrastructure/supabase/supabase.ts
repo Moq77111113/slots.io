@@ -11,16 +11,23 @@ type SupabaseContext = {
 	options: SupabaseServerClientOptions;
 };
 
-export type Profile = Tables<'profiles'>;
+export type SbProfile = Tables<'profiles'>;
+
+type SbAvailability = Tables<'availabilities'>;
+type SbSlot = Tables<'slots'> & { availabilities: SbAvailability[] };
+export type SbHuddle = Tables<'huddles'> & { slots: SbSlot[] };
+
 export const SupabaseInfrastructure = (context: SupabaseContext) => {
 	const { env, options } = context;
 
 	const { auth, from } = createServerClient<Database>(env.APP_URL, env.APP_ANON, options);
 
 	const profiles = from('profiles');
+	const huddles = from('huddles');
 	return {
 		auth,
-		users: profiles
+		users: profiles,
+		huddles
 	};
 };
 

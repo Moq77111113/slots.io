@@ -17,7 +17,7 @@ const EnglishLocales = z.union([
 ]);
 
 const ISOLanguage = z.union([z.literal('fr'), z.literal('en')]);
-export const Locale = z.union([FrenchLocales, EnglishLocales]);
+const Locale = z.union([FrenchLocales, EnglishLocales]);
 
 const userSchema = z.object({
 	id: z.string(),
@@ -36,13 +36,56 @@ const userSchema = z.object({
 	updatedAt: z.date()
 });
 
+const AvailabilityStatus = z.union([
+	z.literal('available'),
+	z.literal('unavailable'),
+	z.literal('maybe')
+]);
+
+const availabilitySchema = z.object({
+	userId: z.string(),
+	status: AvailabilityStatus
+});
+
+const slotSchema = z.object({
+	id: z.string(),
+	start: z.date(),
+	end: z.date(),
+	availabilities: z.array(availabilitySchema).default([]),
+	createdAt: z.date(),
+	updatedAt: z.date()
+});
+
+const huddleSchema = z.object({
+	id: z.string(),
+	title: z.string(),
+	description: z.string().optional(),
+	createdAt: z.date(),
+	updatedAt: z.date(),
+	creatorId: z.string(),
+	slots: z.array(slotSchema).default([]),
+	locked: z.boolean(),
+	expiration: z.date().optional(),
+	participantIds: z.array(z.string()).default([])
+});
+
 export const DomainSchemas = {
-	User: userSchema
+	User: userSchema,
+	Huddle: huddleSchema
+};
+
+export type ZodUserSchema = typeof userSchema;
+export type ZodHuddleSchema = typeof huddleSchema;
+
+export type DomainSchemas = {
+	User: ZodUserSchema;
+	Huddle: ZodHuddleSchema;
 };
 
 type ResultWithError<T extends z.AnyZodObject> =
 	| [result: undefined, error: z.inferFlattenedErrors<T>]
 	| [result: z.infer<T>, error: undefined];
+
 export const validateData = <Schema extends z.AnyZodObject, Data = z.infer<Schema>>(
 	data: Data,
 	schema: Schema
