@@ -1,5 +1,5 @@
 import { DomainErrors } from '$domain/@shared/errors';
-import type { CreateSlotDto } from '$domain/poll/dto/in/slot-input';
+import type { CreateSlotDto } from '$domain/poll/dto/in/slot.input';
 import type { PollId, SlotId } from '$domain/poll/models';
 import type { SlotApi } from '$domain/poll/ports/api/poll.slots';
 
@@ -68,7 +68,7 @@ export const SlotSubService = (context: PollServiceContext): SlotApi => {
 			throw errorHandler.throws(DomainErrors.Poll.not_found);
 		}
 		if (poll.creatorId !== me.id) {
-			throw errorHandler.throws(DomainErrors.Poll.authorization_required);
+			throw errorHandler.throws(DomainErrors.Poll.admin_required);
 		}
 
 		const { start, end, availability } = args;
@@ -96,7 +96,7 @@ export const SlotSubService = (context: PollServiceContext): SlotApi => {
 			throw errorHandler.throws(DomainErrors.Poll.not_found);
 		}
 		if (poll.creatorId !== me.id) {
-			throw errorHandler.throws(DomainErrors.Poll.authorization_required);
+			throw errorHandler.throws(DomainErrors.Poll.admin_required);
 		}
 
 		const { slots } = poll;

@@ -50,7 +50,7 @@ describe('Poll Slots', () => {
 						end: new Date('2024-01-01T23:59:00Z')
 					});
 
-				expect(fn).toThrow(Error('poll:authorization-required'));
+				expect(fn).toThrow(Error('poll:not-admin'));
 				spy.mockRestore();
 			});
 		});
@@ -182,7 +182,7 @@ describe('Poll Slots', () => {
 
 				const fn = () => service.removeSlot(createdPoll.id, '2' as SlotId);
 
-				expect(fn).toThrow(Error('poll:authorization-required'));
+				expect(fn).toThrow(Error('poll:not-admin'));
 				spy.mockRestore();
 			});
 		});

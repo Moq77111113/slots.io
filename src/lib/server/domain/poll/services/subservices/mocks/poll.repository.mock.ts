@@ -1,8 +1,15 @@
 import { makePollId, makeSlotId, type Poll, type PollId, type SlotId } from '$domain/poll/models';
-import type { PollCreateArgs, PollRepository, SlotAddArgs } from '$domain/poll/ports/spi';
+import type {
+	AvailabilityAddArgs,
+	AvailabilityRemoveArgs,
+	PollCreateArgs,
+	PollRepository,
+	SlotAddArgs
+} from '$domain/poll/ports/spi';
 
 export const MockedPollRepository = (): PollRepository => {
 	const polls: Poll[] = [];
+
 	const create = (_poll: PollCreateArgs) => {
 		const pollId = makePollId((polls.length + 1).toString());
 
@@ -23,6 +30,10 @@ export const MockedPollRepository = (): PollRepository => {
 		return polls.find((poll) => poll.id === id) ?? null;
 	};
 
+	const findBySlotId = (slotId: SlotId) => {
+		return polls.find((poll) => poll.slots.some((_) => _.id === slotId)) ?? null;
+	};
+
 	const addSlot = (pollId: PollId, slot: SlotAddArgs) => {
 		const poll = findById(pollId);
 
@@ -31,7 +42,7 @@ export const MockedPollRepository = (): PollRepository => {
 		}
 		const newSlot = {
 			...slot,
-			id: makeSlotId((poll.slots.length + 1).toString()),
+			id: makeSlotId(`${poll.id}-${(poll.slots.length + 1).toString()}`),
 			createdAt: new Date(),
 			updatedAt: new Date()
 		};
@@ -53,10 +64,41 @@ export const MockedPollRepository = (): PollRepository => {
 		poll.slots.splice(index, 1);
 		return poll;
 	};
+
+	const addAvailability = (slotId: SlotId, availability: AvailabilityAddArgs) => {
+		const poll = findBySlotId(slotId);
+		if (!poll) {
+			throw new Error('Poll not found');
+		}
+		const slot = poll.slots.find((_) => _.id === slotId);
+		if (!slot) {
+			throw new Error('Slot not found');
+		}
+		slot.availabilities.push(availability);
+		return poll;
+	};
+
+	const removeAvailability = (slotId: SlotId, { userId }: AvailabilityRemoveArgs) => {
+		const poll = findBySlotId(slotId);
+		if (!poll) {
+			throw new Error('Poll not found');
+		}
+		const slot = poll.slots.find((_) => _.id === slotId);
+		if (!slot) {
+			throw new Error('Slot not found');
+		}
+		slot.availabilities = slot.availabilities.filter((_) => _.userId !== userId);
+
+		return poll;
+	};
+
 	return {
 		create,
 		findById,
+		findBySlotId,
 		addSlot,
-		removeSlot
+		removeSlot,
+		addAvailability,
+		removeAvailability
 	};
 };
