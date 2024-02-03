@@ -23,6 +23,10 @@ export const MockedPollRepository = (): PollRepository => {
 		return polls.find((poll) => poll.id === id) ?? null;
 	};
 
+	const findBySlotId = (slotId: SlotId) => {
+		return polls.find((poll) => poll.slots.some((_) => _.id === slotId)) ?? null;
+	};
+
 	const addSlot = (pollId: PollId, slot: SlotAddArgs) => {
 		const poll = findById(pollId);
 
@@ -56,6 +60,7 @@ export const MockedPollRepository = (): PollRepository => {
 	return {
 		create,
 		findById,
+		findBySlotId,
 		addSlot,
 		removeSlot
 	};

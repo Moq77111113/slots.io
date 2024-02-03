@@ -1,4 +1,5 @@
 import { DomainErrors } from '$domain/@shared/errors';
+import type { SlotId } from '$domain/poll/models';
 import type { AvailabilityApi } from '$domain/poll/ports/api';
 
 import type { PollServiceContext } from '../types';
@@ -7,15 +8,25 @@ export const AvailabilitySubService = (context: PollServiceContext): Availabilit
 	const { meApi } = context.apis;
 	const { poll: pollRepo } = context.repositories;
 
-	const setAvailable = (slot: SlotId) => {
+	const assertSlotExists = async (slot: SlotId) => {
+		const poll = await pollRepo.findBySlotId(slot);
+		if (!poll) {
+			throw errorHandler.throws(DomainErrors.Poll.slot_not_found);
+		}
+		return poll;
+	};
+	const setAvailable = async (slot: SlotId) => {
+		const poll = await assertSlotExists(slot);
 		throw errorHandler.throws(DomainErrors.Common.not_implemented);
 	};
 
-	const setUnavailable = (slot: SlotId) => {
+	const setUnavailable = async (slot: SlotId) => {
+		const poll = await assertSlotExists(slot);
 		throw errorHandler.throws(DomainErrors.Common.not_implemented);
 	};
 
-	const setMaybeAvailable = (slot: SlotId) => {
+	const setMaybeAvailable = async (slot: SlotId) => {
+		const poll = await assertSlotExists(slot);
 		throw errorHandler.throws(DomainErrors.Common.not_implemented);
 	};
 

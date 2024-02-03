@@ -8,6 +8,7 @@ export type SlotAddArgs = CreateEntityInput<Slot>;
 
 type PollQuery = {
 	findById: (id: string) => MaybePromise<Poll | null>;
+	findBySlotId: (slotId: SlotId) => MaybePromise<Poll | null>;
 };
 
 type PollCommand = {
