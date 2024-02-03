@@ -13,7 +13,8 @@ export type Entity<ID extends Branded<unknown, string>, T> = { id: ID } & T & {
  */
 export type Identity<T> = {
 	[P in keyof T]: T[P];
-};
+	// eslint-disable-next-line @typescript-eslint/ban-types
+} & {};
 
 /**
  * @description Allow to get base dto to create an entity.
@@ -40,9 +41,3 @@ export type PatchEntityInput<T extends Entity<Branded<unknown, string>, unknown>
 export type UpsertEntityInput<T extends Entity<Branded<unknown, string>, unknown>> = Identity<
 	CreateEntityInput<T> & { id: T['id'] }
 >;
-
-/**
- * @description This type is used to prettify the types of objects.
- */
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type Prettify<T> = { [K in keyof T]: T[K] } & {};

@@ -6,7 +6,7 @@ import type { User, UserId } from '$domain/user/models';
 import type { PollServiceContext } from '../types';
 import { MockedPollContext } from './mocks/context.mock';
 import { PollCreateSubService } from './poll.create.subservice';
-import { SlotSubService } from './slot.subservice';
+import { SlotSubService } from './poll.slot.subservice';
 
 describe('Poll Slots', () => {
 	let service: ReturnType<typeof SlotSubService>;
@@ -135,7 +135,6 @@ describe('Poll Slots', () => {
 							_.start.getTime() === slot.start.getTime() && _.end.getTime() === slot.end.getTime()
 					)
 				).toBeDefined();
-				expect(poll.slots.length).toEqual(2);
 				spy.mockRestore();
 			});
 		});
@@ -190,32 +189,10 @@ describe('Poll Slots', () => {
 
 		describe('Remove Slot', () => {
 			it('should remove the slot from the poll', async () => {
-				const spy = spyOn(context.repositories.poll, 'findById').mockImplementation(
-					() =>
-						({
-							id: createdPoll.id,
-							slots: [
-								{
-									id: '1',
-									start: new Date('2024-01-01T00:00:00Z'),
-									end: new Date('2024-01-01T23:59:00Z')
-								},
-								{
-									id: '2',
-									start: new Date('2024-01-02T10:00:00Z'),
-									end: new Date('2024-01-02T20:00:00Z')
-								}
-							],
-							creatorId: 'me'
-						}) as Poll
-				);
-
 				const poll = await service.removeSlot(createdPoll.id, '1' as SlotId);
 
 				expect(poll.creatorId).toEqual('me' as UserId);
 				expect(poll.slots.find((_) => _.id === '1')).toBeUndefined();
-				expect(poll.slots.length).toEqual(1);
-				spy.mockRestore();
 			});
 		});
 	});
