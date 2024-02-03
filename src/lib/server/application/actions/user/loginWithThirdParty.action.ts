@@ -1,7 +1,7 @@
 import type { AppContext } from '$application/context';
 import type { Action, ActionAdapter } from '$domain/@shared';
 import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import type { Prettify } from '$domain/@shared/types';
+import type { Identity } from '$domain/@shared/types';
 import type { OAuthAuthenticationArgs } from '$domain/user/dtos/in/authentication.input';
 import type { User } from '$domain/user/models';
 
@@ -15,7 +15,7 @@ export const LoginWithThirdPartyAction = ((context) => {
 
 	const execute = async (
 		provider: ThirdPartyAccount['provider'],
-		request: Prettify<Omit<OAuthAuthenticationArgs, 'provider'>>
+		request: Identity<Omit<OAuthAuthenticationArgs, 'provider'>>
 	) => {
 		return await userApi.authOrRegisterWithThirdParty(provider, request);
 	};

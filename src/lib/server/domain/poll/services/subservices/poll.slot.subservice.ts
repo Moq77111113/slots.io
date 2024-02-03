@@ -8,7 +8,7 @@ import type { PollServiceContext } from '../types';
 export const SlotSubService = (context: PollServiceContext): SlotApi => {
 	const { errorHandler } = context.shared;
 	const { meApi } = context.apis;
-	const { slot: slotRepo, poll: pollRepo } = context.repositories;
+	const { poll: pollRepo } = context.repositories;
 
 	/**
 	 *
@@ -27,6 +27,15 @@ export const SlotSubService = (context: PollServiceContext): SlotApi => {
 
 	/**
 	 *
+	 * @description Checks if a date is within the range of two dates
+	 */
+	const overlaps = (
+		{ start, end }: { start: Date; end: Date },
+		date: Date,
+		allowAdjacent = true
+	) => (allowAdjacent ? date > start && date < end : date >= start && date <= end);
+	/**
+	 *
 	 * @description Asserts that the new slot does not overlap with any of the existing slots
 	 *
 	 */
@@ -38,17 +47,12 @@ export const SlotSubService = (context: PollServiceContext): SlotApi => {
 		const { start, end } = newSlot;
 		if (!slots.length) return;
 		const overlapping = slots.some((slot) => {
-			const slotStart = slot.start.getTime();
-			const slotEnd = slot.end.getTime();
-			const newStart = start.getTime();
-			const newEnd = end.getTime();
-
-			return allowAdjacent
-				? // If adjacent slots are allowed, we consider two slots to be overlapping if the start of the new slot is within the existing slot or if the end of the new slot is within the existing slot.
-					(newStart >= slotStart && newStart < slotEnd) || (newEnd > slotStart && newEnd <= slotEnd)
-				: // If adjacent slots are not allowed, we consider two slots to be overlapping even if the start or end of the new slot is exactly the same as the end or start of the existing slot, respectively.
-					(newStart >= slotStart && newStart <= slotEnd) ||
-						(newEnd >= slotStart && newEnd <= slotEnd);
+			return (
+				overlaps({ start, end }, slot.start, allowAdjacent) ||
+				overlaps({ start, end }, slot.end, allowAdjacent) ||
+				overlaps({ start: slot.start, end: slot.end }, start, allowAdjacent) ||
+				overlaps({ start: slot.start, end: slot.end }, end, allowAdjacent)
+			);
 		});
 		if (overlapping) {
 			throw errorHandler.throws(DomainErrors.Poll.slots_overlapping([newSlot, ...slots]));
@@ -80,12 +84,7 @@ export const SlotSubService = (context: PollServiceContext): SlotApi => {
 		assertSlotsDoesNotOverlaps(slots, args);
 
 		const availabilities = availability ? [{ ...availability, userId: me.id }] : [];
-		const slot = await slotRepo.create({ start, end, availabilities, pollId });
-
-		return {
-			...poll,
-			slots: [...slots, slot]
-		};
+		return await pollRepo.addSlot(pollId, { start, end, availabilities });
 	};
 
 	const remove = async (pollId: PollId, slotId: SlotId) => {
@@ -108,13 +107,7 @@ export const SlotSubService = (context: PollServiceContext): SlotApi => {
 			throw errorHandler.throws(DomainErrors.Poll.slot_not_found);
 		}
 
-		await slotRepo.remove(slotId);
-		const slotIndex = slots.findIndex((s) => s.id === slotId);
-		const newSlots = slots.filter((_, i) => i !== slotIndex);
-		return {
-			...poll,
-			slots: newSlots
-		};
+		return await pollRepo.removeSlot(pollId, slotId);
 	};
 
 	return {

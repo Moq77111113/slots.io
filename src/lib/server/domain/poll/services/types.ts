@@ -1,5 +1,5 @@
 import type { ActionContext } from '$domain/@shared';
-import type { PollRepository, SlotRepository } from '$domain/poll/ports/spi';
+import type { PollRepository } from '$domain/poll/ports/spi';
 import type { MeApi } from '$domain/user/ports/api/user.api';
 
 export type PollServiceContext = ActionContext & {
@@ -8,6 +8,5 @@ export type PollServiceContext = ActionContext & {
 	};
 	repositories: {
 		poll: PollRepository;
-		slot: SlotRepository;
 	};
 };
