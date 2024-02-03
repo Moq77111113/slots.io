@@ -1,8 +1,10 @@
 import { DomainErrors } from '$domain/@shared/errors';
 import type { Poll, SlotId } from '$domain/poll/models';
 import type { AvailabilityApi } from '$domain/poll/ports/api';
+import type { AvailabilityAddArgs } from '$domain/poll/ports/spi';
 
 import type { PollServiceContext } from '../types';
+
 export const AvailabilitySubService = (context: PollServiceContext): AvailabilityApi => {
 	const { errorHandler } = context.shared;
 	const { meApi } = context.apis;
@@ -23,23 +25,31 @@ export const AvailabilitySubService = (context: PollServiceContext): Availabilit
 		}
 		return me;
 	};
-	const setAvailable = async (slot: SlotId) => {
-		const poll = await findPollOrThrow(slot);
 
-		const me = await getAuthorizedUser(poll);
-		throw errorHandler.throws(DomainErrors.Common.not_implemented);
+	const replaceAvailability = async (slotId: SlotId, { userId, status }: AvailabilityAddArgs) => {
+		await pollRepo.removeAvailability(slotId, { userId });
+		return await pollRepo.addAvailability(slotId, { userId, status });
 	};
 
-	const setUnavailable = async (slot: SlotId) => {
-		const poll = await findPollOrThrow(slot);
+	const setAvailable = async (slotId: SlotId) => {
+		const poll = await findPollOrThrow(slotId);
+
 		const me = await getAuthorizedUser(poll);
-		throw errorHandler.throws(DomainErrors.Common.not_implemented);
+
+		return await replaceAvailability(slotId, { userId: me.id, status: 'available' });
 	};
 
-	const setMaybeAvailable = async (slot: SlotId) => {
-		const poll = await findPollOrThrow(slot);
+	const setUnavailable = async (slotId: SlotId) => {
+		const poll = await findPollOrThrow(slotId);
 		const me = await getAuthorizedUser(poll);
-		throw errorHandler.throws(DomainErrors.Common.not_implemented);
+
+		return await replaceAvailability(slotId, { userId: me.id, status: 'unavailable' });
+	};
+
+	const setMaybeAvailable = async (slotId: SlotId) => {
+		const poll = await findPollOrThrow(slotId);
+		const me = await getAuthorizedUser(poll);
+		return await replaceAvailability(slotId, { userId: me.id, status: 'maybe' });
 	};
 
 	return {

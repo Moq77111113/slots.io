@@ -1,16 +1,16 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
+import type { Availability, AvailabilityStatus } from '$domain/poll/attributes';
 import type { Poll, SlotId } from '$domain/poll/models';
 import type { PollRepository } from '$domain/poll/ports/spi';
 import type { User, UserId } from '$domain/user/models';
+import { keys } from '$lib/helpers/types';
 
 import type { PollServiceContext } from '../types';
 import { MockedPollContext } from './mocks/context.mock';
 import { AvailabilitySubService } from './poll.availabilities.subservice';
 
 describe('Slots availabilities ', () => {
-	let service: ReturnType<typeof AvailabilitySubService>;
-	let context: PollServiceContext;
 	const userId = 'me' as UserId;
 	const seed = async (repo: PollRepository) => {
 		let poll = await repo.create({
@@ -26,22 +26,24 @@ describe('Slots availabilities ', () => {
 		});
 		return poll;
 	};
-	let poll: Poll;
-	beforeAll(async () => {
-		context = MockedPollContext();
-		service = AvailabilitySubService(context);
-		poll = await seed(context.repositories.poll);
-	});
 
 	type AvailabilityService = keyof ReturnType<typeof AvailabilitySubService>;
 	const availabilityServices = [
-		'setAvailable',
-		'setMaybeAvailable',
-		'setUnavailable'
-	] satisfies AvailabilityService[];
-	describe.each(availabilityServices)('%s', (serviceFunction) => {
-		describe('Check availabilities', () => {
-			it('should throw a poll not found exception if the slot does not exists', () => {
+		['setAvailable', 'available'],
+		['setMaybeAvailable', 'maybe'],
+		['setUnavailable', 'unavailable']
+	] satisfies [AvailabilityService, AvailabilityStatus][];
+	describe.each(availabilityServices)('%s', (serviceFunction, status) => {
+		let seededPoll: Poll;
+		let service: ReturnType<typeof AvailabilitySubService>;
+		let context: PollServiceContext;
+		beforeAll(async () => {
+			context = MockedPollContext();
+			service = AvailabilitySubService(context);
+			seededPoll = await seed(context.repositories.poll);
+		});
+		describe('Assert presence & authorization', () => {
+			it('should throw a slot not found exception if the slot does not exists', () => {
 				const fn = () => service[serviceFunction]('AnIdThatDoesNotExist' as SlotId);
 
 				expect(fn).toThrow(Error('poll:slot_not_found'));
@@ -54,10 +56,37 @@ describe('Slots availabilities ', () => {
 							id: 'lucifer'
 						}) as User
 				);
-				const fn = () => service[serviceFunction](poll.slots[0].id);
+				const fn = () => service[serviceFunction](seededPoll.slots[0].id);
 
 				expect(fn).toThrow(Error('poll:not-member'));
 				spy.mockRestore();
+			});
+		});
+		describe('Setting availability', () => {
+			it('should set the availability of the user to the slot', async () => {
+				const createdPoll = await service[serviceFunction](seededPoll.slots[0].id);
+
+				const availabilitiesForSlot = createdPoll.slots[0].availabilities;
+
+				expect(availabilitiesForSlot).toEqual(
+					expect.arrayContaining([{ userId, status }]) as Availability[]
+				);
+			});
+
+			it('should override the availability for the user', async () => {
+				const anotherServiceFn = keys(service).filter((_) => _ !== serviceFunction)[0];
+				console.log('calling', anotherServiceFn, 'then', serviceFunction);
+				await service[anotherServiceFn](seededPoll.slots[0].id);
+				await service[serviceFunction](seededPoll.slots[0].id);
+
+				const createdPoll = await service[serviceFunction](seededPoll.slots[0].id);
+
+				const availabilitiesForSlot = createdPoll.slots[0].availabilities;
+
+				expect(availabilitiesForSlot).toEqual(
+					expect.arrayContaining([{ userId, status }]) as Availability[]
+				);
+				expect(availabilitiesForSlot.filter((_) => _.userId === userId).length).toBe(1);
 			});
 		});
 	});
