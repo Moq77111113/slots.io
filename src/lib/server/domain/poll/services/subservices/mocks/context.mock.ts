@@ -3,12 +3,10 @@ import type { ErrorHandler } from '$domain/@shared/errors';
 import type { PollServiceContext } from '../../types';
 import { MockedMeApi } from './me.api.mock';
 import { MockedPollRepository } from './poll.repository.mock';
-import { MockedSlotRepository } from './slot.repository.mock';
 
 export const MockedPollContext = (): PollServiceContext => {
 	const meApi = MockedMeApi();
 	const poll = MockedPollRepository();
-	const slot = MockedSlotRepository();
 
 	const errorHandler = {
 		throws: (e) => {
@@ -24,8 +22,7 @@ export const MockedPollContext = (): PollServiceContext => {
 			meApi
 		},
 		repositories: {
-			poll,
-			slot
+			poll
 		}
 	};
 };

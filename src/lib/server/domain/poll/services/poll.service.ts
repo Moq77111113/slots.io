@@ -1,5 +1,5 @@
 import { PollCreateSubService } from './subservices/poll.create.subservice';
-import { SlotSubService } from './subservices/slot.subservice';
+import { SlotSubService } from './subservices/poll.slot.subservice';
 import type { PollServiceContext } from './types';
 
 /**

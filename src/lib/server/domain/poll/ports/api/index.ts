@@ -1,4 +1,4 @@
 import type { CreatePollApi } from './poll.create';
-
-export type { CreatePollApi };
-export type PollApi = CreatePollApi;
+import type { SlotApi } from './poll.slots';
+export type { CreatePollApi, SlotApi };
+export type PollApi = CreatePollApi & SlotApi;
