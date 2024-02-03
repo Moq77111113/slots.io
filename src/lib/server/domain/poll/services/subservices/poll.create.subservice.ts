@@ -1,6 +1,6 @@
 import { DomainErrors } from '$domain/@shared/errors';
-import type { CreatePollDto } from '$domain/poll/dto/in/poll-input';
-import type { CreateSlotDto } from '$domain/poll/dto/in/slot-input';
+import type { CreatePollDto } from '$domain/poll/dto/in/poll.input';
+import type { CreateSlotDto } from '$domain/poll/dto/in/slot.input';
 import type { Poll } from '$domain/poll/models';
 import type { CreatePollApi } from '$domain/poll/ports/api/poll.create';
 

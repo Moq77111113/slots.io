@@ -1,3 +1,4 @@
+import { type CommonErrorKeys, CommonErrors } from '$domain/@shared/errors/common.errors';
 import type { DomainError, ErrorCollection } from '$domain/@shared/errors/errors';
 import { type PollErrorKeys, PollErrors } from '$domain/@shared/errors/poll.errors';
 import type { ErrorHandler } from '$domain/@shared/errors/ports/spi/error.handler';
@@ -6,14 +7,15 @@ import { type UserErrorKeys, UserErrors } from '$domain/@shared/errors/user.erro
 /**
  * @description List of keys available for domain errors
  */
-type DomainErrorKeys = UserErrorKeys | PollErrorKeys;
+type DomainErrorKeys = CommonErrorKeys | UserErrorKeys | PollErrorKeys;
 
 /**
  * @description Collection of domain errors
  */
 const DomainErrors = {
 	User: UserErrors,
-	Poll: PollErrors
+	Poll: PollErrors,
+	Common: CommonErrors
 } as const satisfies Record<string, ErrorCollection<DomainErrorKeys>>;
 
 export { DomainErrors };

@@ -1,12 +1,12 @@
 import { DomainError, type ErrorCollection } from '$domain/@shared/errors/errors';
-import type { CreateSlotDto } from '$domain/poll/dto/in/slot-input';
 
 type Keys =
 	| 'poll:title-too-long'
 	| 'poll:description-too-long'
 	| 'poll:slots-overlapping'
 	| 'poll:not-found'
-	| 'poll:authorization-required'
+	| 'poll:not-admin'
+	| 'poll:not-member'
 	| 'poll:bad-time-range'
 	| 'poll:slot_not_found';
 
@@ -21,7 +21,7 @@ export const PollErrors = {
 		message: 'The description is too long',
 		statusCode: 'bad_data'
 	}),
-	slots_overlapping: (overlapping: CreateSlotDto[]) =>
+	slots_overlapping: (overlapping: { start: Date; end: Date }[]) =>
 		DomainError(
 			{
 				key: 'poll:slots-overlapping',
@@ -37,10 +37,15 @@ export const PollErrors = {
 		message: 'The poll was not found',
 		statusCode: 'not_found'
 	}),
-	authorization_required: DomainError({
-		key: 'poll:authorization-required',
+	admin_required: DomainError({
+		key: 'poll:not-admin',
 		message: 'You are not the owner of the poll',
-		statusCode: 'unauthorized'
+		statusCode: 'forbidden'
+	}),
+	not_member: DomainError({
+		key: 'poll:not-member',
+		message: 'You are not a member of the poll',
+		statusCode: 'forbidden'
 	}),
 	bad_time_range: DomainError({
 		key: 'poll:bad-time-range',
