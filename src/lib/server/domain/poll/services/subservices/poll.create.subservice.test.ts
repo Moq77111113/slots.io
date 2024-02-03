@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
-import type { CreatePollDto } from '$domain/poll/dto/in/poll-input';
+import type { CreatePollDto } from '$domain/poll/dto/in/poll.input';
 
 import type { PollServiceContext } from '../types';
 import { MockedPollContext } from './mocks/context.mock';

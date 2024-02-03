@@ -1,5 +1,5 @@
 import { DomainErrors } from '$domain/@shared/errors';
-import type { CreateSlotDto } from '$domain/poll/dto/in/slot-input';
+import type { CreateSlotDto } from '$domain/poll/dto/in/slot.input';
 import type { PollId, SlotId } from '$domain/poll/models';
 import type { SlotApi } from '$domain/poll/ports/api/poll.slots';
 
