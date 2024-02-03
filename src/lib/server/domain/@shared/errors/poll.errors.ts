@@ -1,5 +1,4 @@
 import { DomainError, type ErrorCollection } from '$domain/@shared/errors/errors';
-import type { CreateSlotDto } from '$domain/poll/dto/in/slot-input';
 
 type Keys =
 	| 'poll:title-too-long'
@@ -21,7 +20,7 @@ export const PollErrors = {
 		message: 'The description is too long',
 		statusCode: 'bad_data'
 	}),
-	slots_overlapping: (overlapping: CreateSlotDto[]) =>
+	slots_overlapping: (overlapping: { start: Date; end: Date }[]) =>
 		DomainError(
 			{
 				key: 'poll:slots-overlapping',

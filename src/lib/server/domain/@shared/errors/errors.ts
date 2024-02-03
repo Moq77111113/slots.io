@@ -7,7 +7,8 @@ type ErrorCode =
 	| 'duplicate'
 	| 'unauthorized'
 	| 'forbidden'
-	| 'internal';
+	| 'internal'
+	| 'not_implemented';
 
 const statusToCode = {
 	bad_request: 400,
@@ -16,7 +17,8 @@ const statusToCode = {
 	not_found: 404,
 	duplicate: 409,
 	bad_data: 422,
-	internal: 500
+	internal: 500,
+	not_implemented: 501
 } as const;
 
 type StatusCode = (typeof statusToCode)[ErrorCode];
