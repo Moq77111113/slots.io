@@ -5,7 +5,8 @@ type Keys =
 	| 'poll:description-too-long'
 	| 'poll:slots-overlapping'
 	| 'poll:not-found'
-	| 'poll:authorization-required'
+	| 'poll:not-admin'
+	| 'poll:not-member'
 	| 'poll:bad-time-range'
 	| 'poll:slot_not_found';
 
@@ -36,10 +37,15 @@ export const PollErrors = {
 		message: 'The poll was not found',
 		statusCode: 'not_found'
 	}),
-	authorization_required: DomainError({
-		key: 'poll:authorization-required',
+	admin_required: DomainError({
+		key: 'poll:not-admin',
 		message: 'You are not the owner of the poll',
-		statusCode: 'unauthorized'
+		statusCode: 'forbidden'
+	}),
+	not_member: DomainError({
+		key: 'poll:not-member',
+		message: 'You are not a member of the poll',
+		statusCode: 'forbidden'
 	}),
 	bad_time_range: DomainError({
 		key: 'poll:bad-time-range',

@@ -68,7 +68,7 @@ export const SlotSubService = (context: PollServiceContext): SlotApi => {
 			throw errorHandler.throws(DomainErrors.Poll.not_found);
 		}
 		if (poll.creatorId !== me.id) {
-			throw errorHandler.throws(DomainErrors.Poll.authorization_required);
+			throw errorHandler.throws(DomainErrors.Poll.admin_required);
 		}
 
 		const { start, end, availability } = args;
@@ -96,7 +96,7 @@ export const SlotSubService = (context: PollServiceContext): SlotApi => {
 			throw errorHandler.throws(DomainErrors.Poll.not_found);
 		}
 		if (poll.creatorId !== me.id) {
-			throw errorHandler.throws(DomainErrors.Poll.authorization_required);
+			throw errorHandler.throws(DomainErrors.Poll.admin_required);
 		}
 
 		const { slots } = poll;

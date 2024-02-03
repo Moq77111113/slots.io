@@ -1,8 +1,8 @@
-import { beforeAll, describe, expect, it } from 'bun:test';
+import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
 import type { Poll, SlotId } from '$domain/poll/models';
 import type { PollRepository } from '$domain/poll/ports/spi';
-import type { UserId } from '$domain/user/models';
+import type { User, UserId } from '$domain/user/models';
 
 import type { PollServiceContext } from '../types';
 import { MockedPollContext } from './mocks/context.mock';
@@ -45,6 +45,19 @@ describe('Slots availabilities ', () => {
 				const fn = () => service[serviceFunction]('AnIdThatDoesNotExist' as SlotId);
 
 				expect(fn).toThrow(Error('poll:slot_not_found'));
+			});
+
+			it('should throw an unauthorized exception if the user is not member of the poll', () => {
+				const spy = spyOn(context.apis.meApi, 'getMe').mockImplementation(
+					() =>
+						({
+							id: 'lucifer'
+						}) as User
+				);
+				const fn = () => service[serviceFunction](poll.slots[0].id);
+
+				expect(fn).toThrow(Error('poll:not-member'));
+				spy.mockRestore();
 			});
 		});
 	});
