@@ -17,6 +17,7 @@ const toHuddle = (entity: SbHuddle): Huddle => {
 			createdAt: new Date(entity.created_at),
 			updatedAt: new Date(entity.updated_at || entity.created_at),
 			participantIds: [],
+			participants: entity.participants,
 			expiration: entity.expiration ? new Date(entity.expiration) : undefined,
 			slots: entity.slots.map((slot) => ({
 				...slot,
@@ -26,7 +27,8 @@ const toHuddle = (entity: SbHuddle): Huddle => {
 				updatedAt: new Date(slot.updated_at),
 				availabilities: slot.availabilities.map((availability) => ({
 					...availability,
-					userId: availability.user_id
+					userId: availability.user_id,
+					user: availability.user
 				}))
 			}))
 		},

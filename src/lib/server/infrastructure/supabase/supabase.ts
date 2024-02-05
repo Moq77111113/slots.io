@@ -1,5 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 
+import type { Identity } from '$domain/@shared/types';
+
 import type { Database, Tables } from './sb-types';
 
 type SupabaseServerClientOptions = Parameters<typeof createServerClient>[2];
@@ -11,11 +13,18 @@ type SupabaseContext = {
 	options: SupabaseServerClientOptions;
 };
 
-export type SbProfile = Tables<'profiles'>;
+export type SbProfile = Identity<Tables<'profiles'>>;
 
-type SbAvailability = Tables<'availabilities'>;
-type SbSlot = Tables<'slots'> & { availabilities: SbAvailability[] };
-export type SbHuddle = Tables<'huddles'> & { slots: SbSlot[] };
+export type SbAvailability = Identity<Tables<'availabilities'> & { user?: SbProfile }>;
+export type SbSlot = Identity<Tables<'slots'> & { availabilities: SbAvailability[] }>;
+
+export type SbHuddle = Identity<
+	Tables<'huddles'> & {
+		creator?: SbProfile;
+		slots: SbSlot[];
+		participants?: SbProfile[];
+	}
+>;
 
 export const SupabaseInfrastructure = (context: SupabaseContext) => {
 	const { env, options } = context;
