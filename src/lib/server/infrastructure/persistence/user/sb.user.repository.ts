@@ -4,13 +4,13 @@ import { makeUserId, type User, type UserId } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
 import {
 	DomainSchemas,
-	type Profile,
+	type SbProfile,
 	type SupabaseInfrastructure,
 	validateData
 } from '$infrastructure';
 
-const toUser = (profile: Profile): User => {
-	const [user, error] = validateData<(typeof DomainSchemas)['User']>(
+const toUser = (profile: SbProfile): User => {
+	const [user, error] = validateData<DomainSchemas['User']>(
 		{
 			...profile,
 			language: {
