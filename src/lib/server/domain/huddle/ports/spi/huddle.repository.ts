@@ -12,7 +12,7 @@ export type AvailabilityAddArgs = Omit<Availability, 'user'>;
 export type AvailabilityRemoveArgs = Pick<Availability, 'userId'>;
 
 type HuddleQuery = {
-	findById: (id: string) => MaybePromise<Huddle | null>;
+	findById: (id: HuddleId) => MaybePromise<Huddle | null>;
 	findBySlotId: (slotId: SlotId) => MaybePromise<Huddle | null>;
 };
 

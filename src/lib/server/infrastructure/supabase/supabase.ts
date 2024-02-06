@@ -33,10 +33,18 @@ export const SupabaseInfrastructure = (context: SupabaseContext) => {
 
 	const profiles = from('profiles');
 	const huddles = from('huddles');
+	const slots = from('slots');
+	const availabilities = from('availabilities');
+	const huddle_participant = from('huddle_participant');
 	return {
 		auth,
 		users: profiles,
-		huddles
+		huddleResources: {
+			huddles,
+			slots,
+			availabilities,
+			huddle_participant
+		}
 	};
 };
 
