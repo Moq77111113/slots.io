@@ -1,11 +1,12 @@
-import type { HuddleCreateArgs } from '$domain/huddle/ports/spi';
+import type { HuddleId, SlotId } from '$domain/huddle/models';
+import type { HuddleCreateArgs, SlotAddArgs } from '$domain/huddle/ports/spi';
 import { type SbHuddle, type SupabaseInfrastructure } from '$infrastructure';
 import { supabaseToDomain } from '$infrastructure/mappers';
 
 export const SupabaseHuddleRepository = ({
-	huddles
+	huddleResources
 }: {
-	huddles: SupabaseInfrastructure['huddles'];
+	huddleResources: SupabaseInfrastructure['huddleResources'];
 }) => {
 	const SLOT_SELECTION = '*, availabilities(*, user:profiles(*))' as const;
 	const CREATOR_SELECTION = 'profiles!creator_id(*)' as const;
@@ -13,6 +14,7 @@ export const SupabaseHuddleRepository = ({
 	const DEFAULT_SELECTION =
 		`*,  slots(${SLOT_SELECTION}), creator:${CREATOR_SELECTION}, huddle_participant:${PARTICIPANT_SELECTION}` as const;
 
+	const { huddles, slots, availabilities, huddle_participant } = huddleResources;
 	const create = async (args: HuddleCreateArgs) => {
 		const { creatorId, description, title, locked, expiration } = args;
 		const { data, error } = await huddles
@@ -49,9 +51,82 @@ export const SupabaseHuddleRepository = ({
 		return data.map((_) => supabaseToDomain.huddle(_));
 	};
 
+	const findById = async (id: HuddleId) => {
+		const { data, error } = await huddles
+			.select(DEFAULT_SELECTION)
+			.eq('id', id)
+			.returns<SbHuddle[]>()
+			.single();
+
+		if (error) {
+			return null;
+		}
+
+		return supabaseToDomain.huddle(data);
+	};
+
+	const findBySlotId = async (slotId: SlotId) => {
+		const { data, error } = await huddles
+			.select(DEFAULT_SELECTION)
+			.eq('slots.id', slotId)
+			.returns<SbHuddle[]>()
+			.single();
+
+		if (error) {
+			return null;
+		}
+
+		return supabaseToDomain.huddle(data);
+	};
+
+	const addSlot = async (huddleId: HuddleId, slot: SlotAddArgs) => {
+		const { data: slotData, error } = await slots
+			.insert({
+				huddle_id: huddleId,
+				start: slot.start.toISOString(),
+				end: slot.end.toISOString()
+			})
+			.select('id')
+			.single();
+		if (error) {
+			throw Error(error.message);
+		}
+		const { error: availabiltyError } = await availabilities.insert(
+			slot.availabilities.map((_) => ({
+				status: _.status,
+				user_id: _.userId,
+				slot_id: slotData.id
+			}))
+		);
+		if (availabiltyError) {
+			throw Error(availabiltyError.message);
+		}
+
+		const huddle = await findById(huddleId);
+		if (!huddle) {
+			throw Error('Huddle not found');
+		}
+		return huddle;
+	};
+
+	const removeSlot = async (huddleId: HuddleId, slotId: SlotId) => {
+		await slots.delete().eq('id', slotId).eq('huddle_id', huddleId);
+
+		const huddle = await findById(huddleId);
+		if (!huddle) {
+			throw Error('Huddle not found');
+		}
+		return huddle;
+	};
+
+	
+
 	return {
 		create,
-		findAll
+		findById,
+		findBySlotId,
+		addSlot,
+		removeSlot
 	};
 };
 
