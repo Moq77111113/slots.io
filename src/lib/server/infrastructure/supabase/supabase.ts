@@ -13,22 +13,16 @@ type SupabaseContext = {
 	options: SupabaseServerClientOptions;
 };
 
-type NullableKeys<T> = {
-	[P in keyof T]: T[P] extends undefined ? null : T[P];
-};
-
 export type SbProfile = Identity<Tables<'profiles'>>;
 
-export type SbAvailability = NullableKeys<
-	Identity<Tables<'availabilities'> & { user: SbProfile | null }>
->;
+export type SbAvailability = Identity<Tables<'availabilities'> & { user: SbProfile }>;
 export type SbSlot = Identity<Tables<'slots'> & { availabilities: SbAvailability[] }>;
 
 export type SbHuddle = Identity<
 	Tables<'huddles'> & {
-		creator: SbProfile | null;
+		creator: SbProfile;
 		slots: SbSlot[];
-		participants: SbProfile[] | null;
+		huddle_participant: { user: SbProfile }[];
 	}
 >;
 

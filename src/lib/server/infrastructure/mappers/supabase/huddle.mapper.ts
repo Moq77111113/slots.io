@@ -1,5 +1,5 @@
 import type { Availability } from '$domain/huddle/attributes';
-import { type Huddle, makeHuddleId, makeSlotId, type Slot } from '$domain/huddle/models';
+import { type Huddle, makeSlotId, type Slot } from '$domain/huddle/models';
 import { makeUserId } from '$domain/user/models';
 import type { SbAvailability, SbHuddle, SbSlot } from '$infrastructure';
 import {
@@ -11,24 +11,22 @@ import {
 } from '$infrastructure/schemas/domain/huddle.schemas';
 
 import { validateData } from '../validate';
-import { supabaseToDomain as toDomainUser } from './user.mapper';
+import { supabaseToDomain as toUser } from './user.mapper';
 
 const parseAvailability = ({ user, ...entity }: SbAvailability): Availability => {
 	const [availability, error] = validateData<AvailabilitySchema>(
 		{
 			...entity,
-			userId: entity.user_id
+			userId: entity.user_id,
+			user: toUser(user)
 		},
 		availabilitySchema
 	);
 	if (error) {
 		throw Error(error.formErrors[0] || 'Invalid availability data');
 	}
-	return {
-		...availability,
-		userId: makeUserId(availability.userId),
-		user: user ? toDomainUser(user) : undefined
-	};
+
+	return availability;
 };
 
 const parseSlot = (entity: SbSlot): Slot => {
@@ -65,11 +63,11 @@ export const supabaseToDomain = (entity: SbHuddle): Huddle => {
 			...entity,
 			createdAt: new Date(entity.created_at),
 			updatedAt: new Date(entity.updated_at),
-			participantIds: [],
+			participantIds: entity.huddle_participant.map((_) => _.user.id),
 			creatorId: entity.creator_id,
-			creator: undefined,
-			slots: [],
-			participants: [],
+			creator: toUser(entity.creator),
+			slots: entity.slots.map(parseSlot),
+			participants: entity.huddle_participant.map((_) => toUser(_.user)),
 			description: entity.description || undefined,
 			expiration: entity.expiration ? new Date(entity.expiration) : undefined
 		},
@@ -78,13 +76,5 @@ export const supabaseToDomain = (entity: SbHuddle): Huddle => {
 	if (error) {
 		throw Error(error.formErrors[0] || 'Invalid huddle data');
 	}
-	return {
-		...huddle,
-		id: makeHuddleId(huddle.id),
-		creatorId: makeUserId(huddle.creatorId),
-		creator: entity.creator ? toDomainUser(entity.creator) : undefined,
-		slots: entity.slots.map(parseSlot),
-		participantIds: huddle.participantIds.map(makeUserId),
-		participants: entity.participants?.map(toDomainUser)
-	};
+	return huddle;
 };

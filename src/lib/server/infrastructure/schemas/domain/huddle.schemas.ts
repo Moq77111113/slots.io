@@ -11,7 +11,7 @@ const AvailabilityStatus = z.union([
 ]);
 const availabilitySchema = z.object({
 	userId: userSchema.shape.id,
-	user: userSchema.optional().nullable(),
+	user: userSchema,
 	status: AvailabilityStatus
 });
 
@@ -33,7 +33,7 @@ const huddleSchema = z.object({
 	createdAt: z.date(),
 	updatedAt: z.date(),
 	creatorId: userSchema.shape.id,
-	creator: userSchema.optional(),
+	creator: userSchema,
 	slots: z.array(slotSchema).default([]),
 	locked: z.boolean(),
 	expiration: z.date().optional(),

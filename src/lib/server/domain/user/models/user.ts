@@ -6,7 +6,7 @@ import type { NotificationChannel, UserStatus } from '$domain/user/attributes';
 export type UserId = Branded<string, 'UserId'>;
 
 const assertsUserId = (id: unknown): asserts id is UserId => {
-	if (typeof id !== 'string') throw new Error('Invalid person id');
+	if (typeof id !== 'string') throw new Error('Invalid user id');
 };
 
 export const makeUserId = (id: unknown) => make(id, assertsUserId);
