@@ -9,31 +9,11 @@ import {
 	type SlotSchema,
 	slotSchema
 } from '$infrastructure/schemas/domain/huddle.schemas';
-import {
-	availabilitySchema as SbAvailabilitySchema,
-	huddleSchema as SbHuddleSchema,
-	slotSchema as SbSlotSchema
-} from '$infrastructure/schemas/supabase/huddle.schemas';
 
 import { validateData } from '../validate';
-import { subabaseToDomain as toDomainUser } from './user.mapper';
+import { supabaseToDomain as toDomainUser } from './user.mapper';
 
-const parseSbAvailability = (entity: SbAvailability): SbAvailability => {
-	const [availability, error] = validateData<typeof SbAvailabilitySchema>(
-		{
-			...entity
-		},
-		SbAvailabilitySchema
-	);
-	if (error) {
-		throw Error(error.formErrors[0] || 'Invalid availability data');
-	}
-	return availability;
-};
-const parseAvailability = ({
-	user,
-	...entity
-}: ReturnType<typeof parseSbAvailability>): Availability => {
+const parseAvailability = ({ user, ...entity }: SbAvailability): Availability => {
 	const [availability, error] = validateData<AvailabilitySchema>(
 		{
 			...entity,
@@ -51,21 +31,7 @@ const parseAvailability = ({
 	};
 };
 
-const parseSbSlot = (entity: SbSlot): SbSlot => {
-	const [slot, error] = validateData<typeof SbSlotSchema>(
-		{
-			...entity,
-			availabilities: entity.availabilities.map(parseSbAvailability)
-		},
-		SbSlotSchema
-	);
-	if (error) {
-		throw Error(error.formErrors[0] || 'Invalid slot data');
-	}
-	return slot;
-};
-
-const parseSlot = (entity: ReturnType<typeof parseSbSlot>): Slot => {
+const parseSlot = (entity: SbSlot): Slot => {
 	const [slot, error] = validateData<SlotSchema>(
 		{
 			...entity,
@@ -93,22 +59,7 @@ const parseSlot = (entity: ReturnType<typeof parseSbSlot>): Slot => {
 	};
 };
 
-const parseSbHuddle = (entity: SbHuddle): SbHuddle => {
-	const [huddle, error] = validateData<typeof SbHuddleSchema>(
-		{
-			...entity,
-			participantIds: [],
-			participants: []
-		},
-		SbHuddleSchema
-	);
-	if (error) {
-		throw Error(error.formErrors[0] || 'Invalid huddle data');
-	}
-	return huddle;
-};
-
-const parseHuddle = (entity: SbHuddle): Huddle => {
+export const supabaseToDomain = (entity: SbHuddle): Huddle => {
 	const [huddle, error] = validateData<typeof huddleSchema>(
 		{
 			...entity,

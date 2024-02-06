@@ -4,7 +4,7 @@ import type { SbProfile } from '$infrastructure/supabase/supabase';
 
 import { validateData } from '../validate';
 
-export const subabaseToDomain = (profile: SbProfile): User => {
+export const supabaseToDomain = (profile: SbProfile): User => {
 	const [user, error] = validateData<UserSchema>(
 		{
 			...profile,

@@ -5,11 +5,11 @@ import type { NotificationChannel, UserStatus } from '$domain/user/attributes';
 
 export type UserId = Branded<string, 'UserId'>;
 
-const assertsUserId = (id: string): asserts id is UserId => {
+const assertsUserId = (id: unknown): asserts id is UserId => {
 	if (typeof id !== 'string') throw new Error('Invalid person id');
 };
 
-export const makeUserId = (id: string) => make(id, assertsUserId);
+export const makeUserId = (id: unknown) => make(id, assertsUserId);
 
 /**
  * @description Aggregate root entity representing a user.
