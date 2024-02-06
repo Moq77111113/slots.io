@@ -1,5 +1,7 @@
-import { subabaseToDomain as userToDomain } from './user.mapper';
+import { supabaseToDomain as huddleToDomain } from './huddle.mapper';
+import { supabaseToDomain as userToDomain } from './user.mapper';
 
-export const subabaseToDomain = {
-	user: userToDomain
+export const supabaseToDomain = {
+	user: userToDomain,
+	huddle: huddleToDomain
 };

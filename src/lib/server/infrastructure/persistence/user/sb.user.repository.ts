@@ -1,38 +1,10 @@
 import type { UserFilters } from '$domain/user/dtos/in/user-filters';
 import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '$domain/user/dtos/in/user-input';
-import { makeUserId, type User, type UserId } from '$domain/user/models';
+import { type User, type UserId } from '$domain/user/models';
 import type { UserRepository } from '$domain/user/ports/spi';
-import {
-	DomainSchemas,
-	type SbProfile,
-	type SupabaseInfrastructure,
-	validateData
-} from '$infrastructure';
+import { type SupabaseInfrastructure } from '$infrastructure';
+import { supabaseToDomain } from '$infrastructure/mappers';
 
-const toUser = (profile: SbProfile): User => {
-	const [user, error] = validateData<DomainSchemas['User']>(
-		{
-			...profile,
-			language: {
-				code: profile.language
-			},
-			status: profile.status ? 'active' : 'inactive',
-			createdAt: new Date(profile.created_at),
-			updatedAt: new Date(profile.updated_at || profile.created_at),
-			notificationsChannel: [],
-			thirdPartyAccounts: [],
-			lastLogin: profile.last_login ? new Date(profile.last_login) : null
-		},
-		DomainSchemas.User
-	);
-	if (error) {
-		throw Error(error.formErrors[0] || 'Invalid user data');
-	}
-	return {
-		...user,
-		id: makeUserId(user.id)
-	};
-};
 export const SupabaseUserRepository = ({
 	users
 }: {
@@ -40,12 +12,12 @@ export const SupabaseUserRepository = ({
 }): UserRepository => {
 	const findById = async (id: UserId) => {
 		const { data } = await users.select('*').eq('id', id).single();
-		return data ? toUser(data) : null;
+		return data ? supabaseToDomain.user(data) : null;
 	};
 
 	const findByEmail = async (email: User['email']) => {
 		const { data } = await users.select('*').eq('email', email).single();
-		return data ? toUser(data) : null;
+		return data ? supabaseToDomain.user(data) : null;
 	};
 
 	const findMany = async ({ page = 1, itemsPerPage = 10, status, language }: UserFilters) => {
@@ -64,7 +36,7 @@ export const SupabaseUserRepository = ({
 		const { data, count } = await query.range(from, to);
 
 		return {
-			data: data?.map(toUser) || [],
+			data: data?.map((_) => supabaseToDomain.user(_)) || [],
 			total: count || 0,
 			page: page,
 			itemsPerPage: itemsPerPage
@@ -86,7 +58,7 @@ export const SupabaseUserRepository = ({
 		if (error) {
 			throw Error(error.message);
 		}
-		return toUser(user);
+		return supabaseToDomain.user(user);
 	};
 
 	const patch = async (data: PatchUserDto) => {
@@ -106,7 +78,7 @@ export const SupabaseUserRepository = ({
 		if (error) {
 			throw Error(error.message);
 		}
-		return toUser(user);
+		return supabaseToDomain.user(user);
 	};
 
 	const deleteById = async (id: UserId) => {
@@ -116,7 +88,7 @@ export const SupabaseUserRepository = ({
 			throw Error(error.message);
 		}
 
-		return toUser(data);
+		return supabaseToDomain.user(data);
 	};
 
 	const upsert = async (data: UpsertUserDto) => {
@@ -135,7 +107,7 @@ export const SupabaseUserRepository = ({
 		if (error) {
 			throw Error(error.message);
 		}
-		return toUser(user);
+		return supabaseToDomain.user(user);
 	};
 	return {
 		findById,

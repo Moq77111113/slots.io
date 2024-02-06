@@ -1,10 +1,10 @@
-import { makeUserId, type User } from '$domain/user/models';
+import { type User } from '$domain/user/models';
 import { type UserSchema, userSchema } from '$infrastructure/schemas/domain/user.schemas';
 import type { SbProfile } from '$infrastructure/supabase/supabase';
 
 import { validateData } from '../validate';
 
-export const subabaseToDomain = (profile: SbProfile): User => {
+export const supabaseToDomain = (profile: SbProfile): User => {
 	const [user, error] = validateData<UserSchema>(
 		{
 			...profile,
@@ -23,8 +23,5 @@ export const subabaseToDomain = (profile: SbProfile): User => {
 	if (error) {
 		throw Error(error.formErrors[0] || 'Invalid user data');
 	}
-	return {
-		...user,
-		id: makeUserId(user.id)
-	};
+	return user;
 };

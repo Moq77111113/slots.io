@@ -4,8 +4,8 @@ type ResultWithError<T extends z.AnyZodObject> =
 	| [result: undefined, error: z.inferFlattenedErrors<T>]
 	| [result: z.infer<T>, error: undefined];
 
-export const validateData = <Schema extends z.AnyZodObject, Data = z.infer<Schema>>(
-	data: Data,
+export const validateData = <Schema extends z.AnyZodObject>(
+	data: unknown,
 	schema: Schema
 ): ResultWithError<Schema> => {
 	try {
