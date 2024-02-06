@@ -1,5 +1,5 @@
 import type { HuddleId, SlotId } from '$domain/huddle/models';
-import type { HuddleCreateArgs, SlotAddArgs } from '$domain/huddle/ports/spi';
+import type { AvailabilityAddArgs, HuddleCreateArgs, SlotAddArgs } from '$domain/huddle/ports/spi';
 import { type SbHuddle, type SupabaseInfrastructure } from '$infrastructure';
 import { supabaseToDomain } from '$infrastructure/mappers';
 
@@ -14,7 +14,7 @@ export const SupabaseHuddleRepository = ({
 	const DEFAULT_SELECTION =
 		`*,  slots(${SLOT_SELECTION}), creator:${CREATOR_SELECTION}, huddle_participant:${PARTICIPANT_SELECTION}` as const;
 
-	const { huddles, slots, availabilities, huddle_participant } = huddleResources;
+	const { huddles, slots, availabilities } = huddleResources;
 	const create = async (args: HuddleCreateArgs) => {
 		const { creatorId, description, title, locked, expiration } = args;
 		const { data, error } = await huddles
@@ -33,22 +33,6 @@ export const SupabaseHuddleRepository = ({
 			throw Error(error.message);
 		}
 		return supabaseToDomain.huddle(data);
-	};
-
-	const findAll = async () => {
-		const query = huddles
-			.select(DEFAULT_SELECTION)
-			.order('created_at', { ascending: false })
-			// We have to provide the type here because the type inference for one-to-one relations is currently not working (returning array)
-			.returns<SbHuddle[]>();
-
-		const { data, error } = await query;
-
-		if (error) {
-			throw Error(error.message);
-		}
-
-		return data.map((_) => supabaseToDomain.huddle(_));
 	};
 
 	const findById = async (id: HuddleId) => {
@@ -119,14 +103,46 @@ export const SupabaseHuddleRepository = ({
 		return huddle;
 	};
 
-	
+	const addAvailability = async (slotId: SlotId, availability: AvailabilityAddArgs) => {
+		const { error } = await availabilities.insert({
+			status: availability.status,
+			user_id: availability.userId,
+			slot_id: slotId
+		});
+		if (error) {
+			throw Error(error.message);
+		}
 
+		const huddle = await findBySlotId(slotId);
+		if (!huddle) {
+			throw Error('Huddle not found');
+		}
+		return huddle;
+	};
+
+	const removeAvailability = async (slotId: SlotId, availability: AvailabilityAddArgs) => {
+		const { error } = await availabilities
+			.delete()
+			.eq('slot_id', slotId)
+			.eq('user_id', availability.userId);
+		if (error) {
+			throw Error(error.message);
+		}
+
+		const huddle = await findBySlotId(slotId);
+		if (!huddle) {
+			throw Error('Huddle not found');
+		}
+		return huddle;
+	};
 	return {
 		create,
 		findById,
 		findBySlotId,
 		addSlot,
-		removeSlot
+		removeSlot,
+		addAvailability,
+		removeAvailability
 	};
 };
 
