@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { type HuddleId, makeHuddleId, makeSlotId, type SlotId } from '$domain/huddle/models';
+
 import { userSchema } from './user.schemas';
 
 const AvailabilityStatus = z.union([
@@ -7,15 +9,15 @@ const AvailabilityStatus = z.union([
 	z.literal('unavailable'),
 	z.literal('maybe')
 ]);
-
 const availabilitySchema = z.object({
-	userId: z.string(),
-	user: userSchema.optional(),
+	userId: userSchema.shape.id,
+	user: userSchema,
 	status: AvailabilityStatus
 });
 
+const SlotIdSchema = z.custom<SlotId>(makeSlotId);
 const slotSchema = z.object({
-	id: z.string(),
+	id: SlotIdSchema,
 	start: z.date(),
 	end: z.date(),
 	availabilities: z.array(availabilitySchema).default([]),
@@ -23,18 +25,19 @@ const slotSchema = z.object({
 	updatedAt: z.date()
 });
 
+const HuddleIdSchema = z.custom<HuddleId>(makeHuddleId);
 const huddleSchema = z.object({
-	id: z.string(),
+	id: HuddleIdSchema,
 	title: z.string(),
 	description: z.string().optional(),
 	createdAt: z.date(),
 	updatedAt: z.date(),
-	creatorId: z.string(),
-	creator: userSchema.optional(),
+	creatorId: userSchema.shape.id,
+	creator: userSchema,
 	slots: z.array(slotSchema).default([]),
 	locked: z.boolean(),
 	expiration: z.date().optional(),
-	participantIds: z.array(z.string()).default([]),
+	participantIds: z.array(userSchema.shape.id).default([]),
 	participants: z.array(userSchema).default([])
 });
 

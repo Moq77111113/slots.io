@@ -15,14 +15,14 @@ type SupabaseContext = {
 
 export type SbProfile = Identity<Tables<'profiles'>>;
 
-export type SbAvailability = Identity<Tables<'availabilities'> & { user?: SbProfile }>;
+export type SbAvailability = Identity<Tables<'availabilities'> & { user: SbProfile }>;
 export type SbSlot = Identity<Tables<'slots'> & { availabilities: SbAvailability[] }>;
 
 export type SbHuddle = Identity<
 	Tables<'huddles'> & {
-		creator?: SbProfile;
+		creator: SbProfile;
 		slots: SbSlot[];
-		participants?: SbProfile[];
+		huddle_participant: { user: SbProfile }[];
 	}
 >;
 

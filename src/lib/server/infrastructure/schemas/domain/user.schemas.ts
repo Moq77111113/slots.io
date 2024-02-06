@@ -1,9 +1,12 @@
 import { z } from 'zod';
 
+import { makeUserId, type UserId } from '$domain/user/models';
+
 import { ISOLanguage, Locale } from '../common.schemas';
 
+const UserIdSchema = z.custom<UserId>(makeUserId);
 export const userSchema = z.object({
-	id: z.string(),
+	id: UserIdSchema,
 	email: z.string().email(),
 	notificationsChannel: z.array(z.string()).default([]),
 	lastLogin: z.date().nullable(),
