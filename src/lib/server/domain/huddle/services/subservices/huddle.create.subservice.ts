@@ -46,12 +46,6 @@ export const HuddleCreateSubService = (context: HuddleServiceContext): CreateHud
 
 		assertSlotsDoesNotOverlaps(slots);
 
-		const formattedSlots = slots.map(({ start, end, availability }) => ({
-			start,
-			end,
-			availabilities: availability ? [{ ...availability, userId: me.id }] : []
-		}));
-
 		const created = await huddle.create({
 			title: title.trim(),
 			description: description?.trim(),
@@ -60,8 +54,13 @@ export const HuddleCreateSubService = (context: HuddleServiceContext): CreateHud
 			locked: false
 		});
 
-		if (!formattedSlots.length) return created;
+		if (!slots.length) return created;
 
+		const formattedSlots = slots.map(({ start, end, availability }) => ({
+			start,
+			end,
+			availabilities: availability ? [{ ...availability, userId: me.id }] : []
+		}));
 		const withSlot = await Promise.all<Huddle>(
 			formattedSlots.map((_) => huddle.addSlot(created.id, { ..._ }))
 		);

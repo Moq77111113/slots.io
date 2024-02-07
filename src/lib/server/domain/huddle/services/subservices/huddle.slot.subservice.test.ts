@@ -1,12 +1,12 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
-import { makeHuddleId, type Huddle, type SlotId } from '$domain/huddle/models';
+import { type Huddle, makeHuddleId, type SlotId } from '$domain/huddle/models';
 import type { User, UserId } from '$domain/user/models';
 
 import type { HuddleServiceContext } from '../types';
-import { MockedHuddleContext } from './mocks/context.mock';
 import { HuddleCreateSubService } from './huddle.create.subservice';
 import { SlotSubService } from './huddle.slot.subservice';
+import { MockedHuddleContext } from './mocks/context.mock';
 
 describe('Huddle Slots', () => {
 	let service: ReturnType<typeof SlotSubService>;
@@ -189,7 +189,8 @@ describe('Huddle Slots', () => {
 
 		describe('Remove Slot', () => {
 			it('should remove the slot from the huddle', async () => {
-				const huddle = await service.removeSlot(createdHuddle.id, '1' as SlotId);
+				console.log('createdHuddle', createdHuddle);
+				const huddle = await service.removeSlot(createdHuddle.id, createdHuddle.slots[0].id);
 
 				expect(huddle.creatorId).toEqual('me' as UserId);
 				expect(huddle.slots.find((_) => _.id === '1')).toBeUndefined();
