@@ -1,8 +1,8 @@
 import type { ErrorHandler } from '$domain/@shared/errors';
 
 import type { HuddleServiceContext } from '../../types';
-import { MockedMeApi } from './me.api.mock';
 import { MockedHuddleRepository } from './huddle.repository.mock';
+import { MockedMeApi } from './me.api.mock';
 
 export const MockedHuddleContext = (): HuddleServiceContext => {
 	const meApi = MockedMeApi();

@@ -1,13 +1,14 @@
-import type { UserResponse } from '@supabase/supabase-js';
 import type { RequestEvent } from '@sveltejs/kit';
 
-import { DefaultErrorHandler } from '$application/errors/error.handler';
 import type { ErrorHandler } from '$domain/@shared/errors';
+import type { HuddleApi } from '$domain/huddle/ports/api';
+import { HuddleService } from '$domain/huddle/services/huddle.service';
 import type { UserApi } from '$domain/user/ports/api/user.api';
 import { UserService } from '$domain/user/services/user.service';
-import { SupabaseInfrastructure } from '$infrastructure';
+import { DefaultErrorProvider, SupabaseInfrastructure } from '$infrastructure';
 import { SupabaseUserRepository } from '$infrastructure/persistence';
-import { SupabaseAuthProvider } from '$infrastructure/providers/sb.auth.provider';
+import { SupabaseHuddleRepository } from '$infrastructure/persistence/huddle/sb.huddle.repository';
+import { SupabaseAuthProvider } from '$infrastructure/providers/auth/sb.auth.provider';
 
 /**
  * `SharedContext` is a type that represents shared resources available to all actions in the application.
@@ -32,8 +33,8 @@ export type AppContext = {
 	 */
 	apis: {
 		userApi: UserApi;
+		huddleApi: HuddleApi;
 	};
-	t: () => Promise<UserResponse>;
 };
 
 /**
@@ -47,9 +48,9 @@ export const initContext = async (event: RequestEvent): Promise<AppContext> => {
 	}
 
 	const shared = {
-		errorHandler: DefaultErrorHandler({})
+		errorHandler: DefaultErrorProvider({})
 	};
-	const { auth, users } = SupabaseInfrastructure({
+	const { auth, users, huddleResources } = SupabaseInfrastructure({
 		env: {
 			APP_URL: process.env.PUBLIC_SUPABASE_URL,
 			APP_ANON: process.env.PUBLIC_SUPABASE_ANON_KEY
@@ -81,11 +82,25 @@ export const initContext = async (event: RequestEvent): Promise<AppContext> => {
 		shared
 	});
 
+	const huddleRepo = SupabaseHuddleRepository({
+		huddleResources
+	});
+
+	const huddleApi = HuddleService({
+		repositories: {
+			huddle: huddleRepo
+		},
+		apis: {
+			meApi: userApi
+		},
+		shared
+	});
+
 	return Promise.resolve({
 		shared,
 		apis: {
-			userApi
-		},
-		t: async () => await auth.getUser()
+			userApi,
+			huddleApi
+		}
 	});
 };
