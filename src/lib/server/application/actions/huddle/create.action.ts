@@ -4,7 +4,7 @@ import type { CreateHuddleDto } from '$domain/huddle/dto/in/huddle.input';
 import type { Huddle } from '$domain/huddle/models';
 
 type CreateHuddleAction = Action<[CreateHuddleDto], Promise<Huddle>>;
-export const GetMeAction = ((context) => {
+export const CreateHuddleAction = ((context) => {
 	const { huddleApi } = context.apis;
 	const _name = 'huddle.create' as const;
 
