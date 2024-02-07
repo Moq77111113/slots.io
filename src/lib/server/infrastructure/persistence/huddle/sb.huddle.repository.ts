@@ -3,6 +3,7 @@ import type {
 	AvailabilityAddArgs,
 	AvailabilityRemoveArgs,
 	HuddleCreateArgs,
+	HuddleRepository,
 	SlotAddArgs
 } from '$domain/huddle/ports/spi';
 import { type SbHuddle, type SupabaseInfrastructure } from '$infrastructure';
@@ -12,7 +13,7 @@ export const SupabaseHuddleRepository = ({
 	huddleResources
 }: {
 	huddleResources: SupabaseInfrastructure['huddleResources'];
-}) => {
+}): HuddleRepository => {
 	const SLOT_SELECTION = '*, availabilities(*, user:profiles(*))' as const;
 	const CREATOR_SELECTION = 'profiles!creator_id(*)' as const;
 	const PARTICIPANT_SELECTION = 'huddle_participant(user:profiles(*))' as const;
@@ -80,15 +81,15 @@ export const SupabaseHuddleRepository = ({
 		if (error) {
 			throw Error(error.message);
 		}
-		const { error: availabiltyError } = await availabilities.insert(
+		const { error: availabilityError } = await availabilities.insert(
 			slot.availabilities.map((_) => ({
 				status: _.status,
 				user_id: _.userId,
 				slot_id: slotData.id
 			}))
 		);
-		if (availabiltyError) {
-			throw Error(availabiltyError.message);
+		if (availabilityError) {
+			throw Error(availabilityError.message);
 		}
 
 		const huddle = await findById(huddleId);
@@ -150,5 +151,3 @@ export const SupabaseHuddleRepository = ({
 		removeAvailability
 	};
 };
-
-export type SupabaseHuddleRepository = ReturnType<typeof SupabaseHuddleRepository>;

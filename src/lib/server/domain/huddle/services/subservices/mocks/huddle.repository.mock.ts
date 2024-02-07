@@ -1,8 +1,8 @@
 import {
-	makeHuddleId,
-	makeSlotId,
 	type Huddle,
 	type HuddleId,
+	makeHuddleId,
+	makeSlotId,
 	type SlotId
 } from '$domain/huddle/models';
 import type {
