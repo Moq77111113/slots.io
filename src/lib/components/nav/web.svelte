@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import { site } from '$lib/config/site';
-	import { cn } from '$lib/utils';
 	import { Icons } from '../icons';
 </script>
 
