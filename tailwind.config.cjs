@@ -48,9 +48,9 @@ const config = {
 					DEFAULT: 'hsl(var(--card) / <alpha-value>)',
 					foreground: 'hsl(var(--card-foreground) / <alpha-value>)'
 				},
-				'light-gray': 'rgb(var(--light-gray) / <alpha-value>)',
-				'medium-gray': 'rgb(var(--medium-gray) / <alpha-value>)',
-				'dark-gray': 'rgb(var(--dark-gray) / <alpha-value>)'
+				'light-gray': 'hsl(var(--light-gray) / <alpha-value>)',
+				'medium-gray': 'hsl(var(--medium-gray) / <alpha-value>)',
+				'dark-gray': 'hsl(var(--dark-gray) / <alpha-value>)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

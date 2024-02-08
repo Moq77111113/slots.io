@@ -4,7 +4,7 @@
 
 @layer base {
 	:root {
-		--background: 0 0% 100%;
+		--background: 20 14.3% 96%;
 		--foreground: 20 14.3% 4.1%;
 		--card: 0 0% 100%;
 		--card-foreground: 20 14.3% 4.1%;
@@ -24,9 +24,9 @@
 		--input: 20 5.9% 90%;
 		--ring: 24.6 95% 53.1%;
 		--radius: 0.5rem;
-		--light-gray: 167 167 167;
-		--medium-gray: 46 46 46;
-		--dark-gray: 24 24 24;
+		--light-gray: 0 0 65%;
+		--medium-gray: 0 0 18%;
+		--dark-gray: 0 0 9%;
 	}
 	.dark {
 		--background: 20 14.3% 4.1%;
@@ -50,60 +50,62 @@
 		--ring: 20.5 90.2% 48.2%;
 	}
 }
-
 @layer base {
 	* {
 		@apply border-border;
 	}
-
+	html {
+		-webkit-text-size-adjust: 100%;
+		font-variation-settings: normal;
+	}
 	body {
-		@apply min-h-dvh w-dvw overflow-x-hidden bg-background bg-fixed text-foreground;
+		@apply bg-background text-foreground;
+		font-feature-settings:
+			'rlig' 1,
+			'calt' 1;
 	}
 
-	h1 {
-		@apply text-4xl;
+	/* Mobile tap highlight */
+	/* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-tap-highlight-color */
+	html {
+		-webkit-tap-highlight-color: rgba(128, 128, 128, 0.5);
 	}
 
-	h2 {
-		@apply text-[2rem];
+	/* === Scrollbars === */
+
+	::-webkit-scrollbar {
+		@apply w-2;
+		@apply h-2;
 	}
 
-	h3 {
-		@apply text-[1.75rem];
+	::-webkit-scrollbar-track {
+		@apply !bg-muted;
+	}
+	::-webkit-scrollbar-thumb {
+		@apply rounded-sm !bg-muted-foreground/30;
 	}
 
-	h4 {
-		@apply text-2xl;
+	/* Firefox */
+	/* https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color#browser_compatibility */
+	html {
+		scrollbar-color: hsl(215.4 16.3% 46.9% / 0.3);
 	}
 
-	h5 {
-		@apply text-xl;
+	html.dark {
+		scrollbar-color: hsl(215.4 16.3% 56.9% / 0.3);
 	}
 
-	p {
-		@apply my-[1em];
+	.hide-scrollbar::-webkit-scrollbar {
+		display: none;
 	}
 
-	a {
-		@apply text-accent;
+	.hide-scrollbar {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
 	}
 
-	select,
-	input,
-	button,
-	a {
-		@apply ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
-	}
-
-	input {
-		@apply h-10 rounded-3xl px-5 text-sm text-medium-gray;
-	}
-
-	dialog {
-		@apply rounded bg-dark-gray backdrop:bg-black/50 backdrop:backdrop-blur;
-	}
-
-	img {
-		@apply pointer-events-none;
+	.antialised {
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 	}
 }
