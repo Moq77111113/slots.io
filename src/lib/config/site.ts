@@ -5,7 +5,7 @@ export const site = {
 	description:
 		'Slots is a simple app to schedule meetings and appointments with your friends, colleagues and clients.',
 	links: {
-		github: ''
+		github: 'https://github.com/Moq77111113'
 	},
 	keywords: `slots,app,meeting,appointment,meetup`
 };

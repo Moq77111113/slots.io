@@ -8,6 +8,7 @@
 <Seo />
 <div class="relative flex min-h-screen flex-col bg-background">
 	<Header />
+
 	<div class="flex-1">
 		<slot />
 	</div>
