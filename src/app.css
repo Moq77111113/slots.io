@@ -23,6 +23,9 @@
 		--input: 20 5.9% 90%;
 		--ring: 20 14.3% 4.1%;
 		--radius: 0.5rem;
+		--light-gray: 0 0 65%;
+		--medium-gray: 0 0 18%;
+		--dark-gray: 0 0 9%;
 	}
 	.dark {
 		--background: 0 0% 10.2%;
