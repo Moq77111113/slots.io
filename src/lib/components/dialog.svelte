@@ -25,9 +25,7 @@
 		<Dialog.Content class="sm:max-w-[425px]">
 			<Dialog.Header>
 				<Dialog.Title>{title}</Dialog.Title>
-				{#if description}<Dialog.Description>
-						{description}
-					</Dialog.Description>
+				{#if description}<Dialog.Description>{description}</Dialog.Description>
 				{/if}
 			</Dialog.Header>
 			<slot />

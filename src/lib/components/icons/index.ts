@@ -1,10 +1,17 @@
-import { CircleUser, type Icon as Lucide } from 'lucide-svelte';
+import { CircleUser, type Icon as Lucide, Loader2, Projector } from 'lucide-svelte';
 
+import Github from './github.svelte';
+import Google from './google.svelte';
 import Hamburger from './hamburger.svelte';
 import Logo from './logo.svelte';
+
 export type Icon = Lucide;
 export const Icons = {
 	logo: Logo,
 	hamburger: Hamburger,
-	auth: CircleUser
+	auth: CircleUser,
+	spinner: Loader2,
+	google: Google,
+	github: Github,
+	projector: Projector
 };
