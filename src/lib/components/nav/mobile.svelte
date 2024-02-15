@@ -20,7 +20,12 @@
 				<span class="sr-only">Toggle Menu</span>
 			</Button>
 		</Sheet.Trigger>
-		<Icons.logo class="h-6 w-6" />
+		<a href="/" class="mr-6 flex items-center space-x-2">
+			<Icons.logo class="h-6 w-6" />
+			<span class="hidden font-bold sm:inline-block">
+				{site.name}
+			</span>
+		</a>
 		<Sheet.Content side="left" class="pr-0">
 			<MobileLink href="/" class="flex items-center" bind:open>
 				<Icons.logo class="mr-2 h-6 w-6" />
