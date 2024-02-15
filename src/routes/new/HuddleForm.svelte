@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Availability from '$lib/components/Availability.svelte';
 	import * as Form from '$lib/components/ui/form';
 
 	import { huddleCreateSchema, type HuddleCreateSchema } from './schema';

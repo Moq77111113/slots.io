@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Separator } from '$lib/components/ui/separator';
 	import type { PageServerData } from './$types';
-	import Form from './form.svelte';
+	import Form from './HuddleForm.svelte';
 
 	export let data: PageServerData;
 </script>

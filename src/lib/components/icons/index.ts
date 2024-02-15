@@ -1,4 +1,12 @@
-import { CircleUser, type Icon as Lucide, Loader2, Projector } from 'lucide-svelte';
+import {
+	CircleUser,
+	type Icon as Lucide,
+	Loader2,
+	Projector,
+	ShieldCheck,
+	ShieldOff,
+	ShieldQuestion
+} from 'lucide-svelte';
 
 import Github from './github.svelte';
 import Google from './google.svelte';
@@ -13,5 +21,10 @@ export const Icons = {
 	spinner: Loader2,
 	google: Google,
 	github: Github,
-	projector: Projector
+	projector: Projector,
+	availability: {
+		available: ShieldCheck,
+		unavailable: ShieldOff,
+		maybe: ShieldQuestion
+	}
 };
