@@ -3,11 +3,12 @@ import { superValidate } from 'sveltekit-superforms/server';
 import { fail } from '@sveltejs/kit';
 
 import type { Actions, PageServerLoad } from './$types';
-import { huddleCreateSchema } from './schema';
+import { huddleCreateSchema, slotAddSchema } from './schema';
 
 export const load: PageServerLoad = async () => {
 	return {
-		form: await superValidate(huddleCreateSchema)
+		form: await superValidate(huddleCreateSchema),
+		form2: await superValidate(slotAddSchema)
 	};
 };
 

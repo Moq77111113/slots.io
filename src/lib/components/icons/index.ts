@@ -2,10 +2,12 @@ import {
 	CircleUser,
 	type Icon as Lucide,
 	Loader2,
+	PlusCircle,
 	Projector,
 	ShieldCheck,
 	ShieldOff,
-	ShieldQuestion
+	ShieldQuestion,
+	X
 } from 'lucide-svelte';
 
 import Github from './github.svelte';
@@ -22,6 +24,8 @@ export const Icons = {
 	google: Google,
 	github: Github,
 	projector: Projector,
+	add: PlusCircle,
+	remove: X,
 	availability: {
 		available: ShieldCheck,
 		unavailable: ShieldOff,

@@ -6,8 +6,8 @@
 	export let data: PageServerData;
 </script>
 
-<main class="container max-w-lg h-full flex flex-col flex-1 gap-6">
-	<h2 class="text-xl font-semibold">Create you own Huddle</h2>
+<main class="container max-w-xl h-full flex flex-col flex-1 gap-6">
+	<h2 class="text-xl font-semibold">Create your own Huddle</h2>
 	<Separator />
-	<Form form={data.form} />
+	<Form form={data.form} form2={data.form2} />
 </main>

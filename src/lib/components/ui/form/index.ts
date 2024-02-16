@@ -3,6 +3,7 @@ import type { Writable } from 'svelte/store';
 
 import * as RadioGroupComp from '$lib/components/ui/radio-group';
 import * as SelectComp from '$lib/components/ui/select';
+import * as ToggleGroupComp from '$lib/components/ui/toggle-group';
 
 import Button from './form-button.svelte';
 import Checkbox from './form-checkbox.svelte';
@@ -16,12 +17,14 @@ import Select from './form-select.svelte';
 import SelectTrigger from './form-select-trigger.svelte';
 import Switch from './form-switch.svelte';
 import Textarea from './form-textarea.svelte';
+import ToggleGroup from './form-toggle-group.svelte';
 import Validation from './form-validation.svelte';
 
 const Root = FormPrimitive.Root;
 const Field = FormPrimitive.Field;
 const Control = FormPrimitive.Control;
 const RadioItem = RadioGroupComp.Item;
+const ToggleItem = ToggleGroupComp.Item;
 const NativeRadio = FormPrimitive.Radio;
 const SelectContent = SelectComp.Content;
 const SelectLabel = SelectComp.Label;
@@ -47,7 +50,9 @@ export {
 	Textarea,
 	Validation,
 	RadioGroup,
+	ToggleGroup,
 	RadioItem,
+	ToggleItem,
 	Description,
 	SelectContent,
 	SelectLabel,
@@ -73,6 +78,8 @@ export {
 	Switch as FormSwitch,
 	RadioGroup as FormRadioGroup,
 	RadioItem as FormRadioItem,
+	ToggleGroup as FormToggleGroup,
+	ToggleItem as FormToggleItem,
 	Select as FormSelect,
 	SelectContent as FormSelectContent,
 	SelectLabel as FormSelectLabel,
