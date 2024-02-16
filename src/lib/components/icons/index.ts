@@ -1,7 +1,10 @@
 import {
 	CircleUser,
+	Clock,
 	type Icon as Lucide,
 	Loader2,
+	LogOut,
+	MapPin,
 	PlusCircle,
 	Projector,
 	ShieldCheck,
@@ -26,6 +29,9 @@ export const Icons = {
 	projector: Projector,
 	add: PlusCircle,
 	remove: X,
+	logout: LogOut,
+	mapPin: MapPin,
+	clock: Clock,
 	availability: {
 		available: ShieldCheck,
 		unavailable: ShieldOff,
