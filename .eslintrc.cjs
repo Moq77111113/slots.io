@@ -14,7 +14,7 @@ module.exports = {
 		ecmaVersion: 2020,
 		extraFileExtensions: ['.svelte']
 	},
-	ignorePatterns: ['.eslintrc.cjs', 'vite.config.ts'],
+	ignorePatterns: ['.eslintrc.cjs', 'vite.config.ts', 'postcss.config.cjs'],
 	env: {
 		browser: true,
 		es2017: true,
