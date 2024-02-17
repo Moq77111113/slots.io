@@ -1,4 +1,5 @@
 import {
+	CalendarDays,
 	CircleUser,
 	Clock,
 	type Icon as Lucide,
@@ -36,5 +37,6 @@ export const Icons = {
 		available: ShieldCheck,
 		unavailable: ShieldOff,
 		maybe: ShieldQuestion
-	}
+	},
+	calendar: CalendarDays
 };

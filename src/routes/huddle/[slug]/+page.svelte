@@ -142,10 +142,12 @@
 		{/if}
 	</section>
 
-	<section class="flex flex-col space-y-6">
-		<h3 class="text-lg font-semibold">Status</h3>
-		<span class="text-sm text-medium-gray dark:text-light-gray"
-			>Best date for the huddle is on {format()(best.start)}</span
-		>
-	</section>
+	{#if best}
+		<section class="flex flex-col space-y-6">
+			<h3 class="text-lg font-semibold">Status</h3>
+			<span class="text-sm text-medium-gray dark:text-light-gray"
+				>Best date for the huddle is on {format()(best.start)}</span
+			>
+		</section>
+	{/if}
 </main>

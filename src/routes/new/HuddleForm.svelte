@@ -1,59 +1,97 @@
 <script lang="ts">
-	import * as Form from '$lib/components/ui/form';
-	import { z } from 'zod';
+	import { type HuddleCreateSchema } from './schema';
 
-	import { huddleCreateSchema, type HuddleCreateSchema, slotAddSchema } from './schema';
+	import SuperDebug, { superForm, type SuperValidated } from 'sveltekit-superforms';
 
-	import type { SuperValidated } from 'sveltekit-superforms';
-	import SlotForm from './SlotForm.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Icons } from '$lib/components';
+
 	import Label from '$lib/components/ui/label/label.svelte';
+	import { Input } from '$lib/components/ui/input';
+	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+	import { Icons } from '$lib/components';
+
+	import SlotItem from './SlotItem.svelte';
+	import { today } from '@internationalized/date';
+
 	interface Props {
 		form: SuperValidated<HuddleCreateSchema>;
-		form2: SuperValidated<typeof slotAddSchema>;
 	}
 
-	let slots = $state<Partial<z.infer<typeof slotAddSchema>>[]>([]);
+	const { form: formData } = $props<Props>();
+	const huddleForm = superForm(formData, {
+		resetForm: false,
+		dataType: 'json'
+	});
+	const { form, errors, constraints, enhance, message } = huddleForm;
 
-	const removeSlot = (index: number) => {
-		console.log('test');
-		slots = slots.filter((_, i) => i !== index);
+	const _today = today('UTC').toDate('UTC');
+	const addSlot = () => {
+		form.update((_) => {
+			if (!_.slots.length) {
+				_.slots = [];
+			}
+			_.slots.push({ start: _today });
+			return _;
+		});
 	};
-	const { form } = $props<Props>();
+
+	const removeSlot = (idx: number) => {
+		form.update((_) => ({
+			..._,
+			slots: _.slots.filter((_slot, i) => i !== idx)
+		}));
+	};
 </script>
 
-<Form.Root method="POST" {form} schema={huddleCreateSchema} let:config class="space-y-4 " debug>
-	<Form.Field {config} name="title">
-		<Form.Item>
-			<Form.Label>Huddle Name</Form.Label>
-			<Form.Input placeholder="Birthday party" />
-			<Form.Description>The name of the huddle or meeting.</Form.Description>
-			<Form.Validation />
-		</Form.Item>
-	</Form.Field>
-	<Form.Field {config} name="description">
-		<Form.Item>
-			<Form.Label>Description</Form.Label>
-			<Form.Textarea rows={2} placeholder="Hello guys, let's meet up for a birthday party !" />
-			<Form.Validation />
-		</Form.Item>
-	</Form.Field>
+<form method="post" use:enhance class="space-y-4">
+	<div class="space-y-2">
+		<Label>Huddle Name</Label>
+		<Input
+			name="title"
+			placeholder="Birthday party"
+			aria-invalid={$errors.title ? 'true' : undefined}
+			bind:value={$form.title}
+		/>
+		<p class="text-xs text-muted-foreground">The name of the huddle or meeting.</p>
+		{#if $errors.title}
+			<p class="text-xs font-medium text-destructive">{$errors.title}</p>
+		{/if}
+	</div>
 
-	<div class="flex items-center gap-2">
+	<div class="space-y-2">
+		<Label>Description</Label>
+		<Textarea
+			name="description"
+			rows={2}
+			placeholder="Hello guys, let's meet up for a birthday party !"
+			aria-invalid={$errors.description ? 'true' : undefined}
+			bind:value={$form.description}
+			{...$constraints.description}
+		/>
+		{#if $errors.description}
+			<p class="text-xs font-medium text-destructive">{$errors.title}</p>
+		{/if}
+	</div>
+
+	<div class="flex items-center gap-y-2">
 		<Label>Time Slots</Label>
 
-		<Button variant="ghost" size="icon" on:click={() => slots.push({})}><Icons.add /></Button>
+		<Button variant="ghost" size="icon" on:click={addSlot}><Icons.add /></Button>
 	</div>
+
 	<div class="space-y-2 flex flex-col">
-		{#each slots as slot, i (i)}
+		{#each $form.slots as _, i (i)}
 			<div class="flex flex-row items-center space-x-2">
 				<Button size="icon-sm" variant="ghost" on:click={() => removeSlot(i)}
 					><Icons.remove class="h-2 w-2" /></Button
 				>
-				<SlotForm bind:data={slot} />
+				<SlotItem form={huddleForm} index={i} />
 			</div>
 		{/each}
 	</div>
-	<Form.Button>Let's go</Form.Button>
-</Form.Root>
+
+	{#if $message}
+		<p class="text-destructive">{JSON.stringify($message)}</p>{/if}
+	<Button type="submit">Submit</Button>
+</form>
+<SuperDebug data={$form} />
