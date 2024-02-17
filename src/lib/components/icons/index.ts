@@ -6,6 +6,8 @@ import {
 	Loader2,
 	LogOut,
 	MapPin,
+	Pause,
+	Play,
 	PlusCircle,
 	Projector,
 	ShieldCheck,
@@ -14,6 +16,7 @@ import {
 	X
 } from 'lucide-svelte';
 
+import Ghost from './ghost.svelte';
 import Github from './github.svelte';
 import Google from './google.svelte';
 import Hamburger from './hamburger.svelte';
@@ -38,5 +41,8 @@ export const Icons = {
 		unavailable: ShieldOff,
 		maybe: ShieldQuestion
 	},
-	calendar: CalendarDays
+	calendar: CalendarDays,
+	ghost: Ghost,
+	pause: Pause,
+	play: Play
 };

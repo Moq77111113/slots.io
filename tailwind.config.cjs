@@ -66,6 +66,19 @@ const config = {
 			fontFamily: {
 				sans: [...fontFamily.sans]
 			}
+		},
+		animation: {
+			ghost: 'ghost 2s ease-in-out infinite alternate'
+		},
+
+		keyframes: {
+			ghost: {
+				'0%': { transform: 'scale(.5)', rotate: '0deg' },
+				'25%': { transform: 'scale(1)', rotate: '-20deg' },
+				'50%': { transform: 'scale(2)', rotate: '0deg' },
+				'75%': { transform: 'scale(1)', rotate: '20deg' },
+				'100%': { transform: 'scale(.5)', rotate: '360deg' }
+			}
 		}
 	}
 };

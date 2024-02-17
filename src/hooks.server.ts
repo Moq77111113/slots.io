@@ -6,5 +6,5 @@ export const handle = (async ({ event, resolve }) => {
 	const context = await initContext(event);
 	event.locals.context = context;
 
-	return resolve(event);
+	return await resolve(event);
 }) satisfies Handle;
