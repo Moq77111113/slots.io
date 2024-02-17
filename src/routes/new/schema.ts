@@ -5,7 +5,7 @@ const availability = z.union([
 	z.literal('unavailable'),
 	z.literal('maybe')
 ]);
-export const slotAddSchema = z.object({
+const slotAddSchema = z.object({
 	start: z.date(),
 	availability: availability.optional()
 });
@@ -19,4 +19,4 @@ export const huddleCreateSchema = z.object({
 	slots: slotAddSchema.array()
 });
 
-export type HuddleCreateSchema = typeof huddleCreateSchema;
+export type HuddleCreateSchema = z.infer<typeof huddleCreateSchema>;

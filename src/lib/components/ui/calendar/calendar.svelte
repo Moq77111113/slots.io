@@ -1,10 +1,7 @@
 <script lang="ts" context="module">
 	import { Calendar as CalendarPrimitive } from 'bits-ui';
 
-	export type Props = {
-		placeholder?: CalendarPrimitive.Props['placeholder'];
-		weekdayFormat?: CalendarPrimitive.Props['weekdayFormat'];
-	};
+	export type Props = Omit<CalendarPrimitive.Props, 'value'>;
 </script>
 
 <script lang="ts">
