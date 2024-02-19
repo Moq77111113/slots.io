@@ -1,6 +1,9 @@
+@import 'fonts.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
 	:root {
 		--background: 20 14.3% 96%;
@@ -59,7 +62,7 @@
 		font-variation-settings: normal;
 	}
 	body {
-		@apply bg-background text-foreground;
+		@apply bg-background text-foreground font-sans;
 		font-feature-settings:
 			'rlig' 1,
 			'calt' 1;
@@ -107,5 +110,15 @@
 	.antialiased {
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+	}
+
+	/* === Typography === */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		@apply font-manrope;
 	}
 }
