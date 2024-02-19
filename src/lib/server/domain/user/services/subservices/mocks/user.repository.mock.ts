@@ -1,13 +1,13 @@
-import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import type { UserFilters } from '$domain/user/dtos/in/user-filters';
+import type { ThirdPartyAccount } from '#/domain/@shared/attributes';
+import type { UserFilters } from '#/domain/user/dtos/in/user-filters';
 import type {
 	CreateUserDto,
 	PatchUserDto,
 	UpdateUserDto,
 	UpsertUserDto
-} from '$domain/user/dtos/in/user-input';
-import { makeUserId, type User, type UserId } from '$domain/user/models';
-import type { UserRepository } from '$domain/user/ports/spi';
+} from '#/domain/user/dtos/in/user-input';
+import { makeUserId, type User, type UserId } from '#/domain/user/models';
+import type { UserRepository } from '#/domain/user/ports/spi';
 
 export const MockedUserRepository = (): UserRepository => {
 	const users: User[] = [];

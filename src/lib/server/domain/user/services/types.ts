@@ -1,5 +1,5 @@
-import type { ActionContext } from '$domain/@shared';
-import type { UserRepository } from '$domain/user/ports/spi';
+import type { ActionContext } from '#/domain/@shared';
+import type { UserRepository } from '#/domain/user/ports/spi';
 
 import type { AuthProvider } from '../ports/spi/auth.provider';
 

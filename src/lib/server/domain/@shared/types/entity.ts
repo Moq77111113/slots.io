@@ -1,4 +1,4 @@
-import type { Branded } from '$brand';
+import type { Branded } from '#/domain/@shared/utils/brand';
 
 /**
  * @description An entity is a domain object that with mandatory fields.

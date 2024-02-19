@@ -1,6 +1,6 @@
-import { DomainErrors } from '$domain/@shared/errors';
-import type { UserId } from '$domain/user/models';
-import type { MeApi } from '$domain/user/ports/api/user.api';
+import { DomainErrors } from '#/domain/@shared/errors';
+import type { UserId } from '#/domain/user/models';
+import type { MeApi } from '#/domain/user/ports/api/user.api';
 
 import type { UserServiceContext } from '../types';
 

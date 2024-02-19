@@ -1,4 +1,4 @@
-import type { UserId } from '$domain/user/models';
+import type { UserId } from '#/domain/user/models';
 
 /**
  * @description Dto to hash a password.

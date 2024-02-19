@@ -3,7 +3,7 @@ import { message, superValidate } from 'sveltekit-superforms/server';
 
 import { fail, redirect } from '@sveltejs/kit';
 
-import { CreateHuddleAction } from '$application/actions';
+import { CreateHuddleAction } from '#/application/actions';
 import { recoverable } from '$lib/helpers/promise';
 
 import type { Actions, PageServerLoad } from './$types';

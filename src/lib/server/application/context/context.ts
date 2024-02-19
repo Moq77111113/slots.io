@@ -1,14 +1,15 @@
 import type { RequestEvent } from '@sveltejs/kit';
 
-import type { ErrorHandler } from '$domain/@shared/errors';
-import type { HuddleApi } from '$domain/huddle/ports/api';
-import { HuddleService } from '$domain/huddle/services/huddle.service';
-import type { UserApi } from '$domain/user/ports/api/user.api';
-import { UserService } from '$domain/user/services/user.service';
-import { DefaultErrorProvider, SupabaseInfrastructure } from '$infrastructure';
-import { SupabaseUserRepository } from '$infrastructure/persistence';
-import { SupabaseHuddleRepository } from '$infrastructure/persistence/huddle/sb.huddle.repository';
-import { SupabaseAuthProvider } from '$infrastructure/providers/auth/sb.auth.provider';
+import type { ErrorHandler } from '#/domain/@shared/errors';
+import type { HuddleApi } from '#/domain/huddle/ports/api';
+import type { HuddleRepository } from '#/domain/huddle/ports/spi';
+import { HuddleService } from '#/domain/huddle/services/huddle.service';
+import type { UserApi } from '#/domain/user/ports/api/user.api';
+import { UserService } from '#/domain/user/services/user.service';
+import { DefaultErrorProvider, SupabaseInfrastructure } from '#/infrastructure';
+import { SupabaseUserRepository } from '#/infrastructure/persistence';
+import { SupabaseHuddleRepository } from '#/infrastructure/persistence/huddle/sb.huddle.repository';
+import { SupabaseAuthProvider } from '#/infrastructure/providers/auth/sb.auth.provider';
 
 /**
  * `SharedContext` is a type that represents shared resources available to all actions in the application.
@@ -34,6 +35,7 @@ export type AppContext = {
 	apis: {
 		userApi: UserApi;
 		huddleApi: HuddleApi;
+		huddleRepo: HuddleRepository;
 	};
 };
 
@@ -100,7 +102,8 @@ export const initContext = async (event: RequestEvent): Promise<AppContext> => {
 		shared,
 		apis: {
 			userApi,
-			huddleApi
+			huddleApi,
+			huddleRepo
 		}
 	});
 };

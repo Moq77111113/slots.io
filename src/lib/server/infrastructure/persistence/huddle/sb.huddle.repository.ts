@@ -1,13 +1,13 @@
-import type { HuddleId, SlotId } from '$domain/huddle/models';
+import type { HuddleId, SlotId } from '#/domain/huddle/models';
 import type {
 	AvailabilityAddArgs,
 	AvailabilityRemoveArgs,
 	HuddleCreateArgs,
 	HuddleRepository,
 	SlotAddArgs
-} from '$domain/huddle/ports/spi';
-import { type SbHuddle, type SupabaseInfrastructure } from '$infrastructure';
-import { supabaseToDomain } from '$infrastructure/mappers';
+} from '#/domain/huddle/ports/spi';
+import { type SbHuddle, type SupabaseInfrastructure } from '#/infrastructure';
+import { supabaseToDomain } from '#/infrastructure/mappers';
 
 export const SupabaseHuddleRepository = ({
 	huddleResources

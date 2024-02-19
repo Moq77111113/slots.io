@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { makeUserId, type UserId } from '$domain/user/models';
+import { makeUserId, type UserId } from '#/domain/user/models';
 
 import { ISOLanguage, Locale } from '../common.schemas';
 

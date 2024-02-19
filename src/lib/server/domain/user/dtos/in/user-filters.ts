@@ -1,6 +1,6 @@
-import type { Language } from '$domain/@shared';
-import type { Identity, PaginationFilters } from '$domain/@shared/types';
-import type { UserStatus } from '$domain/user/attributes';
+import type { Language } from '#/domain/@shared';
+import type { Identity, PaginationFilters } from '#/domain/@shared/types';
+import type { UserStatus } from '#/domain/user/attributes';
 
 /**
  * @description User filters

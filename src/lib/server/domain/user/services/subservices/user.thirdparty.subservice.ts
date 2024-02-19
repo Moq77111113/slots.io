@@ -1,9 +1,9 @@
-import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import { DomainErrors } from '$domain/@shared/errors';
-import type { OAuthAuthenticationArgs } from '$domain/user/dtos/in/authentication.input';
-import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
-import type { User } from '$domain/user/models/user';
-import type { ThirdPartyApi } from '$domain/user/ports/api/user.api';
+import type { ThirdPartyAccount } from '#/domain/@shared/attributes';
+import { DomainErrors } from '#/domain/@shared/errors';
+import type { OAuthAuthenticationArgs } from '#/domain/user/dtos/in/authentication.input';
+import type { AuthRequest } from '#/domain/user/dtos/out/authentication.output';
+import type { User } from '#/domain/user/models/user';
+import type { ThirdPartyApi } from '#/domain/user/ports/api/user.api';
 
 import type { UserServiceContext } from '../types';
 

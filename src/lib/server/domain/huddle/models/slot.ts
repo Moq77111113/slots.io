@@ -1,6 +1,6 @@
-import type { Entity } from '$domain/@shared';
-import { type Branded, make } from '$domain/@shared/utils/brand';
-import type { Availability } from '$domain/huddle/attributes';
+import type { Entity } from '#/domain/@shared';
+import { type Branded, make } from '#/domain/@shared/utils/brand';
+import type { Availability } from '#/domain/huddle/attributes';
 
 export type SlotId = Branded<string, 'SlotId'>;
 
