@@ -2,7 +2,7 @@
 	import { cn } from '$lib/utils';
 	import { Icons } from '$lib/components';
 	import type { ComponentType } from 'svelte';
-	import type { PageServerData } from './$types';
+	import type { PageData } from './$types';
 
 	const format = (
 		options: Intl.DateTimeFormatOptions = {
@@ -13,7 +13,7 @@
 		}
 	) => new Intl.DateTimeFormat('en-US', options).format;
 
-	type Huddle = PageServerData['huddle'];
+	type Huddle = PageData['huddle'];
 	type Slot = Huddle['slots'][number];
 	type Availability = Slot['availabilities'][number];
 
@@ -48,15 +48,16 @@
 		return best.slot;
 	};
 
-	export let data: PageServerData;
+	export let data: PageData;
 
 	$: best = bestSlot(data.huddle.slots);
+
+	$: isOwner = data.huddle.creator?.id === data.me?.id;
 </script>
 
 <svelte:head>
 	<title>{data.huddle.title} - Slots</title>
 </svelte:head>
-
 {#snippet row({icon, heading, content, iconClass}: {icon: ComponentType, heading: string, content: string, iconClass?: string})}
 	<div class="flex space-x-2 items-center">
 		<div
@@ -77,7 +78,10 @@
 <main class="container max-w-xl h-full flex flex-col flex-1 space-y-8 p-8">
 	<section class="space-y-2">
 		<h1 class="text-3xl font-semibold">{data.huddle.title}</h1>
-		<span class="text-sm">by {data.huddle.creator?.email}</span>
+		<span class={cn('text-sm')}
+			>by {data.huddle.creator?.email}
+			{#if isOwner}<small class="text-xs">{' '}(you)</small>{/if}</span
+		>
 	</section>
 
 	<section class="flex space-x-2 items-center">
