@@ -1,8 +1,8 @@
-import { DomainErrors } from '$domain/@shared/errors';
-import type { CreateHuddleDto } from '$domain/huddle/dto/in/huddle.input';
-import type { CreateSlotDto } from '$domain/huddle/dto/in/slot.input';
-import type { Huddle } from '$domain/huddle/models';
-import type { CreateHuddleApi } from '$domain/huddle/ports/api/huddle.create';
+import { DomainErrors } from '#/domain/@shared/errors';
+import type { CreateHuddleDto } from '#/domain/huddle/dto/in/huddle.input';
+import type { CreateSlotDto } from '#/domain/huddle/dto/in/slot.input';
+import type { Huddle } from '#/domain/huddle/models';
+import type { CreateHuddleApi } from '#/domain/huddle/ports/api/huddle.create';
 
 import type { HuddleServiceContext } from '../types';
 

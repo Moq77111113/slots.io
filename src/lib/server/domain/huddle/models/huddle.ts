@@ -1,6 +1,6 @@
-import { type Branded, make } from '$brand';
-import type { Entity } from '$domain/@shared';
-import type { User, UserId } from '$domain/user/models';
+import { type Branded, make } from '#/domain/@shared/utils/brand';
+import type { Entity } from '#/domain/@shared';
+import type { User, UserId } from '#/domain/user/models';
 
 import type { Slot } from './slot';
 

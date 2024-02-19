@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr';
 
-import type { Identity } from '$domain/@shared/types';
+import type { Identity } from '#/domain/@shared/types';
 
 import type { Database, Tables } from './sb-types';
 

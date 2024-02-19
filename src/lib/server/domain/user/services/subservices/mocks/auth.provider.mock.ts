@@ -1,12 +1,12 @@
-import type { ThirdPartyAccount } from '$domain/@shared/attributes';
+import type { ThirdPartyAccount } from '#/domain/@shared/attributes';
 import type {
 	AuthenticateUserArgs,
 	LogoutUserArgs,
 	OAuthAuthenticationArgs
-} from '$domain/user/dtos/in/authentication.input';
-import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
-import { makeUserId, type UserId } from '$domain/user/models';
-import type { AuthProvider } from '$domain/user/ports/spi/auth.provider';
+} from '#/domain/user/dtos/in/authentication.input';
+import type { AuthRequest } from '#/domain/user/dtos/out/authentication.output';
+import { makeUserId, type UserId } from '#/domain/user/models';
+import type { AuthProvider } from '#/domain/user/ports/spi/auth.provider';
 
 export const MockedAuthProvider = (): AuthProvider => {
 	return {

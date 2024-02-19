@@ -1,5 +1,5 @@
-import { makeUserId, type User } from '$domain/user/models';
-import type { MeApi } from '$domain/user/ports/api/user.api';
+import { makeUserId, type User } from '#/domain/user/models';
+import type { MeApi } from '#/domain/user/ports/api/user.api';
 
 export const MockedMeApi = (): MeApi => {
 	const getMe = (): User => {

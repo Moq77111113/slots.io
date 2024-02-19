@@ -1,4 +1,4 @@
-import type { DomainErrorKeys } from '$domain/@shared/errors';
+import type { DomainErrorKeys } from '#/domain/@shared/errors';
 
 type ErrorCode =
 	| 'bad_data'

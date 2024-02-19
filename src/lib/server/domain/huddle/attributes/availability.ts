@@ -1,4 +1,4 @@
-import type { User, UserId } from '$domain/user/models';
+import type { User, UserId } from '#/domain/user/models';
 
 export type AvailabilityStatus = 'available' | 'unavailable' | 'maybe';
 

@@ -1,4 +1,4 @@
-import type { DomainError, DomainErrorKeys } from '$domain/@shared/errors';
+import type { DomainError, DomainErrorKeys } from '#/domain/@shared/errors';
 
 /**
  * @description SPI ports for error handling

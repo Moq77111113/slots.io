@@ -1,4 +1,4 @@
-import type { DomainError, ErrorHandler } from '$domain/@shared/errors';
+import type { DomainError, ErrorHandler } from '#/domain/@shared/errors';
 
 type DefaultErrorProviderContext = {
 	//

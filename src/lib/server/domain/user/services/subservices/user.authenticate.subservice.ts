@@ -1,7 +1,7 @@
-import { DomainErrors } from '$domain/@shared/errors';
-import type { AuthenticateUserArgs } from '$domain/user/dtos/in/authentication.input';
-import type { User } from '$domain/user/models';
-import type { AuthenticateApi } from '$domain/user/ports/api/user.api';
+import { DomainErrors } from '#/domain/@shared/errors';
+import type { AuthenticateUserArgs } from '#/domain/user/dtos/in/authentication.input';
+import type { User } from '#/domain/user/models';
+import type { AuthenticateApi } from '#/domain/user/ports/api/user.api';
 
 import type { UserServiceContext } from '../types';
 

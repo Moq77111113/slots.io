@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { cn } from '$lib/utils';
 	import { Icons } from '$lib/components';
 	import type { ComponentType } from 'svelte';
 	import type { PageServerData } from './$types';
-	import { cn } from '$lib/utils';
 
 	const format = (
 		options: Intl.DateTimeFormatOptions = {
@@ -12,8 +12,6 @@
 			day: 'numeric'
 		}
 	) => new Intl.DateTimeFormat('en-US', options).format;
-
-	type AvailabilityStatus = 'available' | 'unavailable' | 'maybe';
 
 	type Huddle = PageServerData['huddle'];
 	type Slot = Huddle['slots'][number];
@@ -143,11 +141,11 @@
 	</section>
 
 	{#if best}
-	<section class="flex flex-col space-y-6">
-		<h3 class="text-lg font-semibold">Status</h3>
-		<span class="text-sm text-medium-gray dark:text-light-gray"
-			>Best date for the huddle is on {format()(best.start)}</span
-		>
-	</section>
+		<section class="flex flex-col space-y-6">
+			<h3 class="text-lg font-semibold">Status</h3>
+			<span class="text-sm text-medium-gray dark:text-light-gray"
+				>Best date for the huddle is on {format()(best.start)}</span
+			>
+		</section>
 	{/if}
 </main>

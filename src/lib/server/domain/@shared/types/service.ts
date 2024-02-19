@@ -1,4 +1,4 @@
-import type { ErrorHandler } from '$domain/@shared/errors';
+import type { ErrorHandler } from '#/domain/@shared/errors';
 
 type SharedContext = {
 	errorHandler: ErrorHandler;

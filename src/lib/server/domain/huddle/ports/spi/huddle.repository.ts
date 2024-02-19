@@ -1,8 +1,8 @@
 import type { MaybePromise } from '@sveltejs/kit';
 
-import type { CreateEntityInput, Identity } from '$domain/@shared/types';
-import type { Availability } from '$domain/huddle/attributes';
-import type { Huddle, HuddleId, Slot, SlotId } from '$domain/huddle/models';
+import type { CreateEntityInput, Identity } from '#/domain/@shared/types';
+import type { Availability } from '#/domain/huddle/attributes';
+import type { Huddle, HuddleId, Slot, SlotId } from '#/domain/huddle/models';
 
 export type HuddleCreateArgs = Identity<
 	Omit<CreateEntityInput<Huddle>, 'slots' | 'participantIds' | 'creator' | 'participants'>

@@ -1,8 +1,7 @@
-import type { AppContext } from '$application/context';
-import type { Action, ActionAdapter } from '$domain/@shared';
-import type { CreateSlotDto } from '$domain/huddle/dto/in/slot.input';
-import type { Huddle, HuddleId } from '$domain/huddle/models';
-
+import type { AppContext } from '#/application/context';
+import type { CreateSlotDto } from '#/domain/huddle/dto/in/slot.input';
+import type { Huddle, HuddleId } from '#/domain/huddle/models';
+import type { Action, ActionAdapter } from '#/domain/@shared';
 type AddSlotAction = Action<[HuddleId, CreateSlotDto], Promise<Huddle>>;
 export const AddSlotAction = ((context) => {
 	const { huddleApi } = context.apis;

@@ -1,6 +1,6 @@
-import { error, fail } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 
-import { makeHuddleId } from '$domain/huddle/models';
+import { makeHuddleId } from '#/domain/huddle/models';
 
 import type { PageServerLoad } from './$types';
 

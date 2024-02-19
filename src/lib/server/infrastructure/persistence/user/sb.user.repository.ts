@@ -1,9 +1,9 @@
-import type { UserFilters } from '$domain/user/dtos/in/user-filters';
-import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '$domain/user/dtos/in/user-input';
-import { type User, type UserId } from '$domain/user/models';
-import type { UserRepository } from '$domain/user/ports/spi';
-import { type SupabaseInfrastructure } from '$infrastructure';
-import { supabaseToDomain } from '$infrastructure/mappers';
+import type { UserFilters } from '#/domain/user/dtos/in/user-filters';
+import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '#/domain/user/dtos/in/user-input';
+import { type User, type UserId } from '#/domain/user/models';
+import type { UserRepository } from '#/domain/user/ports/spi';
+import { type SupabaseInfrastructure } from '#/infrastructure';
+import { supabaseToDomain } from '#/infrastructure/mappers';
 
 export const SupabaseUserRepository = ({
 	users

@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
-import type { CreateHuddleDto } from '$domain/huddle/dto/in/huddle.input';
+import type { CreateHuddleDto } from '#/domain/huddle/dto/in/huddle.input';
 
 import type { HuddleServiceContext } from '../types';
 import { MockedHuddleContext } from './mocks/context.mock';

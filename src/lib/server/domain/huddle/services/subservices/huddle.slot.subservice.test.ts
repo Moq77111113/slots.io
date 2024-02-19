@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
-import { type Huddle, makeHuddleId, type SlotId } from '$domain/huddle/models';
-import type { User, UserId } from '$domain/user/models';
+import { type Huddle, makeHuddleId, type SlotId } from '#/domain/huddle/models';
+import type { User, UserId } from '#/domain/user/models';
 
 import type { HuddleServiceContext } from '../types';
 import { HuddleCreateSubService } from './huddle.create.subservice';

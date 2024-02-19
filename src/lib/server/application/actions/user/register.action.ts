@@ -1,7 +1,7 @@
-import type { AppContext } from '$application/context';
-import type { Action, ActionAdapter } from '$domain/@shared';
-import type { RegisterUserArgs } from '$domain/user/dtos/in/authentication.input';
-import type { User } from '$domain/user/models';
+import type { AppContext } from '#/application/context';
+import type { Action, ActionAdapter } from '#/domain/@shared';
+import type { RegisterUserArgs } from '#/domain/user/dtos/in/authentication.input';
+import type { User } from '#/domain/user/models';
 
 type RegisterAction = Action<[RegisterUserArgs], Promise<User>>;
 export const RegisterUserAction = ((context: AppContext) => {

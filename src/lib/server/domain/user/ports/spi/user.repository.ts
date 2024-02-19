@@ -1,7 +1,7 @@
-import type { MaybePromise, Paginated } from '$domain/@shared';
-import type { UserFilters } from '$domain/user/dtos/in/user-filters';
-import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '$domain/user/dtos/in/user-input';
-import type { User, UserId } from '$domain/user/models';
+import type { MaybePromise, Paginated } from '#/domain/@shared';
+import type { UserFilters } from '#/domain/user/dtos/in/user-filters';
+import type { PatchUserDto, UpdateUserDto, UpsertUserDto } from '#/domain/user/dtos/in/user-input';
+import type { User, UserId } from '#/domain/user/models';
 
 export type UserQuery = {
 	findById: (id: UserId) => MaybePromise<User | null>;
