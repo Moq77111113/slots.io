@@ -13,6 +13,8 @@ import {
 	ShieldCheck,
 	ShieldOff,
 	ShieldQuestion,
+	ArrowLeft,
+	ArrowRight,
 	X
 } from 'lucide-svelte';
 
@@ -24,6 +26,8 @@ import Logo from './logo.svelte';
 
 export type Icon = Lucide;
 export const Icons = {
+	prev: ArrowLeft,
+	next: ArrowRight,
 	logo: Logo,
 	hamburger: Hamburger,
 	auth: CircleUser,

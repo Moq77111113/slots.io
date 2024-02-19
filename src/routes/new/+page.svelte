@@ -5,7 +5,7 @@
 	export let data: PageData;
 </script>
 
-<main class="container max-w-xl h-full flex flex-col flex-1 gap-6">
+<main class="container max-w-4xl h-full flex flex-col flex-1 space-y-6">
 	<h2 class="text-xl font-semibold">Create your own Huddle</h2>
 	<Separator />
 
