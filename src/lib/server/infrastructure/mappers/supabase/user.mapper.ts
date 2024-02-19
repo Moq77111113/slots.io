@@ -1,6 +1,6 @@
-import { type User } from '$domain/user/models';
-import { type UserSchema, userSchema } from '$infrastructure/schemas/domain/user.schemas';
-import type { SbProfile } from '$infrastructure/supabase/supabase';
+import { type User } from '#/domain/user/models';
+import { type UserSchema, userSchema } from '#/infrastructure/schemas/domain/user.schemas';
+import type { SbProfile } from '#/infrastructure/supabase/supabase';
 
 import { validateData } from '../validate';
 

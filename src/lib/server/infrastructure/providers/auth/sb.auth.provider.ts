@@ -1,13 +1,13 @@
 import type { Provider } from '@supabase/supabase-js';
 
-import type { ThirdPartyAccount } from '$domain/@shared/attributes';
+import type { ThirdPartyAccount } from '#/domain/@shared/attributes';
 import type {
 	AuthenticateUserArgs,
 	OAuthAuthenticationArgs
-} from '$domain/user/dtos/in/authentication.input';
-import { makeUserId } from '$domain/user/models';
-import type { AuthProvider } from '$domain/user/ports/spi';
-import type { SupabaseInfrastructure } from '$infrastructure';
+} from '#/domain/user/dtos/in/authentication.input';
+import { makeUserId } from '#/domain/user/models';
+import type { AuthProvider } from '#/domain/user/ports/spi';
+import type { SupabaseInfrastructure } from '#/infrastructure';
 export const SupabaseAuthProvider = ({
 	auth
 }: {

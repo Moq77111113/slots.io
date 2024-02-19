@@ -1,6 +1,6 @@
-import type { AppContext } from '$application/context';
-import type { Action, ActionAdapter } from '$domain/@shared';
-import type { User } from '$domain/user/models';
+import type { AppContext } from '#/application/context';
+import type { Action, ActionAdapter } from '#/domain/@shared';
+import type { User } from '#/domain/user/models';
 
 type GetMeAction = Action<[], Promise<User | null>>;
 export const GetMeAction = ((context) => {

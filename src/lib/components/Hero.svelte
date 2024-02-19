@@ -1,6 +1,4 @@
 <script>
-	import Dialog from './Dialog.svelte';
-	import SignUp from './auth/sign-up.svelte';
 	import { Icons } from './icons';
 	import Button from './ui/button/button.svelte';
 </script>

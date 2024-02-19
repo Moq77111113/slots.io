@@ -1,6 +1,6 @@
 /* eslint-disable regex/invalid */
 
-import type { ErrorHandler } from '$domain/@shared/errors';
+import type { ErrorHandler } from '#/domain/@shared/errors';
 
 import type { UserServiceContext } from '../../types';
 import { MockedAuthProvider } from './auth.provider.mock';

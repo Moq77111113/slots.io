@@ -1,7 +1,7 @@
-import { DomainErrors } from '$domain/@shared/errors';
-import type { Huddle, SlotId } from '$domain/huddle/models';
-import type { AvailabilityApi } from '$domain/huddle/ports/api';
-import type { AvailabilityAddArgs } from '$domain/huddle/ports/spi';
+import { DomainErrors } from '#/domain/@shared/errors';
+import type { Huddle, SlotId } from '#/domain/huddle/models';
+import type { AvailabilityApi } from '#/domain/huddle/ports/api';
+import type { AvailabilityAddArgs } from '#/domain/huddle/ports/spi';
 
 import type { HuddleServiceContext } from '../types';
 

@@ -1,6 +1,6 @@
-import type { AppContext } from '$application/context';
-import type { Action, ActionAdapter } from '$domain/@shared';
-import type { AuthRequest } from '$domain/user/dtos/out/authentication.output';
+import type { AppContext } from '#/application/context';
+import type { Action, ActionAdapter } from '#/domain/@shared';
+import type { AuthRequest } from '#/domain/user/dtos/out/authentication.output';
 
 type GenerateOAuthRequestAction = Action<[string], Promise<AuthRequest>>;
 export const GenerateOAuthRequest = ((context: AppContext) => {

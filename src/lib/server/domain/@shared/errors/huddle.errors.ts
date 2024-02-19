@@ -1,4 +1,4 @@
-import { DomainError, type ErrorCollection } from '$domain/@shared/errors/errors';
+import { DomainError, type ErrorCollection } from '#/domain/@shared/errors/errors';
 
 type Keys =
 	| 'huddle:title-too-long'

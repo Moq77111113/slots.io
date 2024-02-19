@@ -4,14 +4,14 @@ import {
 	makeHuddleId,
 	makeSlotId,
 	type SlotId
-} from '$domain/huddle/models';
+} from '#/domain/huddle/models';
 import type {
 	AvailabilityAddArgs,
 	AvailabilityRemoveArgs,
 	HuddleCreateArgs,
 	HuddleRepository,
 	SlotAddArgs
-} from '$domain/huddle/ports/spi';
+} from '#/domain/huddle/ports/spi';
 
 export const MockedHuddleRepository = (): HuddleRepository => {
 	const huddles: Huddle[] = [];

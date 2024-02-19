@@ -1,6 +1,6 @@
-import type { AppContext } from '$application/context';
-import type { Action, ActionAdapter } from '$domain/@shared';
-import type { Huddle, SlotId } from '$domain/huddle/models';
+import type { AppContext } from '#/application/context';
+import type { Action, ActionAdapter } from '#/domain/@shared';
+import type { Huddle, SlotId } from '#/domain/huddle/models';
 
 type SetAvailabilityAction = Action<[SlotId], Promise<Huddle>>;
 export const SetAvailableAction = ((context) => {

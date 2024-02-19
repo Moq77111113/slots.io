@@ -1,6 +1,6 @@
-import type { AppContext } from '$application/context';
-import type { Action, ActionAdapter } from '$domain/@shared';
-import type { LogoutUserArgs } from '$domain/user/dtos/in/authentication.input';
+import type { AppContext } from '#/application/context';
+import type { Action, ActionAdapter } from '#/domain/@shared';
+import type { LogoutUserArgs } from '#/domain/user/dtos/in/authentication.input';
 
 type LogoutAction = Action<[LogoutUserArgs], Promise<void>>;
 export const LogoutUserAction = ((context) => {

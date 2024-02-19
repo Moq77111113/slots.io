@@ -1,5 +1,5 @@
-import type { MaybePromise } from '$domain/@shared';
-import type { HashPasswordDto } from '$domain/user/dtos/in/authentication.input';
+import type { MaybePromise } from '#/domain/@shared';
+import type { HashPasswordDto } from '#/domain/user/dtos/in/authentication.input';
 
 export type HashCommand = {
 	generateSalt: () => MaybePromise<string>;

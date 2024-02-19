@@ -1,14 +1,14 @@
-import type { Availability } from '$domain/huddle/attributes';
-import { type Huddle, makeSlotId, type Slot } from '$domain/huddle/models';
-import { makeUserId } from '$domain/user/models';
-import type { SbAvailability, SbHuddle, SbSlot } from '$infrastructure';
+import type { Availability } from '#/domain/huddle/attributes';
+import { type Huddle, makeSlotId, type Slot } from '#/domain/huddle/models';
+import { makeUserId } from '#/domain/user/models';
+import type { SbAvailability, SbHuddle, SbSlot } from '#/infrastructure';
 import {
 	type AvailabilitySchema,
 	availabilitySchema,
 	huddleSchema,
 	type SlotSchema,
 	slotSchema
-} from '$infrastructure/schemas/domain/huddle.schemas';
+} from '#/infrastructure/schemas/domain/huddle.schemas';
 
 import { validateData } from '../validate';
 import { supabaseToDomain as toUser } from './user.mapper';

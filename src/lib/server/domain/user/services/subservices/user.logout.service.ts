@@ -1,7 +1,7 @@
-import { DomainErrors } from '$domain/@shared/errors';
-import type { LogoutUserArgs } from '$domain/user/dtos/in/authentication.input';
-import type { UserId } from '$domain/user/models';
-import type { LogoutApi } from '$domain/user/ports/api/user.api';
+import { DomainErrors } from '#/domain/@shared/errors';
+import type { LogoutUserArgs } from '#/domain/user/dtos/in/authentication.input';
+import type { UserId } from '#/domain/user/models';
+import type { LogoutApi } from '#/domain/user/ports/api/user.api';
 
 import type { UserServiceContext } from '../types';
 

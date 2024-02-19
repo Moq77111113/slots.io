@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
-import { makeUserId } from '$domain/user/models';
+import { makeUserId } from '#/domain/user/models';
 
 import { MockedUserServiceContext } from './mocks/context.mock';
 import type { UserServiceContext } from '../types';

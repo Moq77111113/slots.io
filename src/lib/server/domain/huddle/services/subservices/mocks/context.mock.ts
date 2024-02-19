@@ -1,4 +1,4 @@
-import type { ErrorHandler } from '$domain/@shared/errors';
+import type { ErrorHandler } from '#/domain/@shared/errors';
 
 import type { HuddleServiceContext } from '../../types';
 import { MockedHuddleRepository } from './huddle.repository.mock';

@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, it, spyOn } from 'bun:test';
 
-import type { Availability, AvailabilityStatus } from '$domain/huddle/attributes';
-import type { Huddle, SlotId } from '$domain/huddle/models';
-import type { HuddleRepository } from '$domain/huddle/ports/spi';
-import type { User, UserId } from '$domain/user/models';
+import type { Availability, AvailabilityStatus } from '#/domain/huddle/attributes';
+import type { Huddle, SlotId } from '#/domain/huddle/models';
+import type { HuddleRepository } from '#/domain/huddle/ports/spi';
+import type { User, UserId } from '#/domain/user/models';
 import { keys } from '$lib/helpers/types';
 
 import type { HuddleServiceContext } from '../types';

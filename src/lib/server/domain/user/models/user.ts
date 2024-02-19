@@ -1,7 +1,7 @@
-import { type Branded, make } from '$brand';
-import type { Entity, Language, Locale } from '$domain/@shared';
-import type { ThirdPartyAccount } from '$domain/@shared/attributes';
-import type { NotificationChannel, UserStatus } from '$domain/user/attributes';
+import { type Branded, make } from '#/domain/@shared/utils/brand';
+import type { Entity, Language, Locale } from '#/domain/@shared';
+import type { ThirdPartyAccount } from '#/domain/@shared/attributes';
+import type { NotificationChannel, UserStatus } from '#/domain/user/attributes';
 
 export type UserId = Branded<string, 'UserId'>;
 

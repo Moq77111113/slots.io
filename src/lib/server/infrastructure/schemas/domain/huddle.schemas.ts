@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { type HuddleId, makeHuddleId, makeSlotId, type SlotId } from '$domain/huddle/models';
+import { type HuddleId, makeHuddleId, makeSlotId, type SlotId } from '#/domain/huddle/models';
 
 import { userSchema } from './user.schemas';
 

@@ -3,8 +3,8 @@ import type {
 	PatchEntityInput,
 	UpdateEntityInput,
 	UpsertEntityInput
-} from '$domain/@shared/types';
-import type { User } from '$domain/user/models';
+} from '#/domain/@shared/types';
+import type { User } from '#/domain/user/models';
 
 export type CreateUserDto = CreateEntityInput<User>;
 

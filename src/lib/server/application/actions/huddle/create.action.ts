@@ -1,7 +1,7 @@
-import type { AppContext } from '$application/context';
-import type { Action, ActionAdapter } from '$domain/@shared';
-import type { CreateHuddleDto } from '$domain/huddle/dto/in/huddle.input';
-import type { Huddle } from '$domain/huddle/models';
+import type { AppContext } from '#/application/context';
+import type { Action, ActionAdapter } from '#/domain/@shared';
+import type { CreateHuddleDto } from '#/domain/huddle/dto/in/huddle.input';
+import type { Huddle } from '#/domain/huddle/models';
 
 type CreateHuddleAction = Action<[CreateHuddleDto], Promise<Huddle>>;
 export const CreateHuddleAction = ((context) => {

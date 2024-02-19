@@ -23,7 +23,6 @@ module.exports = {
 	overrides: [
 		{
 			files: ['*.ts'],
-
 			extends: ['plugin:@typescript-eslint/strict-type-checked'],
 
 			parserOptions: {
@@ -60,20 +59,6 @@ module.exports = {
 				caughtErrorsIgnorePattern: '^_'
 			}
 		],
-		'simple-import-sort/imports': [
-			'error',
-			{
-				groups: [
-					['^\\u0000'],
-					['^(?!@|generated|bin|tasks|rest-routes|middleware|service|utils|schema)\\w'],
-					['^@?\\w'],
-					['^(generated|bin|tasks|rest-routes|middleware)\\w'],
-					['^(service|utils|schema)\\w'],
-					['^'],
-					['^\\.']
-				]
-			}
-		],
 		'sort-imports': 0,
 		'regex/invalid': [
 			'warn',
@@ -87,7 +72,7 @@ module.exports = {
 					}
 				},
 				{
-					regex: "import.*from\\s+\\'(?!\\$domain|{\\.}{1,2}/|).*",
+					regex: "import.*from\\s+\\'(?!\\#/domain|{\\.}{1,2}/|).*",
 					message: 'Import from the domain only.',
 					files: {
 						inspect: '.*domain.*/.*\\.ts'
