@@ -64,19 +64,19 @@ const config = {
 			fontFamily: {
 				sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui'],
 				manrope: ['Manrope', 'ui-sans-serif', 'system-ui']
-			}
-		},
-		animation: {
-			ghost: 'ghost 2s ease-in-out infinite alternate'
-		},
+			},
+			animation: {
+				ghost: 'ghost 2s ease-in-out infinite alternate'
+			},
 
-		keyframes: {
-			ghost: {
-				'0%': { transform: 'scale(.5)', rotate: '0deg' },
-				'25%': { transform: 'scale(1)', rotate: '-20deg' },
-				'50%': { transform: 'scale(2)', rotate: '0deg' },
-				'75%': { transform: 'scale(1)', rotate: '20deg' },
-				'100%': { transform: 'scale(.5)', rotate: '360deg' }
+			keyframes: {
+				ghost: {
+					'0%': { transform: 'scale(.5)', rotate: '0deg' },
+					'25%': { transform: 'scale(1)', rotate: '-20deg' },
+					'50%': { transform: 'scale(2)', rotate: '0deg' },
+					'75%': { transform: 'scale(1)', rotate: '20deg' },
+					'100%': { transform: 'scale(.5)', rotate: '360deg' }
+				}
 			}
 		}
 	}

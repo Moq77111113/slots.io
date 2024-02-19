@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { type HuddleCreateSchema } from './schema';
-
 	import SuperDebug, { superForm, type SuperValidated } from 'sveltekit-superforms';
 
 	import Button from '$lib/components/ui/button/button.svelte';
@@ -22,7 +21,7 @@
 		resetForm: false,
 		dataType: 'json'
 	});
-	const { form, errors, constraints, enhance, message } = huddleForm;
+	const { form, errors, constraints, enhance, message, submitting } = huddleForm;
 
 	const _today = today('UTC').toDate('UTC');
 	const addSlot = () => {
@@ -92,6 +91,12 @@
 
 	{#if $message}
 		<p class="text-destructive">{JSON.stringify($message)}</p>{/if}
-	<Button type="submit">Submit</Button>
+
+	{#if $submitting}
+		<Button disabled size="icon">
+			<Icons.wave />
+		</Button>{:else}
+		<Button type="submit">Submit</Button>
+	{/if}
 </form>
 <SuperDebug data={$form} />
