@@ -32,7 +32,7 @@
 	}
 
 	.dot {
-		@apply w-1 h-1 bg-primary-foreground rounded-full inline-block;
+		@apply w-1 h-1 bg-primary rounded-full inline-block;
 		animation: wave 1.2s linear infinite;
 	}
 

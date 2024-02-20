@@ -15,6 +15,7 @@ import {
 	ShieldQuestion,
 	ArrowLeft,
 	ArrowRight,
+	MoreHorizontal,
 	X
 } from 'lucide-svelte';
 
@@ -23,6 +24,7 @@ import Github from './github.svelte';
 import Google from './google.svelte';
 import Hamburger from './hamburger.svelte';
 import Logo from './logo.svelte';
+import WavyDots from './WavyDots.svelte';
 
 export type Icon = Lucide;
 export const Icons = {
@@ -48,5 +50,7 @@ export const Icons = {
 	calendar: CalendarDays,
 	ghost: Ghost,
 	pause: Pause,
-	play: Play
+	play: Play,
+	dotX: MoreHorizontal,
+	wave: WavyDots
 };
