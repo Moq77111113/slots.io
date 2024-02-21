@@ -1,4 +1,4 @@
-import Root, { type Props } from './calendar.svelte';
+import Root from './calendar.svelte';
 import Cell from './calendar-cell.svelte';
 import Day from './calendar-day.svelte';
 import Grid from './calendar-grid.svelte';
@@ -23,6 +23,5 @@ export {
 	NextButton,
 	PrevButton,
 	//
-	Root as Calendar,
-	type Props as CalendarProps
+	Root as Calendar
 };
