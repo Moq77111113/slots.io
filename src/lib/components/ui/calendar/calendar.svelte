@@ -1,23 +1,15 @@
-<script lang="ts" context="module">
-	import { Calendar as CalendarPrimitive } from 'bits-ui';
-	type Variant = 'small' | 'full';
-	export type Props = Omit<CalendarPrimitive.Props, 'value'> & { variant?: Variant };
-</script>
-
 <script lang="ts">
-	import * as Calendar from '.';
+	import { Calendar as CalendarPrimitive } from 'bits-ui';
 	import { cn } from '$lib/utils';
-
-	type $$Props = CalendarPrimitive.Props<boolean> & {
-		variant?: Variant;
-	};
+	import * as Calendar from '.';
+	type Variant = 'small' | 'full';
+	type $$Props = CalendarPrimitive.Props & { variant: Variant };
 	type $$Events = CalendarPrimitive.Events;
 
-	export let variant: Props['variant'] = 'small';
+	export let variant: $$Props['variant'] = 'small';
 	export let value: $$Props['value'] = undefined;
 	export let placeholder: $$Props['placeholder'] = undefined;
 	export let weekdayFormat: $$Props['weekdayFormat'] = 'short';
-	export let multiple: $$Props['multiple'] = false;
 	let className: $$Props['class'] = undefined;
 
 	export { className as class };
@@ -28,7 +20,6 @@
 	bind:placeholder
 	{...$$restProps}
 	{weekdayFormat}
-	{multiple}
 	class={cn('p-3', variant === 'full' ? 'justify-between' : 'w-fit', className)}
 	on:keydown
 	let:months
