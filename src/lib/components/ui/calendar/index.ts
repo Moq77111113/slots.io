@@ -1,4 +1,4 @@
-import Root from './calendar.svelte';
+import Root, { type Value } from './calendar.svelte';
 import Cell from './calendar-cell.svelte';
 import Day from './calendar-day.svelte';
 import Grid from './calendar-grid.svelte';
@@ -25,3 +25,5 @@ export {
 	//
 	Root as Calendar
 };
+
+export type { Value as CalendarValue };

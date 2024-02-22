@@ -4,9 +4,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import { cn } from '$lib/utils';
 
-	let animate = $state(true);
+	let animate = true;
 
-	let notFound = $derived($page.status === 404);
+	$: notFound = $page.status === 404;
 </script>
 
 <main class="h-full flex flex-col flex-1 justify-center items-center space-y-6">

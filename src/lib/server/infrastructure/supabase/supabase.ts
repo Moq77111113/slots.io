@@ -29,15 +29,15 @@ export type SbHuddle = Identity<
 export const SupabaseInfrastructure = (context: SupabaseContext) => {
 	const { env, options } = context;
 
-	const { auth, from } = createServerClient<Database>(env.APP_URL, env.APP_ANON, options);
+	const client = createServerClient<Database>(env.APP_URL, env.APP_ANON, options);
 
-	const profiles = from('profiles');
-	const huddles = from('huddles');
-	const slots = from('slots');
-	const availabilities = from('availabilities');
-	const huddle_participant = from('huddle_participant');
+	const profiles = client.from('profiles');
+	const huddles = client.from('huddles');
+	const slots = client.from('slots');
+	const availabilities = client.from('availabilities');
+	const huddle_participant = client.from('huddle_participant');
 	return {
-		auth,
+		auth: client.auth,
 		users: profiles,
 		huddleResources: {
 			huddles,
