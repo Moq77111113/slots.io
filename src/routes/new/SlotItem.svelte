@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Icons } from '$lib/components';
-	import { DatePicker } from '$lib/components/date';
 	import { ToggleGroup, ToggleGroupItem } from '$lib/components/ui/toggle-group';
 
 	import type { HuddleCreateSchema } from './schema';
@@ -11,7 +10,10 @@
 		index: number;
 	};
 
-	let { form, index } = $props<Props>();
+	let form: Props['form'];
+	let index: Props['index'];
+	export { form, index };
+
 	const { value: slot, errors } = formFieldProxy(form, `slots[${index}]`);
 
 	const availabilities = [
@@ -36,11 +38,6 @@
 <div class="flex flex-row items-center space-x-2">
 	<div class="flex justify-between items-center w-full">
 		<div class="flex flex-col">
-			<DatePicker
-				bind:value={$slot.start}
-				aria-invalid={$errors ? 'true' : undefined}
-				minValue={new Date()}
-			/>
 			{#if $errors}
 				<p class="text-xs font-medium text-destructive">{$errors}</p>
 			{/if}

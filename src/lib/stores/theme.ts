@@ -7,6 +7,9 @@ const noopStorage = {
 };
 const isBrowser = typeof document !== 'undefined';
 
+const isValidMode = (mode: unknown): mode is 'dark' | 'light' => {
+	return mode === 'dark' || mode === 'light';
+};
 export const createLocalStorageTheme = (key = 'theme') => {
 	const defaultValue = 'system' as const;
 
@@ -50,8 +53,4 @@ export const createLocalStorageTheme = (key = 'theme') => {
 		unsubscribe,
 		toggle
 	};
-};
-
-const isValidMode = (mode: unknown): mode is 'dark' | 'light' => {
-	return mode === 'dark' || mode === 'light';
 };

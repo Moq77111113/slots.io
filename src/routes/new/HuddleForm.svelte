@@ -8,15 +8,16 @@
 	import { Input } from '$lib/components/ui/input';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import { Icons } from '$lib/components';
-
-	import SlotItem from './SlotItem.svelte';
-	import { today } from '@internationalized/date';
+	import { today, type DateValue } from '@internationalized/date';
 
 	interface Props {
 		form: SuperValidated<HuddleCreateSchema>;
 	}
 
-	const { form: formData } = $props<Props>();
+	let formData: Props['form'];
+
+	export { formData as form };
+
 	const huddleForm = superForm(formData, {
 		resetForm: false,
 		dataType: 'json'
@@ -40,6 +41,7 @@
 			slots: _.slots.filter((_slot, i) => i !== idx)
 		}));
 	};
+	let value: DateValue[] = [];
 </script>
 
 <form method="post" use:enhance class="space-y-4">
@@ -76,17 +78,6 @@
 		<Label>Time Slots</Label>
 
 		<Button variant="ghost" size="icon" on:click={addSlot}><Icons.add /></Button>
-	</div>
-
-	<div class="space-y-2 flex flex-col">
-		{#each $form.slots as _, i (i)}
-			<div class="flex flex-row items-center space-x-2">
-				<Button size="icon-sm" variant="ghost" on:click={() => removeSlot(i)}
-					><Icons.remove class="h-2 w-2" /></Button
-				>
-				<SlotItem form={huddleForm} index={i} />
-			</div>
-		{/each}
 	</div>
 
 	{#if $message}

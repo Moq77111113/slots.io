@@ -3,7 +3,7 @@
 	import * as Drawer from '$lib/components/ui/drawer';
 	import { Button } from '$lib/components/ui/button';
 	import { mediaQuery } from '$lib/stores/mediaquery';
-	let open = $state(false);
+	let open = false;
 
 	const isDesktop = mediaQuery('(min-width: 768px)');
 
@@ -11,8 +11,10 @@
 		title: string;
 		description?: string;
 	}
+	let title: Props['title'];
+	let description: Props['description'];
 
-	let { title, description } = $props<Props>();
+	export { title, description };
 </script>
 
 {#if $isDesktop}

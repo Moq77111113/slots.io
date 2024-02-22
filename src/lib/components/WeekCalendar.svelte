@@ -9,16 +9,19 @@
 		class?: string;
 	};
 
-	const { start: startInput, onSelect, class: clazz } = $props<Props>();
+	let start: Props['start'];
+	let onSelect: Props['onSelect'];
+	let clazz: Props['class'] = undefined;
 
-	let start = $state(startInput);
-	const days = $derived.call(() => {
+	export { start, onSelect, clazz as class };
+
+	$: days = (() => {
 		const days = [];
 		for (let i = 0; i < 7; i++) {
 			days.push(new Date(start.getTime() + i * 24 * 60 * 60 * 1000));
 		}
 		return days;
-	});
+	})();
 
 	const nextWeek = () => {
 		start = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -53,7 +56,10 @@
 	<div class="grid grid-cols-1 md:grid-cols-7 w-full space-y-1 md:space-x-1 md:space-y-0">
 		{#each days as day (day.getTime())}
 			<label
-				class=" w-[120px] has-[:checked]:bg-green-600/85 flex flex-col items-center bg-primary border-1 rounded-md text-secondary p-4 space-y-2 mx-auto cursor-pointer hover:bg-gray-300"
+				class="w-[120px] has-[:checked]:bg-green-600/85 has-[:checked]:text-primary
+				flex flex-col items-center bg-primary border-1 rounded-md text-secondary p-4
+				 space-y-2 mx-auto cursor-pointer hover:bg-gray-300
+				 transition-colors duration-300"
 			>
 				<input
 					type="checkbox"
@@ -63,7 +69,7 @@
 					}}
 				/>
 				<div class="flex flex-col justify-center items-center">
-					<span class="text-xs">{formatWeekDay(day)}</span>
+					<span class="text-xs font-medium">{formatWeekDay(day)}</span>
 					<h3 class="text-base font-medium">{formatDay(day)}</h3>
 				</div>
 			</label>

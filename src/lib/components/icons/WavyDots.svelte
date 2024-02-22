@@ -9,7 +9,9 @@
 		class?: string;
 	};
 
-	let { class: clazz } = $props<Props>();
+	let clazz: Props['class'] = undefined;
+
+	export { clazz as class };
 </script>
 
 <div class={cn('wave', clazz)}>
