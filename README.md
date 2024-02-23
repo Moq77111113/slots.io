@@ -10,7 +10,6 @@ Thank you for visiting! Our aoo is currently under construction to bring you an 
 - **Tailwind CSS:** A utility-first CSS framework for rapid UI development.
 - **Supabase:** The open-source alternative to Firebase. Instantly build and scale applications.
 
-
 ## What to Expect
 
 - **Modern Design:** A sleek and modern interface awaits you.
