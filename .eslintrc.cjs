@@ -3,12 +3,13 @@ module.exports = {
 	root: true,
 	extends: [
 		'eslint:recommended',
-		'plugin:svelte/recommended',
 		'plugin:@typescript-eslint/recommended',
+		'plugin:svelte/prettier',
+		'plugin:svelte/recommended',
 		'prettier'
 	],
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint', 'unused-imports', 'simple-import-sort', 'regex'],
+	plugins: ['@typescript-eslint', 'regex'],
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
@@ -20,6 +21,7 @@ module.exports = {
 		es2017: true,
 		node: true
 	},
+	globals: { $$Generic: 'readable', _: 'writable' },
 	overrides: [
 		{
 			files: ['*.ts'],
@@ -30,6 +32,12 @@ module.exports = {
 			}
 		},
 		{
+			files: ['**/domain/**/*.ts', '**/+page.server.ts', '**/+server.ts'],
+			rules: {
+				'@typescript-eslint/no-throw-literal': 'off'
+			}
+		},
+		{
 			files: ['*.svelte'],
 			parser: 'svelte-eslint-parser',
 			parserOptions: {
@@ -37,29 +45,33 @@ module.exports = {
 			}
 		},
 		{
-			files: ['**/domain/**/*.ts', '**/+page.server.ts', '**/+server.ts'],
+			files: ['*.ts'],
+			parser: '@typescript-eslint/parser',
 			rules: {
-				'@typescript-eslint/no-throw-literal': 'off'
+				'@typescript-eslint/ban-types': [
+					'error',
+					{
+						extendDefaults: true,
+						types: {
+							'{}': false
+						}
+					}
+				]
 			}
 		}
 	],
 	rules: {
 		'no-unused-vars': 'off',
-		'unused-imports/no-unused-imports': 'error',
-		'unused-imports/no-unused-vars': [
-			'warn',
-			{ vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
-		],
+		'sort-imports': 'warn',
 
 		'@typescript-eslint/no-unused-vars': [
 			'warn',
 			{
 				argsIgnorePattern: '^_',
-				varsIgnorePattern: '^_',
+				varsIgnorePattern: '^(\\$\\$(Props|Events|Slots|Generic)|_.*)$',
 				caughtErrorsIgnorePattern: '^_'
 			}
 		],
-		'sort-imports': 0,
 		'regex/invalid': [
 			'warn',
 			[
@@ -72,7 +84,7 @@ module.exports = {
 					}
 				},
 				{
-					regex: "import.*from\\s+\\'(?!\\#/domain|{\\.}{1,2}/|).*",
+					regex: "import.*from\\s+\\'(?!#\\/domain|\\.){1,2}/).*",
 					message: 'Import from the domain only.',
 					files: {
 						inspect: '.*domain.*/.*\\.ts'

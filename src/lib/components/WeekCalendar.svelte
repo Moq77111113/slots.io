@@ -2,7 +2,6 @@
 	import { cn } from '$lib/utils';
 	import { Icons } from './icons';
 	import Button from './ui/button/button.svelte';
-	import { Checkbox } from './ui/checkbox';
 	type Props = {
 		start: Date;
 		onSelect: (date: Date) => void;

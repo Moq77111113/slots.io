@@ -19,4 +19,4 @@ export const huddleCreateSchema = z.object({
 	slots: slotAddSchema.array()
 });
 
-export type HuddleCreateSchema = z.infer<typeof huddleCreateSchema>;
+export type HuddleCreateSchema = typeof huddleCreateSchema;

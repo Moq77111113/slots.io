@@ -1,4 +1,4 @@
-import Root from "./textarea.svelte";
+import Root from './textarea.svelte';
 
 type FormTextareaEvent<T extends Event = Event> = T & {
 	currentTarget: EventTarget & HTMLTextAreaElement;
@@ -6,7 +6,7 @@ type FormTextareaEvent<T extends Event = Event> = T & {
 
 type TextareaEvents = {
 	blur: FormTextareaEvent<FocusEvent>;
-	change: FormTextareaEvent<Event>;
+	change: FormTextareaEvent;
 	click: FormTextareaEvent<MouseEvent>;
 	focus: FormTextareaEvent<FocusEvent>;
 	keydown: FormTextareaEvent<KeyboardEvent>;
@@ -24,5 +24,5 @@ export {
 	//
 	Root as Textarea,
 	type TextareaEvents,
-	type FormTextareaEvent,
+	type FormTextareaEvent
 };

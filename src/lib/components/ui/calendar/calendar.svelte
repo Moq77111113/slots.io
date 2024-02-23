@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
 	import { Calendar as CalendarPrimitive } from 'bits-ui';
 	type Variant = 'small' | 'full';
+	type T = boolean;
 	type Props<T extends boolean> = Omit<CalendarPrimitive.Props<T>, 'multiple'> & {
 		variant: Variant;
 		multiple: T | undefined;
@@ -21,15 +22,7 @@
 	let clazz: Props<T>['class'];
 	let onValueChange: Props<T>['onValueChange'] = undefined;
 
-	export {
-		value,
-		variant,
-		placeholder,
-		weekdayFormat,
-		multiple,
-		className as class,
-		onValueChange
-	};
+	export { value, variant, placeholder, weekdayFormat, multiple, clazz as class, onValueChange };
 </script>
 
 <CalendarPrimitive.Root

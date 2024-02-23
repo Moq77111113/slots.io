@@ -1,13 +1,13 @@
 import type { Availability } from '#/domain/huddle/attributes';
-import { type Huddle, makeSlotId, type Slot } from '#/domain/huddle/models';
+import { makeSlotId, type Huddle, type Slot } from '#/domain/huddle/models';
 import { makeUserId } from '#/domain/user/models';
 import type { SbAvailability, SbHuddle, SbSlot } from '#/infrastructure';
 import {
-	type AvailabilitySchema,
 	availabilitySchema,
 	huddleSchema,
-	type SlotSchema,
-	slotSchema
+	slotSchema,
+	type AvailabilitySchema,
+	type SlotSchema
 } from '#/infrastructure/schemas/domain/huddle.schemas';
 
 import { validateData } from '../validate';
@@ -52,7 +52,7 @@ const parseSlot = (entity: SbSlot): Slot => {
 		availabilities: slot.availabilities.map((_) => ({
 			..._,
 			userId: makeUserId(_.userId),
-			user: _.user ? { ..._.user, id: makeUserId(_.user.id) } : undefined
+			user: { ..._.user, id: makeUserId(_.user.id) }
 		}))
 	};
 };
