@@ -2,19 +2,18 @@
 	import { Icons } from '$lib/components';
 	import { ToggleGroup, ToggleGroupItem } from '$lib/components/ui/toggle-group';
 
+	import { format } from '$lib/helpers/date';
+	import { type Infer, type SuperForm } from 'sveltekit-superforms';
 	import type { HuddleCreateSchema } from './schema';
-	import { formFieldProxy, type SuperForm } from 'sveltekit-superforms';
 
 	type Props = {
-		form: SuperForm<HuddleCreateSchema>;
+		form: SuperForm<Infer<HuddleCreateSchema>>;
 		index: number;
 	};
 
-	let form: Props['form'];
-	let index: Props['index'];
-	export { form, index };
+	export let value: Infer<HuddleCreateSchema>['slots'][number];
 
-	const { value: slot, errors } = formFieldProxy(form, `slots[${index}]`);
+	// export { form, index };
 
 	const availabilities = [
 		{
@@ -35,14 +34,11 @@
 	] as const;
 </script>
 
-<div class="flex flex-row items-center space-x-2">
-	<div class="flex justify-between items-center w-full">
-		<div class="flex flex-col">
-			{#if $errors}
-				<p class="text-xs font-medium text-destructive">{$errors}</p>
-			{/if}
-		</div>
-		<ToggleGroup type="single" bind:value={$slot.availability}>
+<div class="flex flex-col w-full">
+	<div class="flex flex-row items-center justify-between w-full space-x-1">
+		<span>{format(value.start, 'short-date')}</span>
+
+		<ToggleGroup type="single" bind:value={value.availability}>
 			{#each availabilities as { value, class: clazz, icon } (value)}
 				<ToggleGroupItem {value} aria-label={`toggle ${value}`} class={clazz}>
 					<svelte:component

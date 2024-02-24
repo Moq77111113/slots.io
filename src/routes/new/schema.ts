@@ -1,10 +1,6 @@
 import { z } from 'zod';
 
-const availability = z.union([
-	z.literal('available'),
-	z.literal('unavailable'),
-	z.literal('maybe')
-]);
+const availability = z.enum(['available', 'unavailable', 'maybe']);
 const slotAddSchema = z.object({
 	start: z.date(),
 	availability: availability.optional()

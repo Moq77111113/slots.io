@@ -1,18 +1,17 @@
 <script lang="ts">
-	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { huddleCreateSchema, type HuddleCreateSchema } from './schema';
-
 	import { Icons } from '$lib/components';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Calendar from '$lib/components/ui/calendar/calendar.svelte';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
-	import { timeStamp } from '$lib/helpers/date';
-	import { type DateValue } from '@internationalized/date';
+	import { getTimestamp } from '$lib/helpers/date';
+	import { getLocalTimeZone, type DateValue } from '@internationalized/date';
 	import { blur } from 'svelte/transition';
+	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-
+	import SlotItem from './SlotItem.svelte';
+	import { huddleCreateSchema, type HuddleCreateSchema } from './schema';
 	interface Props {
 		form: SuperValidated<Infer<HuddleCreateSchema>>;
 	}
@@ -28,53 +27,54 @@
 	});
 
 	const { form: formData, enhance, submitting } = huddleForm;
+
+	let tz = getLocalTimeZone();
 	let selected: DateValue[] = [];
-	const addSlot = () => {
-		formData.update(($form) => {
-			$form.slots.push({ start: new Date() });
-			return $form;
-		});
-	};
 
-	const clearSlots = () => {
-		formData.update(($form) => {
-			$form.slots = [];
-			return $form;
-		});
-		selected = [];
-	};
+	const onValueChange = (calDates: DateValue[] | undefined) => {
+		if (!calDates) {
+			formData.set({
+				...$formData,
+				slots: []
+			});
 
-	$: {
-		if (!selected) {
-			clearSlots();
-		} else {
-			const added = selected.filter(
-				(_) => !$formData.slots.map((_) => _.start.getTime()).includes(timeStamp(_))
-			);
-			const removed = $formData.slots.filter(
-				(_) => !selected.map(timeStamp).includes(timeStamp(_.start))
-			);
-
-			if (added.length > 0) {
-				// A DateValue was added
-				formData.update(($form) => {
-					$form.slots.push(...added.map((_) => ({ start: _.toDate('UTC') })));
-					return $form;
-				});
-			}
-
-			if (removed.length > 0) {
-				// A DateValue was removed
-				formData.update(($form) => {
-					removed.forEach((_) => {
-						const index = $form.slots.findIndex((s) => timeStamp(s.start) === timeStamp(_.start));
-						$form.slots.splice(index, 1);
-					});
-					return $form;
-				});
-			}
+			return;
 		}
-	}
+
+		const added = calDates.filter(
+			(calDate) =>
+				!$formData.slots
+					.map((_) => getTimestamp(_.start))
+					.includes(getTimestamp(calDate.toDate(tz)))
+		);
+
+		const removed = $formData.slots.filter(
+			(slot) =>
+				!calDates
+					.map((calDate) => getTimestamp(calDate.toDate(tz)))
+					.includes(getTimestamp(slot.start))
+		);
+
+		if (added.length) {
+			formData.update(($form) => {
+				$form.slots.push(
+					...added.map((date) => ({
+						start: date.toDate(tz)
+					}))
+				);
+				return $form;
+			});
+		}
+
+		if (removed.length) {
+			formData.update(($form) => {
+				$form.slots = $form.slots.filter(
+					(_) => !removed.map((slot) => getTimestamp(slot.start)).includes(getTimestamp(_.start))
+				);
+				return $form;
+			});
+		}
+	};
 </script>
 
 <form method="post" use:enhance class="space-y-4">
@@ -83,7 +83,7 @@
 			<Form.Label>Huddle Name</Form.Label>
 			<Input {...attrs} bind:value={$formData.title} placeholder="Birthday Party" />
 		</Form.Control>
-		<Form.Description>This is your public display name.</Form.Description>
+
 		<Form.FieldErrors />
 	</Form.Field>
 
@@ -99,20 +99,44 @@
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
-	<Form.Button>Submit</Form.Button>
 
-	<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-		<Calendar class="col-span-2" variant="full" multiple={true} bind:value={selected} />
+	<div class="grid grid-cols-2 md:grid-cols-3 space-x-2 space-y-2 md:h-80">
+		<Calendar
+			class="col-span-2"
+			variant="full"
+			multiple={true}
+			bind:value={selected}
+			{onValueChange}
+		/>
+		<Form.Fieldset
+			form={huddleForm}
+			name={`slots`}
+			class="col-span-2 md:col-span-1 flex flex-col space-y-2 max-h-80 overflow-auto w-full"
+		>
+			{#each $formData.slots as _, i}
+				<div transition:blur class="w-full">
+					<Form.ElementField form={huddleForm} name={`slots[${i}].start`}>
+						<Form.Control>
+							<input type="hidden" value={_.start} />
+						</Form.Control>
 
-		<div class="flex flex-col">
-			{#each ($formData.slots || [])
-				.slice()
-				.sort((a, b) => a.start.getTime() - b.start.getTime()) as slot}
-				<div transition:blur class="flex justify-between">
-					<span>{slot.start.toString()}</span>
+						<Form.FieldErrors />
+					</Form.ElementField>
+
+					<Form.ElementField
+						form={huddleForm}
+						name={`slots[${i}].availability`}
+						class="flex justify-between"
+					>
+						<Form.Control>
+							<SlotItem bind:value={_} />
+						</Form.Control>
+
+						<Form.FieldErrors />
+					</Form.ElementField>
 				</div>
 			{/each}
-		</div>
+		</Form.Fieldset>
 	</div>
 
 	{#if $submitting}
