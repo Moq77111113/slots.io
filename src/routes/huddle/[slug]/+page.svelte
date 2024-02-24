@@ -1,17 +1,9 @@
 <script lang="ts">
-	import { cn } from '$lib/utils';
 	import { Icons } from '$lib/components';
-	import type { ComponentType } from 'svelte';
+	import { format } from '$lib/helpers/date';
+	import { cn } from '$lib/utils';
 	import type { PageData } from './$types';
-
-	const format = (
-		options: Intl.DateTimeFormatOptions = {
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
-		}
-	) => new Intl.DateTimeFormat('en-US', options).format;
+	import Row from './Row.svelte';
 
 	type Huddle = PageData['huddle'];
 	type Slot = Huddle['slots'][number];
@@ -53,27 +45,37 @@
 	$: best = bestSlot(data.huddle.slots);
 
 	$: isOwner = data.huddle.creator?.id === data.me?.id;
+
+	const sections = {
+		context: {
+			icon: Icons.logout,
+			heading: 'Context',
+			content: data.huddle.description || ''
+		},
+		location: {
+			icon: Icons.mapPin,
+			heading: 'Location',
+			content: '21 Mary Street - 3rd floor'
+		},
+		instructions: {
+			icon: Icons.logout,
+			heading: 'Instructions',
+			content: "Join us at the 3rd floor , we'll be waiting for you!"
+		},
+		slot: (slot: Slot) => ({
+			icon: Icons.clock,
+			iconClass: slot.id === best.id ? 'bg-gradient-to-b from-black to-red-500' : '',
+			heading: 'Date and time',
+			content: `${format(slot.start, 'ddd DD MMMM YYYY')} · ${
+				slot.availabilities.filter((_) => _.status !== 'unavailable').length
+			} people available`
+		})
+	} as const;
 </script>
 
 <svelte:head>
 	<title>{data.huddle.title} - Slots</title>
 </svelte:head>
-{#snippet row({icon, heading, content, iconClass}: {icon: ComponentType, heading: string, content: string, iconClass?: string})}
-	<div class="flex space-x-2 items-center">
-		<div
-			class={cn(
-				'h-10 w-10 border border-input bg-medium-gray/80 dark:bg-light-gray/20 text-white dark:text-primary flex items-center justify-center rounded-md',
-				iconClass
-			)}
-		>
-			<svelte:component this={icon} class={'h-4 w-4'} />
-		</div>
-		<div class="flex flex-col">
-			<h3 class="text-sm font-semibold">{heading}</h3>
-			<span class="text-sm text-medium-gray dark:text-light-gray">{content}</span>
-		</div>
-	</div>
-{/snippet}
 
 <main class="container max-w-xl h-full flex flex-col flex-1 space-y-8 p-8">
 	<section class="space-y-2">
@@ -85,25 +87,14 @@
 	</section>
 
 	<section class="flex space-x-2 items-center">
-		{@render row({
-			icon: Icons.logout,
-			heading: 'Context',
-			content: data.huddle.description || ''
-		})}
+		<Row {...sections.context} />
 	</section>
 
 	<section class="flex flex-col space-y-6">
 		<h3 class="text-lg font-semibold">Details</h3>
-		{@render row({
-			icon: Icons.mapPin,
-			heading: 'Location',
-			content: '21 Mary Street - 3rd floor'
-		})}
-		{@render row({
-			icon: Icons.logout,
-			heading: 'Instructions',
-			content: "Join us at the 3rd floor , we'll be waiting for you!"
-		})}
+		<Row {...sections.location} />
+
+		<Row {...sections.instructions} />
 	</section>
 
 	<section class="flex flex-col space-y-6">
@@ -118,9 +109,7 @@
 			<div class="flex flex-col">
 				<h3 class="text-sm font-semibold">{data.huddle.creator?.email}</h3>
 				<span class="text-sm text-medium-gray dark:text-light-gray"
-					>{format({ weekday: undefined, month: 'short', year: 'numeric', day: '2-digit' })(
-						data.huddle.createdAt
-					)}</span
+					>{format(data.huddle.createdAt, 'short-date')}</span
 				>
 			</div>
 		</div>
@@ -132,14 +121,7 @@
 			<p class="text-light-gray">No time slot provided yet</p>
 		{:else}
 			{#each data.huddle.slots.sort((a, b) => a.start.getTime() - b.start.getTime()) as slot (slot.id)}
-				{@render row({
-					icon: Icons.clock,
-					iconClass: slot.id === best.id ? 'bg-gradient-to-b from-black to-red-500' : '',
-					heading: 'Date and time',
-					content: `${format()(slot.start)} · ${
-						slot.availabilities.filter((_) => _.status !== 'unavailable').length
-					} people available`
-				})}
+				<Row {...sections.slot(slot)} />
 			{/each}
 		{/if}
 	</section>
@@ -148,8 +130,8 @@
 		<section class="flex flex-col space-y-6">
 			<h3 class="text-lg font-semibold">Status</h3>
 			<span class="text-sm text-medium-gray dark:text-light-gray"
-				>Best date for the huddle is on {format()(best.start)}</span
-			>
+				>Best date for the huddle is on {format(best.start, 'long-date')}
+			</span>
 		</section>
 	{/if}
 </main>

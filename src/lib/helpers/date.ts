@@ -20,6 +20,7 @@ const listFormats = {
 } as const;
 type Format = keyof typeof listFormats;
 
-export const format = (dateValue: Date, format: Format): string => {
-	return tempoFormat(dateValue, format);
+export const format = (dateValue: Date, format: Format | string): string => {
+	const isFormat = listFormats[format as Format];
+	return tempoFormat(dateValue, isFormat ?? format);
 };
