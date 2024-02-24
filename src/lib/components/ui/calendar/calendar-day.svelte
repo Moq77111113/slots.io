@@ -25,7 +25,7 @@
 		// Disabled
 		'data-[disabled]:text-muted-foreground data-[disabled]:opacity-50',
 		// Unavailable
-		'data-[unavailable]:line-through data-[unavailable]:text-destructive-foreground',
+		'data-[unavailable]:line-through data-[unavailable]:text-destructive-foreground data-[unavailable]:opacity-50',
 		// Outside months
 		'data-[outside-month]:text-muted-foreground data-[outside-month]:opacity-50 [&[data-outside-month][data-selected]]:bg-accent/50 [&[data-outside-month][data-selected]]:text-muted-foreground [&[data-outside-month][data-selected]]:opacity-30 data-[outside-month]:pointer-events-none',
 		className

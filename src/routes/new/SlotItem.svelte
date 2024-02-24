@@ -3,17 +3,14 @@
 	import { ToggleGroup, ToggleGroupItem } from '$lib/components/ui/toggle-group';
 
 	import { format } from '$lib/helpers/date';
-	import { type Infer, type SuperForm } from 'sveltekit-superforms';
+	import { type Infer } from 'sveltekit-superforms';
 	import type { HuddleCreateSchema } from './schema';
 
 	type Props = {
-		form: SuperForm<Infer<HuddleCreateSchema>>;
-		index: number;
+		value: Infer<HuddleCreateSchema>['slots'][number];
 	};
 
-	export let value: Infer<HuddleCreateSchema>['slots'][number];
-
-	// export { form, index };
+	export let value: Props['value'];
 
 	const availabilities = [
 		{

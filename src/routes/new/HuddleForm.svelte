@@ -6,7 +6,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import { getTimestamp } from '$lib/helpers/date';
-	import { getLocalTimeZone, type DateValue } from '@internationalized/date';
+	import { fromDate, getLocalTimeZone, type DateValue } from '@internationalized/date';
 	import { blur } from 'svelte/transition';
 	import SuperDebug, { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
@@ -31,6 +31,22 @@
 	let tz = getLocalTimeZone();
 	let selected: DateValue[] = [];
 
+	const removeSlot = (index: number) => {
+		const slot = $formData.slots[index];
+		if (!slot) return;
+		selected = selected.filter(
+			(date) => getTimestamp(date.toDate(tz)) !== getTimestamp(slot.start)
+		);
+		formData.update(($form) => {
+			$form.slots.splice(index, 1);
+			return $form;
+		});
+	};
+
+	const today = fromDate(new Date(), tz);
+	const dateUnavailable = (date: DateValue) => {
+		return getTimestamp(date.toDate(tz)) < getTimestamp(today.toDate());
+	};
 	const onValueChange = (calDates: DateValue[] | undefined) => {
 		if (!calDates) {
 			formData.set({
@@ -105,15 +121,16 @@
 			class="col-span-2"
 			variant="full"
 			multiple={true}
+			isDateUnavailable={dateUnavailable}
 			bind:value={selected}
 			{onValueChange}
 		/>
 		<Form.Fieldset
 			form={huddleForm}
-			name={`slots`}
-			class="col-span-2 md:col-span-1 flex flex-col space-y-2 max-h-80 overflow-auto w-full"
+			name="slots"
+			class="col-span-2 md:col-span-1 flex flex-col max-h-80 overflow-auto w-full divide-y-2"
 		>
-			{#each $formData.slots as _, i}
+			{#each $formData.slots as _, i (i)}
 				<div transition:blur class="w-full">
 					<Form.ElementField form={huddleForm} name={`slots[${i}].start`}>
 						<Form.Control>
@@ -129,7 +146,11 @@
 						class="flex justify-between"
 					>
 						<Form.Control>
-							<SlotItem bind:value={_} />
+							<div class="flex items-center space-x-2 w-full">
+								<Button variant="ghost" size="icon-sm" on:click={() => removeSlot(i)}
+									><Icons.remove class="size-3" /></Button
+								><SlotItem bind:value={_} />
+							</div>
 						</Form.Control>
 
 						<Form.FieldErrors />
