@@ -8,7 +8,8 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
-	import { today, type DateValue } from '@internationalized/date';
+	import { timeStamp } from '$lib/helpers/date';
+	import { type DateValue } from '@internationalized/date';
 	import { blur } from 'svelte/transition';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
@@ -27,9 +28,53 @@
 	});
 
 	const { form: formData, enhance, submitting } = huddleForm;
-	const _today = today('UTC').toDate('UTC');
+	let selected: DateValue[] = [];
+	const addSlot = () => {
+		formData.update(($form) => {
+			$form.slots.push({ start: new Date() });
+			return $form;
+		});
+	};
 
-	let value: DateValue[] = [];
+	const clearSlots = () => {
+		formData.update(($form) => {
+			$form.slots = [];
+			return $form;
+		});
+		selected = [];
+	};
+
+	$: {
+		if (!selected) {
+			clearSlots();
+		} else {
+			const added = selected.filter(
+				(_) => !$formData.slots.map((_) => _.start.getTime()).includes(timeStamp(_))
+			);
+			const removed = $formData.slots.filter(
+				(_) => !selected.map(timeStamp).includes(timeStamp(_.start))
+			);
+
+			if (added.length > 0) {
+				// A DateValue was added
+				formData.update(($form) => {
+					$form.slots.push(...added.map((_) => ({ start: _.toDate('UTC') })));
+					return $form;
+				});
+			}
+
+			if (removed.length > 0) {
+				// A DateValue was removed
+				formData.update(($form) => {
+					removed.forEach((_) => {
+						const index = $form.slots.findIndex((s) => timeStamp(s.start) === timeStamp(_.start));
+						$form.slots.splice(index, 1);
+					});
+					return $form;
+				});
+			}
+		}
+	}
 </script>
 
 <form method="post" use:enhance class="space-y-4">
@@ -57,14 +102,15 @@
 	<Form.Button>Submit</Form.Button>
 
 	<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-		<Calendar class="col-span-2" variant="full" multiple={true} bind:value />
+		<Calendar class="col-span-2" variant="full" multiple={true} bind:value={selected} />
+
 		<div class="flex flex-col">
-			{#each (value || [])
+			{#each ($formData.slots || [])
 				.slice()
-				.sort((a, b) => a.toDate('UTC').getTime() - b.toDate('UTC').getTime()) as date}
-				<p transition:blur>
-					{date.toString()}
-				</p>
+				.sort((a, b) => a.start.getTime() - b.start.getTime()) as slot}
+				<div transition:blur class="flex justify-between">
+					<span>{slot.start.toString()}</span>
+				</div>
 			{/each}
 		</div>
 	</div>
